@@ -255,6 +255,21 @@
     .histrow{grid-area:hist;flex-wrap:wrap;overflow:visible} .menubar{grid-area:menu;padding-bottom:0;align-self:start}
   }
 
+  /* ---- подстройка под экран: если поле шахты выходит низким (вырез и полоска iPhone, короткие экраны) — JS ставит body.cmp, потом body.cmp2 ---- */
+  body.cmp .topbar{min-height:32px} body.cmp .topbar .logo{font-size:15px} body.cmp .gift{padding:4px 8px;font-size:12px}
+  body.cmp .controls{padding:7px 9px} body.cmp .controls .balance{font-size:19px}
+  body.cmp .controls .betbox{margin-top:4px} body.cmp .controls .betbox .btn,body.cmp .controls .betbox input{padding:4px 10px}
+  body.cmp .controls .quick{margin-top:4px} body.cmp .controls .quick .btn{padding:4px}
+  body.cmp .controls .actions .btn{min-height:50px;font-size:16px;padding:5px} body.cmp .controls .actions small{font-size:11px}
+  body.cmp .controls .buybonus{padding:5px 6px;font-size:14px} body.cmp .controls .buybonus small{font-size:11px;margin-top:0}
+  body.cmp .controls .auto{margin-top:4px} body.cmp .controls .hint{display:none}
+  body.cmp .menubar{gap:4px} body.cmp .menubar .btn{display:block;text-align:center;font-size:13px;padding:4px 2px 5px}
+  body.cmp .menubar .btn .i{font-size:14px;margin-right:3px} body.cmp .menubar .btn small{display:block;font-size:10px}
+  body.cmp2 .app{gap:4px} body.cmp2 .topbar{min-height:30px}
+  body.cmp2 .controls .balrow{line-height:1.1} body.cmp2 .controls .actions .btn{min-height:44px}
+  body.cmp2 .controls .buybonus{display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;column-gap:8px;padding:6px}
+  body.cmp2 .controls .buybonus small{display:inline}
+  body.cmp2 .histrow{min-height:22px}
   /* ===== 2.0: деревня, банк, подарки, профиль ===== */
   .menubar{grid-template-columns:repeat(3,1fr);gap:6px}
   .menubar .btn{font-size:14px;padding:7px 2px 8px}
@@ -273,7 +288,9 @@
   .vtab.on{border-color:#3ddc63;background:linear-gradient(#1f3a26,#16161c)}
   .vstage{position:relative;border:3px solid #000;border-radius:12px;overflow:hidden;box-shadow:0 0 0 2px #2c2c38;flex:none}
   .vstage canvas{display:block;width:100%;height:auto}
-  .vrot{position:absolute;right:8px;top:8px;background:#000a;color:#fff;border:2px solid #fff5;border-radius:10px;font:inherit;font-weight:900;font-size:16px;padding:4px 10px;cursor:pointer}
+  .vtools{position:absolute;right:8px;top:8px;display:flex;gap:6px}
+  .vrot:disabled{opacity:.35}
+  .vrot{min-width:36px;background:#000a;color:#fff;border:2px solid #fff5;border-radius:10px;font:inherit;font-weight:900;font-size:16px;padding:4px 10px;cursor:pointer}
   .vprog{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
   .vcards{display:grid;gap:8px}
   .vcard{display:flex;align-items:center;gap:10px;background:var(--panel);border:2px solid var(--line);border-radius:12px;padding:8px 10px}
@@ -456,7 +473,7 @@
   <div class="sh-head"><h1>🏘 Деревня</h1><button class="btn sh-x" data-close title="Закрыть">✕</button></div>
   <div class="sh-body">
     <div class="vtabs" id="vTabs"></div>
-    <div class="vstage"><canvas id="vcv"></canvas><button class="vrot" id="vRot" title="Повернуть">⟳</button></div>
+    <div class="vstage"><canvas id="vcv"></canvas><div class="vtools"><button class="vrot" id="vZo" title="Отдалить" disabled>−</button><button class="vrot" id="vZi" title="Приблизить">+</button><button class="vrot" id="vRot" title="Повернуть">⟳</button></div></div>
     <div><div class="vprog"><span id="vProgT"></span><span id="vProgP"></span></div><div class="bar"><i id="vProgB"></i></div></div>
     <div class="note" id="vMoney"></div>
     <div class="vcards" id="vCards"></div>
@@ -903,6 +920,47 @@ class Game {
 // ====================== ТЕКСТУРЫ ======================
 function srng(seed) { let s = seed >>> 0; return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
 function mkCanvas(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+// Наковальня как в Майнкрафте: настоящая 3D-модель (основание, ступенька, шейка, верх), отрисованная в изометрии
+// по текселям 1/16 блока с z-буфером. bg = тёплый фон-подсветка для клетки шахты (чтобы тёмная наковальня не сливалась).
+function anvil3D(bg) {
+  const N = 32, c = mkCanvas(N, N), g = c.getContext('2d'), img = g.createImageData(N, N), D = new Float32Array(N * N).fill(-1e9), col = new Array(N * N).fill(null);
+  const H = (x, y, s) => { let h = Math.imul(x + 101, 374761393) ^ Math.imul(y + 7, 668265263) ^ Math.imul(s + 3, 982451653); h = Math.imul(h ^ (h >>> 13), 1274126177); h ^= h >>> 16; return (h >>> 0) / 4294967296; };
+  const TOP = [[80, 76, 76], [89, 84, 84], [98, 93, 93], [109, 103, 103], [121, 114, 114]], SIDE = [[60, 57, 57], [66, 62, 62], [73, 69, 69], [80, 76, 76]];
+  // [x0,y0,z0,x1,y1,z1] в текселях; длинная ось — y
+  const boxes = [[2, 2, 0, 14, 14, 4], [4, 3, 4, 12, 13, 5], [6, 4, 5, 10, 12, 10], [3, 0, 10, 13, 16, 16]];
+  const s = 1.06, ox = 15.5, oy = 16.6;
+  const P = (x, y, z) => [ox + (x - y) * .866 * s, oy + (x + y - 16) * .38 * s - (z - 8) * 1.05 * s];
+  const plot = (x, y, z, rgb) => { const [sx, sy] = P(x, y, z), px = Math.floor(sx), py = Math.floor(sy); if (px < 0 || py < 0 || px >= N || py >= N) return; const i = py * N + px, d = x + y + z; if (d > D[i]) { D[i] = d; col[i] = rgb; } };
+  const sh = (c, k) => c.map(v => Math.max(0, Math.min(255, Math.round(v * k))));
+  for (const [x0, y0, z0, x1, y1, z1] of boxes) {
+    const st = .2;
+    for (let a = x0; a < x1; a += st) for (let b = y0; b < y1; b += st) { // верх
+      const tx = Math.floor(a), ty = Math.floor(b), e = tx === x0 || ty === y0 ? 1.12 : tx === x1 - 1 || ty === y1 - 1 ? .9 : 1;
+      plot(a + st / 2, b + st / 2, z1, sh(TOP[Math.floor((H(tx, ty, 1) * .7 + H(tx >> 1, ty >> 1, 2) * .3) * TOP.length)], e));
+    }
+    for (let b = y0; b < y1; b += st) for (let z = z0; z < z1; z += st) { // правая грань (+x)
+      const ty = Math.floor(b), tz = Math.floor(z), e = tz === z1 - 1 ? 1.18 : ty === y0 ? .8 : 1;
+      plot(x1, b + st / 2, z + st / 2, sh(SIDE[Math.floor((H(ty, tz >> 2, 3) * .6 + H(ty, tz, 4) * .4) * SIDE.length)], .92 * e));
+    }
+    for (let a = x0; a < x1; a += st) for (let z = z0; z < z1; z += st) { // левая грань (+y)
+      const tx = Math.floor(a), tz = Math.floor(z), e = tz === z1 - 1 ? 1.18 : tx === x1 - 1 ? 1.1 : 1;
+      plot(a + st / 2, y1, z + st / 2, sh(SIDE[Math.floor((H(tx, tz >> 2, 5) * .6 + H(tx, tz, 6) * .4) * SIDE.length)], .64 * e));
+    }
+  }
+  const put = (i, r, gg, b, a = 255) => { img.data[i * 4] = r; img.data[i * 4 + 1] = gg; img.data[i * 4 + 2] = b; img.data[i * 4 + 3] = a; };
+  if (bg) for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { // фон: тёплая подсветка горна, пиксели 2×2 как у остальных блоков
+    const bx = x >> 1, by = y >> 1, d = Math.hypot(bx - 7.5, (by - 8) * 1.1) / 10, v = Math.max(0, Math.min(.999, 1.05 - d * .75 + (H(bx, by, 9) - .5) * .14));
+    const B = [[96, 52, 22], [128, 70, 26], [160, 90, 32], [192, 112, 40], [222, 138, 52]][Math.floor(v * 5)];
+    const edge = bx === 0 || by === 0 || bx === 15 || by === 15; put(y * N + x, ...(edge ? [26, 16, 10] : B));
+  }
+  for (let i = 0; i < N * N; i++) { // чёрная обводка силуэта
+    if (col[i]) continue; const x = i % N, y = (i / N) | 0;
+    if ([[1, 0], [-1, 0], [0, 1], [0, -1]].some(([a, b]) => x + a >= 0 && y + b >= 0 && x + a < N && y + b < N && col[(y + b) * N + x + a])) put(i, 12, 10, 10, bg ? 255 : 200);
+  }
+  for (let i = 0; i < N * N; i++) if (col[i]) put(i, ...col[i]);
+  if (bg) for (const [x, y, r, gg, b] of [[25, 3, 255, 210, 63], [28, 5, 255, 154, 26], [22, 2, 255, 180, 58], [3, 3, 255, 207, 58], [27, 27, 255, 154, 26]]) put(y * N + x, r, gg, b);
+  g.putImageData(img, 0, 0); c._id = 9000 + (bg ? 1 : 0); return c;
+}
 function texFrom(fn, seed) {
   const c = mkCanvas(16, 16), g = c.getContext('2d'), R = srng(seed);
   const px = (x, y, col) => { g.fillStyle = col; g.fillRect(x, y, 1, 1); };
@@ -973,13 +1031,25 @@ function buildTextures() {
     for (let y = 5; y < 13; y++) px(3, y, '#5a3c1c'); for (let x = 2; x < 6; x++) { px(x, 5, '#9a9a9a'); px(x, 6, '#7a7a7a'); }
     for (let y = 5; y < 12; y++) { px(10, y, '#c8c8c8'); px(11, y, '#9a9a9a'); } px(12, 5, '#5a3c1c'); px(12, 6, '#5a3c1c'); px(11, 12, '#5a3c1c');
   }, 33);
-  TEX.anvil = texFrom((px, R) => {
-    fillNoise(px, R, ['#3a3a3a', '#343434', '#404040', '#2e2e2e']);
-    const S = ['#4b4b4b', '#555', '#5e5e5e'];
-    for (let y = 2; y < 6; y++) for (let x = 1; x < 15; x++) px(x, y, y === 2 ? '#7a7a7a' : S[Math.floor(R() * 3)]);
-    for (let y = 6; y < 10; y++) for (let x = 5; x < 11; x++) px(x, y, S[Math.floor(R() * 3)]);
-    for (let y = 10; y < 14; y++) for (let x = 3; x < 13; x++) px(x, y, y === 10 ? '#6a6a6a' : S[Math.floor(R() * 3)]);
-    for (let x = 1; x < 15; x++) px(x, 6, '#2a2a2a');
+  // Наковальня в шахте: плоский вид сбоку, как в Майнкрафте, «вделана» в камень (фон — тот же камень, без обводки)
+  TEX.anvil = texFrom((px, R, g) => {
+    fillNoise(px, R, PAL.stone);
+    const ROWS = { 2: [1, 14], 3: [1, 14], 4: [1, 14], 5: [2, 13], 6: [5, 10], 7: [5, 10], 8: [5, 10], 9: [5, 10], 10: [4, 11], 11: [2, 13], 12: [2, 13], 13: [2, 13] };
+    const inA = (x, y) => ROWS[y] && x >= ROWS[y][0] && x <= ROWS[y][1];
+    // тень в камне под нависающим верхом и под основанием
+    const sh = (x, y, k) => { const id = g.getImageData(x, y, 1, 1).data; px(x, y, `rgb(${id[0] * k | 0},${id[1] * k | 0},${id[2] * k | 0})`); };
+    for (let x = 2; x <= 13; x++) if (!inA(x, 6)) sh(x, 6, .72);
+    for (let x = 3; x <= 13; x++) sh(x, 14, .78);
+    const M = ['#383535', '#3f3c3c', '#464242', '#333030'];
+    for (let y = 2; y <= 13; y++) for (let x = 0; x < 16; x++) {
+      if (!inA(x, y)) continue; const [x0, x1] = ROWS[y];
+      let c = M[Math.floor(R() * M.length)];
+      if (y === 2 || y === 11 || (y === 10)) c = R() < .5 ? '#6e6a6a' : '#646060';      // верхние грани светлее
+      else if (y === 5 || y === 13) c = R() < .5 ? '#2c2a2a' : '#302d2d';                 // низ темнее
+      else if (x === x1) c = '#2f2c2c'; else if (x === x0) c = R() < .5 ? '#504c4c' : '#4a4646';
+      px(x, y, c);
+    }
+    px(2, 3, '#56524f'); px(3, 3, '#4e4a4a'); px(12, 12, '#4e4a4a');
   }, 34);
   TEX.chest = texFrom((px, R) => {
     for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) px(x, y, ['#a0692a', '#ad7533', '#93601f'][Math.floor(R() * 3)]);
@@ -2184,86 +2254,194 @@ const VN = 14;
 let VTX = null, VB = null;
 function vTextures() {
   if (VTX) return;
-  let seed = 101; const T = 16;
+  // Текстуры в духе Minecraft: не случайный шум по пикселю, а структура (доски, камни, кирпичи, кора, кольца),
+  // мягкая кластерная вариация тонов и редкие крапинки.
+  let tid = 0;
   const hex = h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
-  const mk = fn => {
-    const c = mkCanvas(T, T), g = c.getContext('2d'), id = g.createImageData(T, T); let s = (seed++) * 9973;
-    const R = () => (s = (s * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff, P = a => a[Math.floor(R() * a.length)];
-    for (let y = 0; y < T; y++) for (let x = 0; x < T; x++) {
-      const r = fn(x, y, R, P); if (!r) continue; const [col, a] = Array.isArray(r) ? r : [r, 255], c3 = hex(col), i = (y * T + x) * 4;
+  const sh = (h, k) => '#' + hex(h).map(v => Math.max(0, Math.min(255, Math.round(v * k))).toString(16).padStart(2, '0')).join('');
+  const H = (x, y, s) => { let h = Math.imul(x + 1013, 374761393) ^ Math.imul(y + 7919, 668265263) ^ Math.imul(s + 31, 982451653); h = Math.imul(h ^ (h >>> 13), 1274126177); h ^= h >>> 16; return (h >>> 0) / 4294967296; };
+  const cn = (x, y, s) => H(x, y, s) * .55 + H(x >> 1, y >> 1, s + 7) * .3 + H(x >> 2, y >> 2, s + 13) * .15;
+  const pv = (a, v, k = 1.6) => a[Math.min(a.length - 1, Math.max(0, Math.floor(((v - .5) * k + .5) * a.length)))];
+  const mk = (fn, W = 16, Hh = 16) => {
+    const c = mkCanvas(W, Hh), g = c.getContext('2d'), id = g.createImageData(W, Hh);
+    for (let y = 0; y < Hh; y++) for (let x = 0; x < W; x++) {
+      const r = fn(x, y); if (!r) continue; const [col, a] = Array.isArray(r) ? r : [r, 255], c3 = hex(col), i = (y * W + x) * 4;
       id.data[i] = c3[0]; id.data[i + 1] = c3[1]; id.data[i + 2] = c3[2]; id.data[i + 3] = a;
     }
-    g.putImageData(id, 0, 0); return c;
+    g.putImageData(id, 0, 0); c._id = ++tid; return c;
   };
-  const G = ['#5d9e34', '#6ab43c', '#539030', '#74bf45', '#62a838'], D = ['#866043', '#79553a', '#93694a', '#6c4b33'], ST = ['#7f7f7f', '#8a8a8a', '#747474', '#969696'];
-  const SA = ['#e3d49a', '#dccb8e', '#e9dba6', '#d6c486'], SN = ['#f4f8fb', '#ffffff', '#e8eff5', '#f8fbff'];
-  const wool = (a, b) => mk((x, y, R) => ((x * 3 + y * 7) % 11 === 0) ? b : (R() < .5 ? a : b));
-  const villager = (robe, robe2) => mk((x, y) => {
-    if (y < 7 && x >= 4 && x < 12) { if (y === 3 && (x === 5 || x === 6 || x === 9 || x === 10)) return x === 6 || x === 9 ? '#2a6e2a' : '#ffffff'; if (y === 2 && x >= 5 && x < 11) return '#4a3020'; return '#c69c6d'; }
-    if (y >= 4 && y < 9 && x >= 7 && x < 9) return '#b08458';
-    if (y >= 7 && y < 15 && x >= 3 && x < 13) return (x === 3 || x === 12) && y > 12 ? null : ((y === 10 && x > 4 && x < 11) ? '#c69c6d' : (x % 3 ? robe : robe2));
-    if (y === 15 && (x === 5 || x === 6 || x === 9 || x === 10)) return '#3a2a1a';
-    return null;
+  // ячейки Вороного: булыжник, гравий, светокамень
+  const vor = (n, s) => {
+    const P = []; for (let i = 0; i < n; i++) P.push([H(i, 1, s) * 16, H(i, 2, s) * 16]);
+    const grid = [];
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
+      let d1 = 1e9, d2 = 1e9, id = 0;
+      P.forEach((p, i) => { for (const ox of [-16, 0, 16]) for (const oy of [-16, 0, 16]) { const d = Math.hypot(x + .5 - p[0] - ox, y + .5 - p[1] - oy); if (d < d1) { d2 = d1; d1 = d; id = i; } else if (d < d2) d2 = d; } });
+      grid.push({ id, e: d2 - d1 });
+    }
+    return (x, y) => grid[(((y % 16) + 16) % 16) * 16 + (((x % 16) + 16) % 16)];
+  };
+  const stones = (n, s, pal, mort, thr) => {
+    const V = vor(n, s), edge = (c, o) => o.e < thr || o.id !== c.id;
+    return mk((x, y) => {
+      const c = V(x, y); if (c.e < thr) return H(x, y, s) < .5 ? mort[0] : mort[1];
+      let k = (H(x, y, s + 3) - .5) * .12;
+      if (edge(c, V(x, y - 1))) k += .15; if (edge(c, V(x - 1, y))) k += .07; if (edge(c, V(x, y + 1))) k -= .17; if (edge(c, V(x + 1, y))) k -= .08;
+      return sh(pal[c.id % pal.length], 1 + k);
+    });
+  };
+  const DIRT = ['#5a3d2a', '#684832', '#765338', '#836043', '#906b4c', '#9e7858'];
+  const dirtPx = (x, y, s) => { const h = H(x, y, s + 50); return h < .05 ? '#47301f' : h > .965 ? '#ad8866' : pv(DIRT, cn(x, y, s), 1.8); };
+  const GR = ['#4d882b', '#589832', '#62a43a', '#6baf40', '#75b947', '#82c452'];
+  const SNOW = ['#dde8ed', '#e7eff3', '#eff5f8', '#f6fafb', '#fbfdfe', '#ffffff'];
+  const drip = (x, s, b) => b + (H(x, 0, s) < .55 ? 1 : 0) + (H(x, 1, s) < .3 ? 1 : 0) + (H(x, 2, s) < .12 ? 1 : 0);
+  const plank = (pal, seam, joint, s) => mk((x, y) => {
+    const b = y >> 2, r = y & 3; if (r === 3) return seam;
+    if (x === [3, 11, 6, 14][b]) return joint;
+    const v = H((x + b * 5) >> 2, y, s) * .45 + H(x >> 1, y, s + 2) * .25 + H(x, y, s + 1) * .3;
+    const c = pv(pal, v, 1.6); return r === 0 ? sh(c, 1.07) : r === 2 ? sh(c, .95) : c;
   });
+  const bark = (pal, dark, s) => mk((x, y) => { if (H(x, y >> 2, s + 2) < .17) return dark; return pv(pal, H(x, 0, s) * .6 + H(x, y >> 1, s + 1) * .4, 1.5); });
+  const ltop = (A, B, bk) => mk((x, y) => { const d = Math.max(Math.abs(x - 7.5), Math.abs(y - 7.5)); if (d > 6.6) return sh(bk, .88 + H(x, y, 77) * .24); return sh(Math.floor(d + H(x, y, 78) * .5) % 2 ? A : B, .94 + H(x, y, 79) * .12); });
+  const leaf = (pal, s, holes) => mk((x, y) => { const h = H(x, y, s); if (h < holes) return null; const c = pv(pal, cn(x, y, s + 1), 1.7); return h < holes + .08 ? sh(c, .72) : c; });
+  const wool = (base, s) => mk((x, y) => { const v = Math.sin(x * 1.6 + Math.sin(y * 1.1) * 1.4) + Math.sin(y * 1.7 + Math.cos(x * .9) * 1.3); return sh(base, (v > 1 ? 1.09 : v < -1 ? .87 : 1) * (.96 + H(x, y, s) * .08)); });
+  const HAY = ['#a8841a', '#bb951f', '#c9a227', '#d6b035', '#e2bf48'];
+  const ridge = (x, y) => sh(['#b65f0c', '#d77b16', '#e8921f', '#d07414'][x % 4], (y < 2 ? .9 : 1) * (.95 + H(x, y, 55) * .1));
+  const FACE = ['', '', '', '', '...#.......#....', '..###.....###...', '.####....####...', '.......##.......', '', '..##########....', '..#.######.#....', '...########.....', '....#....#......'];
+  const villager = (robe, robe2, extra) => mk((x, y) => {
+    const skin = '#b88a6c';
+    if (extra) { const e = extra(x, y); if (e) return e; }
+    if (y <= 9 && x >= 2 && x <= 9) {
+      if (y === 3 && x >= 3 && x <= 8) return '#3b281c';
+      if (y === 4 && (x === 3 || x === 8)) return '#f4f4f4';
+      if (y === 4 && (x === 4 || x === 7)) return '#2e7a3c';
+      if (x >= 5 && x <= 6 && y >= 4 && y <= 8) return y === 8 ? '#8a5e45' : x === 5 ? '#b07a5a' : '#9c6a4e';
+      if (y === 8 && (x === 4 || x === 7)) return '#7e5440';
+      return x === 2 || y === 0 ? sh(skin, .86) : x === 9 ? sh(skin, .9) : sh(skin, .97 + H(x, y, 90) * .06);
+    }
+    if (y >= 12 && y <= 14 && x >= 1 && x <= 10) { if (y === 13 && x >= 4 && x <= 7) return skin; return y === 12 ? sh(robe2, 1.1) : y === 14 ? sh(robe2, .8) : robe2; }
+    if (y >= 10 && y <= 18 && x >= 2 && x <= 9) return x === 2 || x === 9 ? sh(robe, .82) : sh(robe, .95 + H(x, y, 91) * .1);
+    if (y === 19 && (x === 3 || x === 4 || x === 7 || x === 8)) return '#3a2a1a';
+    return null;
+  }, 12, 20);
   VTX = {
-    grass: mk((x, y, R, P) => P(G)), grassSide: mk((x, y, R, P) => y < 3 || (y < 5 && R() < .45) ? P(G) : P(D)), dirt: mk((x, y, R, P) => P(D)), stone: mk((x, y, R, P) => P(ST)),
-    cobble: mk((x, y, R, P) => ((x * 5 + y * 3) % 7 === 0 || (x + y * 4) % 9 === 0) ? '#555555' : P(['#8b8b8b', '#7a7a7a', '#9c9c9c', '#6e6e6e'])),
-    planks: mk((x, y, R, P) => y % 4 === 3 || (x === ((y >> 2) * 5 + 3) % 16) ? '#6b4f2a' : P(['#b8945f', '#a8864f', '#c29d66', '#9f7d48'])),
-    dark: mk((x, y, R, P) => y % 4 === 3 || (x === ((y >> 2) * 7 + 2) % 16) ? '#2e1d0e' : P(['#4c3219', '#563a1e', '#432b15'])),
-    log: mk((x, y, R, P) => x % 4 === 0 ? '#4a3620' : P(['#6b5030', '#5e4429', '#755836'])),
-    logTop: mk((x, y) => { const d = Math.max(Math.abs(x - 7.5), Math.abs(y - 7.5)); return d > 6.5 ? '#5e4429' : (Math.floor(d) % 2 ? '#b8945f' : '#a07c4c'); }),
-    glass: mk((x, y) => x === 0 || y === 0 || x === 15 || y === 15 ? ['#dff6ff', 255] : (x - y === 3 || x - y === 4) && x > 4 && x < 13 ? ['#ffffff', 170] : ['#a8e4ff', 60]),
-    leaves: mk((x, y, R, P) => R() < .12 ? '#1d4a14' : P(['#3f8a2a', '#357a23', '#4a9a32', '#2f6e1f'])),
-    bricks: mk((x, y) => y % 4 === 3 || x === ((y >> 2) % 2 ? 3 : 11) ? '#b8a99a' : ((x + y) % 5 ? '#9b4a3a' : '#8a3c2e')),
-    water: mk((x, y, R) => [((x + y * 2) % 7 === 0 ? '#5fa8ff' : R() < .5 ? '#3f76e4' : '#3a6cd6'), 210]),
-    lava: mk((x, y, R, P) => (x * 3 + y * 5) % 11 < 2 ? '#ffe36b' : P(['#ff8a1a', '#ff6a00', '#ffa030', '#e85a00'])),
-    farm: mk((x, y, R, P) => y % 4 < 1 ? '#3e2814' : P(['#5a3a1e', '#653f20', '#4e321a'])),
-    gravel: mk((x, y, R, P) => P(['#8a8380', '#a09895', '#6f6966', '#b5aeab', '#7d7573'])),
-    furnace: mk((x, y, R, P) => (y > 8 && y < 14 && x > 3 && x < 12) ? (y > 11 ? P(['#ff9a2a', '#ffcf4a']) : '#1a1a1a') : P(['#8b8b8b', '#7a7a7a', '#6e6e6e'])),
-    hay: mk((x, y, R, P) => y % 5 === 2 ? '#8b5a1a' : P(['#c9a227', '#d8b23a', '#b8921f'])),
-    sand: mk((x, y, R, P) => P(SA)),
-    sandstone: mk((x, y, R, P) => y === 0 || y === 15 ? '#c9b679' : y < 4 ? P(['#e6d7a0', '#ddcd92']) : P(['#dccb8e', '#d4c283', '#e0d095'])),
-    sstop: mk((x, y, R, P) => (x === 0 || y === 0 || x === 15 || y === 15) ? '#c9b679' : P(['#e6d7a0', '#e0d095'])),
-    cutsand: mk((x, y, R, P) => (y === 1 || y === 14) ? '#c2ad6c' : (y > 4 && y < 11 && (x === 4 || x === 11)) ? '#c9b679' : P(['#e6d7a0', '#ddcd92'])),
-    terra: mk((x, y, R, P) => P(['#a0532a', '#99502a', '#a85a2e', '#93492a'])),
-    goldb: mk((x, y, R, P) => (x === 0 || y === 0) ? '#fffbb0' : (x === 15 || y === 15) ? '#c98a00' : P(['#f7d33a', '#ffdf50', '#eccb2e'])),
-    wred: wool('#b02e26', '#a02822'), wwhite: wool('#e9ecec', '#dadede'), wyellow: wool('#f8c627', '#eab71e'), wblue: wool('#3c44aa', '#353c9a'),
-    melon: mk((x, y) => (x + (y >> 1)) % 4 === 0 ? '#3a7a1a' : '#6fa82c'), melonTop: mk((x, y) => (Math.abs(x - 7.5) + Math.abs(y - 7.5)) % 4 < 1 ? '#3a7a1a' : '#7fb83a'),
-    pumpkin: mk((x, y) => ((y === 5 || y === 6) && (x === 4 || x === 5 || x === 10 || x === 11)) || (y === 10 && x > 3 && x < 12) || (y === 11 && (x === 5 || x === 8 || x === 10)) ? '#ffcf3a' : (x % 4 === 0 ? '#c56a10' : '#e3861a')),
-    pumpkinTop: mk((x, y) => (x > 6 && x < 9 && y > 6 && y < 9) ? '#5a3a10' : (x % 4 === 0 ? '#c56a10' : '#e3861a')),
-    jlog: mk((x, y, R, P) => (y % 5 === 0) ? '#5a4a28' : P(['#8a7444', '#7d683c', '#94804e'])),
-    snowb: mk((x, y, R, P) => P(SN)), snowSide: mk((x, y, R, P) => y < 4 || (y < 6 && R() < .5) ? P(SN) : P(D)),
-    packed: mk((x, y, R, P) => P(['#8db4f2', '#98bdf5', '#86aeee'])), ice: mk((x, y) => [((x * 3 + y) % 9 === 0 ? '#ffffff' : (x + y) % 5 === 0 ? '#c9e4ff' : '#a6cdfa'), 170]),
-    blueice: mk((x, y, R, P) => (x + y * 3) % 8 === 0 ? '#c4e2ff' : P(['#74a8f4', '#6a9eef', '#80b2f8'])),
-    slog: mk((x, y, R, P) => x % 4 === 0 ? '#2e1e10' : P(['#3d2a16', '#4a321b', '#35240f'])),
-    sleaves: mk((x, y, R, P) => R() < .14 ? '#14301a' : P(['#2c4a2e', '#33553a', '#264028', '#3a5e40'])),
-    cactus: mk((x, y, R, P) => (x === 0 || x === 15) ? '#0f4a1a' : (x % 5 === 2 && y % 4 === 1) ? '#d8e8a0' : P(['#2f8a2a', '#287a24', '#35952f'])),
-    cactusTop: mk((x, y, R, P) => (x === 0 || y === 0 || x === 15 || y === 15) ? '#0f4a1a' : P(['#5aa83a', '#4f9a33'])),
-    glow: mk((x, y, R, P) => (x * 7 + y * 3) % 6 === 0 ? '#fff6c0' : P(['#ffcf5a', '#e8a838', '#ffdf80', '#c98a30'])),
+    grass: mk((x, y) => pv(GR, cn(x, y, 1), 1.7)),
+    grassSide: mk((x, y) => { const d = drip(x, 5, 3); return y < d ? (y === d - 1 ? '#4a8429' : pv(GR, cn(x, y, 9), 1.5)) : dirtPx(x, y, 4); }),
+    dirt: mk((x, y) => dirtPx(x, y, 3)),
+    stone: mk((x, y) => pv(['#686868', '#717171', '#7a7a7a', '#828282', '#8b8b8b', '#959595'], H(x, y, 6) * .45 + H(x >> 2, y, 7) * .35 + H(x >> 3, y >> 1, 8) * .2, 1.8)),
+    cobble: stones(11, 10, ['#8f8f8f', '#7d7d7d', '#9b9b9b', '#727272', '#a4a4a4', '#868686'], ['#4a4a4a', '#3f3f3f'], 1.1),
+    planks: plank(['#9c7a47', '#a8864f', '#b38f59', '#bc9862', '#c6a26c'], '#6b4f2c', '#7d5e35', 11),
+    splanks: plank(['#5b3d22', '#654428', '#6f4b2c', '#795232', '#835a37'], '#3a2614', '#442d18', 16),
+    sbricks: mk((x, y) => {
+      const c = y >> 3, r = y & 7, xo = (x + (c ? 8 : 0)) % 16; if (r === 7 || xo === 15) return H(x, y, 17) < .5 ? '#4c4c4c' : '#434343';
+      let k = (cn(x, y, 18) - .5) * .22; if (r === 0 || xo === 0) k += .13; if (r === 6 || xo === 14) k -= .14; if (H(x, y, 19) < .03) k -= .2;
+      return sh(['#8e8e8e', '#828282', '#898989', '#7c7c7c'][c * 2 + (x >= 8 ? 1 : 0)], 1 + k);
+    }),
+    dark: plank(['#3e2914', '#47301a', '#50371e', '#5a3e23', '#634528'], '#24170a', '#2c1c0d', 12),
+    log: bark(['#4b3920', '#594429', '#665032', '#725a37', '#7e6640'], '#3a2b17', 13),
+    logTop: ltop('#b8945f', '#9c7a47', '#5e4729'),
+    slogTop: ltop('#7a5a34', '#634728', '#3a2814'),
+    glass: mk((x, y) => {
+      if (x === 0 || y === 0 || x === 15 || y === 15) return [(x + y) % 7 === 0 ? '#a3c9d4' : '#dcf1f6', 255];
+      if ((x === 1 || y === 1) && H(x, y, 5) < .5) return ['#eaf8fb', 190];
+      if ((x === y && x > 2 && x < 7) || (x - y === 2 && x > 4 && x < 8) || (y - x === 1 && x > 9 && x < 13)) return ['#ffffff', 190];
+      return ['#c4ebff', 36];
+    }),
+    leaves: leaf(['#2b5e19', '#356f20', '#3f7f27', '#4a8f2e', '#58a038', '#66ae42'], 14, .09),
+    bricks: mk((x, y) => {
+      const row = y >> 2, r = y & 3; if (r === 3) return H(x, y, 8) < .5 ? '#b5aca2' : '#a39a90';
+      const xo = (x + (row % 2 ? 0 : 4)) % 16; if (xo % 8 === 7) return '#a8a095';
+      let c = ['#97503f', '#a1594a', '#8b4637', '#a85f4d', '#924c3c'][(row * 2 + (xo >> 3)) % 5];
+      if (r === 0) c = sh(c, 1.13); if (r === 2) c = sh(c, .87); return sh(c, .94 + H(x, y, 9) * .12);
+    }),
+    water: mk((x, y) => { const v = Math.sin((x + y * .5) * .9) + Math.sin(y * 1.3 - x * .35 + 1); return [v > 1.3 ? '#6b9cf3' : v > .5 ? '#4b80e6' : v < -1.2 ? '#2f5cc0' : '#3c6fd8', 205]; }),
+    lava: mk((x, y) => { const v = Math.sin(x * .8 + Math.sin(y * .7) * 2) + Math.cos(y * .9 + x * .3) + (H(x, y, 4) - .5) * .6; return v > 1.3 ? '#ffe36b' : v > .6 ? '#ffae2a' : v > -.4 ? '#ff7a10' : '#d4500a'; }),
+    farm: mk((x, y) => { const r = y & 3, v = H(x, y, 12); if (r === 0) return v < .5 ? '#33200e' : '#3b2513'; if (r === 1) return v < .5 ? '#6a4526' : '#5e3d21'; return pv(['#3f2815', '#4a301a', '#54371e', '#5e3d22'], cn(x, y, 13), 1.5); }),
+    gravel: stones(26, 15, ['#8a827f', '#a19996', '#706966', '#b1aaa7', '#7c7471', '#958b86', '#655f5c'], ['#58524f', '#4e4846'], .75),
+    furnace: mk((x, y) => {
+      if (x === 0 || x === 15 || y === 0 || y === 15) return sh('#5f5f5f', .9 + H(x, y, 20) * .2);
+      if (y >= 8 && y <= 13 && x >= 3 && x <= 12) { if (y === 8 || x === 3 || x === 12) return '#2a2a2a'; if (y >= 11) return y === 13 ? '#ffcf4a' : H(x, y, 21) < .5 ? '#ff9a2a' : '#e8641a'; return '#151515'; }
+      if (y === 3 && x >= 3 && x <= 12) return '#5a5a5a';
+      return pv(['#6e6e6e', '#787878', '#828282', '#8b8b8b'], cn(x, y, 22), 1.4);
+    }),
+    hay: mk((x, y) => { if (y === 2 || y === 12) return '#8a5a1a'; if (y === 3 || y === 13) return '#6f4612'; return pv(HAY, H(x, y >> 2, 30) * .6 + H(x, y, 31) * .4, 1.5); }),
+    hayTop: mk((x, y) => { const d = Math.max(Math.abs(x - 7.5), Math.abs(y - 7.5)); if (d > 5.4 && d < 6.6) return '#8a5a1a'; return pv(HAY, H(x, y, 32) * .6 + H(x >> 1, y, 33) * .4, 1.5); }),
+    sand: mk((x, y) => H(x, y, 39) < .03 ? '#bfae74' : pv(['#cdbf86', '#d5c88f', '#dbcf98', '#e1d6a1', '#e7ddab'], cn(x, y, 40), 1.6)),
+    sandstone: mk((x, y) => {
+      const n = cn(x, y, 41);
+      if (y < 3) return pv(['#ddd2a0', '#e2d7a6', '#e7ddad'], n, 1.3); if (y === 3) return '#c8b97f';
+      if (y >= 12) return (x + (y % 2) * 2) % 4 === 0 ? '#bfae74' : pv(['#cfc08a', '#d6c892'], n, 1.3);
+      return (y === 7 || y === 10) && H(x, y, 42) < .7 ? '#cdbd85' : pv(['#d7ca93', '#dccf98', '#e0d49e'], n, 1.4);
+    }),
+    sstop: mk((x, y) => pv(['#d9cd98', '#ded2a0', '#e2d7a6', '#e6dbab'], cn(x, y, 43), 1.3)),
+    cutsand: mk((x, y) => { if (y === 0 || y === 15) return '#c3b47b'; if (x === 0 || x === 15) return '#cbbd84'; if (y === 1) return '#e8deb0'; if (y === 14) return '#cdbf88'; return pv(['#d9cd98', '#ded2a0', '#e2d7a6'], cn(x, y, 46), 1.3); }),
+    terra: mk((x, y) => pv(['#94492a', '#9b4f2b', '#a2552d', '#a85b30'], cn(x, y, 44), 1.4)),
+    goldb: mk((x, y) => { if (x === 0 || y === 0) return '#fffbb5'; if (x === 15 || y === 15) return '#c78a0a'; if (x === 1 || y === 1) return '#fde872'; if (x === 14 || y === 14) return '#e0a818'; if ((x + y) % 9 === 0 && x > 2 && x < 13) return '#fff3a0'; return pv(['#f0c72e', '#f5d23a', '#f9db48'], cn(x, y, 45), 1.3); }),
+    wred: wool('#a12722', 47), wwhite: wool('#e4e8e8', 48), wyellow: wool('#f2c22a', 49), wblue: wool('#35399d', 50),
+    melon: mk((x, y) => { const p = ((x + Math.round(Math.sin(y * .6) * .8)) % 4 + 4) % 4, n = H(x, y, 51); return p === 0 ? (n < .5 ? '#4a7414' : '#557f19') : p === 1 ? '#6f9a24' : p === 2 ? (n < .3 ? '#a8cc45' : '#93bb33') : '#7ea82a'; }),
+    melonTop: mk((x, y) => { const d = Math.hypot(x - 7.5, y - 7.5); if (d < 1.5) return '#5a4a14'; const p = Math.floor(d * 1.1) % 3; return p === 0 ? '#557f19' : p === 1 ? '#86b030' : '#9cc23e'; }),
+    pumpkin: mk((x, y) => { const f = FACE[y] && FACE[y][x] === '#'; if (f) return (y === 7 || y === 10) ? '#ffb02a' : '#ffd84a'; return ridge(x, y); }),
+    pumpkinTop: mk((x, y) => { if (x >= 7 && x <= 8 && y >= 7 && y <= 8) return x === 7 ? '#6a5a20' : '#4a3a12'; const d = Math.max(Math.abs(x - 7.5), Math.abs(y - 7.5)); return sh(ridge(x, y), d > 6.6 ? .85 : 1); }),
+    jlog: bark(['#5c4a28', '#6e5a33', '#7d683c', '#8a7444', '#968050'], '#47391e', 52),
+    snowb: mk((x, y) => pv(SNOW, cn(x, y, 53), 1.4)),
+    snowSide: mk((x, y) => { const d = drip(x, 11, 3); return y < d ? (y === d - 1 ? '#d2dfe7' : pv(SNOW, cn(x, y, 54), 1.3)) : dirtPx(x, y, 6); }),
+    packed: mk((x, y) => (x - 2 * y + 32) % 11 === 0 ? '#b4d0fa' : pv(['#7ea6e8', '#88b0ee', '#91b8f2', '#9bc0f6'], cn(x, y, 60), 1.4)),
+    ice: mk((x, y) => ((x + y) % 8 === 0 && H(x, y, 61) < .7) ? ['#e6f2ff', 215] : [pv(['#8fb8f5', '#99c0f7', '#a3c8f9'], cn(x, y, 62), 1.3), 175]),
+    blueice: mk((x, y) => (x * 3 - y + 48) % 10 === 0 ? '#a9cbfa' : pv(['#6a9eef', '#74a8f4', '#7eb1f7'], cn(x, y, 63), 1.3)),
+    slog: bark(['#2c1d0e', '#352312', '#3e2a16', '#48311a', '#52381f'], '#1f1409', 64),
+    sleaves: leaf(['#1f3a22', '#26452a', '#2e5131', '#375d39', '#406842', '#4a7449'], 65, .06),
+    cactus: mk((x, y) => {
+      if (x === 0 || x === 15) return '#0e4a17'; if (x === 1 || x === 14) return '#1f6b22';
+      if ((x === 3 || x === 8 || x === 12) && (y + x) % 5 === 0) return '#f0f0c0';
+      if ((x === 3 || x === 8 || x === 12) && (y + x) % 5 === 1) return '#1a5a1c';
+      return x % 5 === 0 ? '#2a7524' : pv(['#348a2c', '#3a9632', '#45a23a'], H(x, y >> 1, 66), 1.2);
+    }),
+    cactusTop: mk((x, y) => { const d = Math.max(Math.abs(x - 7.5), Math.abs(y - 7.5)); if (d > 6.6) return '#0e4a17'; if (d > 5.4) return '#2f8a2a'; if ((x === 7 || x === 8) !== (y === 7 || y === 8) && d < 3) return '#4a9632'; return pv(['#55a237', '#5aa83a', '#62b043'], H(x, y, 67), 1.2); }),
+    glow: stones(10, 68, ['#ffd36b', '#f2b74a', '#ffe39a', '#e09a3a', '#ffcc55'], ['#9a6224', '#7d4f1c'], .9),
     // спрайты
-    wheat: mk((x, y) => (x % 3 === 1 && y > 3 + (x % 2) * 2) ? (y < 8 ? '#e7c44a' : '#b59a2a') : (x % 3 === 2 && y > 2 && y < 6 ? '#f2d667' : null)),
-    sprout: mk((x, y) => (x % 4 === 1 && y > 9) || (x % 4 === 2 && y > 11 && y < 13) ? '#4fb33a' : null),
-    poppy: mk((x, y) => (x === 7 || x === 8) && y > 8 ? '#3f8a2a' : (y > 3 && y < 8 && x > 5 && x < 10) ? (x === 7 && y === 5 ? '#2b1a0a' : '#e02a2a') : (y === 10 && (x === 6 || x === 9) ? '#3f8a2a' : null)),
-    dandelion: mk((x, y) => (x === 7 || x === 8) && y > 8 ? '#3f8a2a' : (y > 4 && y < 9 && x > 5 && x < 10) ? ((x + y) % 3 ? '#ffd23f' : '#ffb000') : null),
-    anvil: mk((x, y) => (y >= 4 && y < 7 && x >= 2 && x < 14) || (y >= 7 && y < 11 && x >= 6 && x < 10) || (y >= 11 && y < 15 && x >= 4 && x < 12) ? ((x + y) % 4 ? '#454545' : '#5a5a5a') : null),
-    lantern: mk((x, y) => (x >= 6 && x < 10 && y < 4) ? '#333333' : (x >= 5 && x < 11 && y >= 4 && y < 13) ? ((x === 5 || x === 10 || y === 4 || y === 12) ? '#3a3a3a' : '#ffcf5a') : null),
-    fence: mk((x, y) => (x >= 6 && x < 10) || (y === 4 || y === 5 || y === 10 || y === 11) ? ((x + y) % 3 ? '#a8864f' : '#8f6f3e') : null),
-    sfence: mk((x, y) => (x >= 6 && x < 10) || (y === 4 || y === 5 || y === 10 || y === 11) ? ((x + y) % 3 ? '#4a321b' : '#3d2a16') : null),
-    deadbush: mk((x, y) => ((y > 6 && (x === 7 || x === 8)) || (y > 3 && y < 9 && Math.abs(x - 7.5) === Math.round((9 - y) * .9) + .5) || (y === 4 && (x === 3 || x === 12))) ? '#8a5a2a' : null),
-    cane: mk((x, y) => ((x === 3 || x === 4 || x === 8 || x === 9 || x === 12 || x === 13) ? (y % 5 === 0 ? '#5f8a3a' : '#8ccf5a') : (y % 6 === 2 && (x === 5 || x === 10)) ? '#6fb04a' : null)),
-    vplains: villager('#6b4a2a', '#5a3d22'), vdesert: villager('#c9a25e', '#b08a4a'), vsnow: villager('#e8eff5', '#7fa8d8'),
+    wheat: mk((x, y) => {
+      if (x % 3 !== 1) { const sx = x - 1; if (x % 3 === 0 || x % 3 === 2) { const c = x % 3 === 2 ? x - 1 : x + 1, t = 2 + (c * 7) % 4; if ((y === t + 1 || y === t + 3) && c >= 0 && c < 16) return '#c9a33e'; } return null; }
+      const t = 2 + (x * 7) % 4; if (y < t) return null; if (y <= t + 4) return (y - t) % 2 ? '#e8c95e' : '#d9b44a'; return y > 12 ? '#6f8a2a' : '#9a8a2a';
+    }),
+    sprout: mk((x, y) => (x % 4 === 1 && y > 9) || (x % 4 === 2 && y > 11 && y < 13) ? (y > 13 ? '#3f9a2c' : '#5fc044') : null),
+    poppy: mk((x, y) => {
+      if (y >= 4 && y <= 7 && Math.hypot((x - 7.5) / 3.6, (y - 5.5) / 2.4) < 1) return (x === 7 || x === 8) && (y === 5 || y === 6) ? '#2a1a0a' : y === 4 ? '#ef3a2a' : y === 7 ? '#a51010' : '#d41e1e';
+      if ((x === 7 || x === 8) && y >= 8) return x === 7 ? '#3e8a24' : '#2f6e1c';
+      if ((y === 11 && (x === 5 || x === 6)) || (y === 12 && (x === 9 || x === 10))) return '#4aa02e';
+      return null;
+    }),
+    dandelion: mk((x, y) => {
+      if (Math.hypot(x - 7.5, y - 6) < 2.7) return y >= 7 ? '#f2b300' : (x + y) % 3 ? '#ffd23f' : '#ffe680';
+      if ((x === 7 || x === 8) && y >= 8) return x === 7 ? '#3e8a24' : '#2f6e1c';
+      if (y >= 13 && Math.abs(x - 7.5) < (y - 11) * 2 && (x + y) % 2) return '#4aa02e';
+      return null;
+    }),
+    anvil: anvil3D(false),
+    lantern: mk((x, y) => {
+      if (y === 0 && (x === 7 || x === 8)) return '#2b2b33'; if ((y === 1 || y === 2) && (x === 6 || x === 9)) return '#2b2b33';
+      if ((y === 3 || y === 12) && x >= 5 && x <= 10) return '#3b3b44';
+      if (y >= 4 && y <= 11 && x >= 5 && x <= 10) { if (x === 5 || x === 10) return '#2f2f38'; return (x === 7 || x === 8) && y >= 6 && y <= 9 ? '#fff0a8' : y > 9 ? '#ffb43a' : '#ffd36b'; }
+      return null;
+    }),
+    fenceSpr: mk((x, y) => { const P = ['#a8864f', '#b8945f', '#8f6f3e', '#6b4f2c']; if (x >= 6 && x <= 9) return x === 6 ? P[1] : x === 9 ? P[2] : P[0]; if ((y >= 3 && y <= 5) || (y >= 9 && y <= 11)) return y === 3 || y === 9 ? P[1] : y === 5 || y === 11 ? P[3] : P[0]; return null; }),
+    sfenceSpr: mk((x, y) => { const P = ['#4a321b', '#5a3e23', '#3d2a16', '#24170a']; if (x >= 6 && x <= 9) return x === 6 ? P[1] : x === 9 ? P[2] : P[0]; if ((y >= 3 && y <= 5) || (y >= 9 && y <= 11)) return y === 3 || y === 9 ? P[1] : y === 5 || y === 11 ? P[3] : P[0]; return null; }),
+    deadbush: mk((x, y) => ((y > 6 && (x === 7 || x === 8)) || (y > 3 && y < 9 && Math.abs(x - 7.5) === Math.round((9 - y) * .9) + .5) || (y === 4 && (x === 3 || x === 12))) ? (y > 10 ? '#6e4520' : '#8a5a2a') : null),
+    cane: mk((x, y) => ((x === 3 || x === 4 || x === 8 || x === 9 || x === 12 || x === 13) ? (y % 5 === 0 ? '#5f8a3a' : x % 2 ? '#9ad866' : '#7cbf4e') : (y % 6 === 2 && (x === 5 || x === 10)) ? '#6fb04a' : null)),
+    vplains: villager('#6b4a2a', '#5a3d22', (x, y) => y === 16 && x >= 2 && x <= 9 ? '#2e2216' : null),
+    vdesert: villager('#c9a25e', '#a7834a', (x, y) => y === 10 && x >= 3 && x <= 8 ? '#b5452a' : null),
+    vsnow: villager('#e8eff5', '#7fa8d8', (x, y) => y === 10 && x >= 2 && x <= 9 ? '#3b5fa8' : null),
   };
   const X = VTX;
   VB = {
     grass: [X.grass, X.grassSide], dirt: [X.dirt, X.dirt], stone: [X.stone, X.stone], cobble: [X.cobble, X.cobble], planks: [X.planks, X.planks], dark: [X.dark, X.dark],
     log: [X.logTop, X.log], glass: [X.glass, X.glass, 1], leaves: [X.leaves, X.leaves, 1], bricks: [X.bricks, X.bricks], water: [X.water, X.water, 1], lava: [X.lava, X.lava],
-    farm: [X.farm, X.dirt], gravel: [X.gravel, X.gravel], furnace: [X.cobble, X.furnace], hay: [X.hay, X.hay],
+    farm: [X.farm, X.dirt], gravel: [X.gravel, X.gravel], furnace: [X.cobble, X.furnace], hay: [X.hayTop, X.hay],
     sand: [X.sand, X.sand], sandstone: [X.sstop, X.sandstone], cutsand: [X.sstop, X.cutsand], terra: [X.terra, X.terra], goldb: [X.goldb, X.goldb],
     wred: [X.wred, X.wred], wwhite: [X.wwhite, X.wwhite], wyellow: [X.wyellow, X.wyellow], wblue: [X.wblue, X.wblue], melon: [X.melonTop, X.melon], pumpkin: [X.pumpkinTop, X.pumpkin],
     jlog: [X.logTop, X.jlog], snow: [X.snowb, X.snowSide], snowb: [X.snowb, X.snowb], packed: [X.packed, X.packed], ice: [X.ice, X.ice, 1], blueice: [X.blueice, X.blueice],
-    cactus: [X.cactusTop, X.cactus], slog: [X.logTop, X.slog], sleaves: [X.sleaves, X.sleaves, 1], glow: [X.glow, X.glow],
+    cactus: [X.cactusTop, X.cactus], slog: [X.slogTop, X.slog], sleaves: [X.sleaves, X.sleaves, 1], glow: [X.glow, X.glow],
     wheat: { spr: X.wheat }, sprout: { spr: X.sprout }, poppy: { spr: X.poppy, s: .7 }, dandelion: { spr: X.dandelion, s: .7 }, anvil: { spr: X.anvil }, lantern: { spr: X.lantern, s: .6 },
-    fence: { spr: X.fence }, sfence: { spr: X.sfence }, deadbush: { spr: X.deadbush, s: .75 }, cane: { spr: X.cane },
+    fence: { fence: X.planks }, sfence: { fence: X.splanks }, sbricks: [X.sbricks, X.sbricks], deadbush: { spr: X.deadbush, s: .75 }, cane: { spr: X.cane },
   };
 }
 const vOpaque = t => t && VB[t] && Array.isArray(VB[t]) && !VB[t][2];
@@ -2286,9 +2464,9 @@ const VILLAGES = [
         ['Уют', 15000, o => { vbox(o, 3, 1, 6, 3, 1, 8, 'bricks'); o.push([0, 4, 1, 'poppy'], [1, 4, 1, 'dandelion'], [3, 4, 1, 'poppy'], [4, 4, 1, 'dandelion'], [5, 2, 1, 'poppy'], [5, 0, 1, 'hay'], [5, 0, 2, 'hay'], [5, 1, 1, 'hay']); }],
       ] },
       { id: 'forge', n: 'Кузница', i: '⚒', ox: 8, oy: 1, st: [
-        ['Каменный пол', 800, o => vbox(o, 0, 0, 1, 3, 3, 1, 'stone')],
+        ['Каменный пол', 800, o => vbox(o, 0, 0, 1, 3, 3, 1, 'sbricks')],
         ['Печи и столбы', 2500, o => { for (const [x, y] of [[0, 0], [3, 0], [0, 3], [3, 3]]) vbox(o, x, y, 2, x, y, 4, 'cobble'); vbox(o, 1, 0, 2, 2, 0, 4, 'cobble'); o.push([1, 0, 2, 'furnace'], [2, 0, 2, 'furnace']); }],
-        ['Крыша', 6000, o => { vbox(o, -1, -1, 5, 4, 4, 5, 'cobble'); vbox(o, 0, 0, 6, 3, 3, 6, 'stone'); vbox(o, 0, 1, 2, 0, 2, 4, 'cobble'); }],
+        ['Крыша', 6000, o => { vbox(o, -1, -1, 5, 4, 4, 5, 'cobble'); vbox(o, 0, 0, 6, 3, 3, 6, 'sbricks'); vbox(o, 0, 1, 2, 0, 2, 4, 'cobble'); }],
         ['Наковальня и лава', 14000, o => { o.push([2, 2, 2, 'anvil'], [3, 1, 2, 'lava'], [3, 2, 2, 'lava'], [1, 3, 5, 'lantern']); vbox(o, 1, 1, 7, 1, 1, 8, 'bricks'); }],
       ] },
       { id: 'well', n: 'Колодец', i: '🪣', ox: 1, oy: 9, st: [
@@ -2385,16 +2563,94 @@ function vBuild() {
   let guard = 0;
   while (vPeople.length < want && guard++ < 400) { const x = Math.floor(Math.random() * VN), y = Math.floor(Math.random() * VN); if (vScene.walk(x, y)) vPeople.push({ v: vi, x, y, tx: x, ty: y, dx: 0, dy: 0, wait: Math.random() * 2, ph: Math.random() * 6 }); }
 }
+// масштаб и сдвиг камеры (кнопки +/− и перетаскивание пальцем)
+const VZ = [1, 1.6, 2.4]; let vZoomI = 0, vZoom = 1, vtw0 = 24, vPanX = 0, vPanY = 0;
 function vResize() {
   const cv = $('vcv'); if (!cv) return; vW = cv.clientWidth || 340; vDpr = Math.min(2, window.devicePixelRatio || 1);
-  vtw = Math.floor(vW / (VN + 1.4)); vH = Math.round(vtw * VN / 2 + vtw * 6.4);
-  cv.width = Math.round(vW * vDpr); cv.height = Math.round(vH * vDpr); cv.style.height = vH + 'px'; vox = vW / 2; voy = vtw * 5;
+  vtw0 = Math.floor(vW / (VN + 1.4)); vtw = vtw0 * vZoom; vH = Math.round(vtw0 * VN / 2 + vtw0 * 6.4);
+  cv.width = Math.round(vW * vDpr); cv.height = Math.round(vH * vDpr); cv.style.height = vH + 'px'; vCam();
+}
+function vCam() {
+  if (vZoom <= 1) { vPanX = 0; vPanY = 0; }
+  // остров не уезжает за край: боковые углы и низ острова остаются у краёв, сверху — запас под высокие постройки
+  const mx = Math.max(0, VN * vtw / 2 - vW / 2 + vtw * .5), lo = vH - vtw * .5 - vtw0 * 8 - vtw * 5, hi = vtw * 8.5 - vtw0 * 8;
+  vPanX = Math.max(-mx, Math.min(mx, vPanX)); vPanY = lo > hi ? 0 : Math.max(lo, Math.min(hi, vPanY));
+  vox = vW / 2 + vPanX; voy = vtw0 * 8 + vPanY - 3 * vtw;
+}
+function vSetZoom(i) {
+  i = Math.max(0, Math.min(VZ.length - 1, i)); const k = VZ[i] / vZoom; vZoomI = i; vZoom = VZ[i]; vPanX *= k; vPanY *= k; vtw = vtw0 * vZoom; vCam();
+  const cv = $('vcv'); if (cv) { cv.style.touchAction = vZoom > 1 ? 'none' : 'pan-y'; cv.style.cursor = vZoom > 1 ? 'grab' : ''; }
+  if ($('vZi')) { $('vZi').disabled = i === VZ.length - 1; $('vZo').disabled = i === 0; }
 }
 const vR4 = (x, y) => { const c = VN - 1; switch (vRot) { case 1: return [c - y, x]; case 2: return [c - x, c - y]; case 3: return [y, c - x]; default: return [x, y]; } };
 const vP = (x, y, z) => [vox + (x - y) * vtw / 2, voy + (x + y) * vtw / 4 - z * vtw / 2];
+// Грани с «запечённым» мягким затенением углов (AO) и тенями: один drawImage на грань, варианты кэшируются.
+// kind: 0 — верх, 1 — южная (светлее), 2 — восточная (темнее). Биты m: 1 лево/запад, 2 право/восток, 4 верх/север, 8 низ/юг, 16..128 углы, 256 — в тени.
+const vFC = new Map();
+function vFace(tex, kind, m) {
+  const key = tex._id * 4096 + kind * 1024 + m; let c = vFC.get(key); if (c) return c;
+  const S = 32; c = mkCanvas(S, S); const g = c.getContext('2d'); g.imageSmoothingEnabled = false; g.drawImage(tex, 0, 0, S, S);
+  g.globalCompositeOperation = 'source-atop';
+  const sd = kind === 1 ? .2 : kind === 2 ? .38 : 0; if (sd) { g.fillStyle = `rgba(0,0,0,${sd})`; g.fillRect(0, 0, S, S); }
+  if (m & 256) { g.fillStyle = 'rgba(12,22,55,.19)'; g.fillRect(0, 0, S, S); }
+  const A = .42, L = S * .45, fill = gr => { gr.addColorStop(0, `rgba(0,0,0,${A})`); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, S, S); };
+  const lin = (x0, y0, x1, y1) => fill(g.createLinearGradient(x0, y0, x1, y1)), rad = (x, y) => fill(g.createRadialGradient(x, y, 0, x, y, L));
+  if (m & 1) lin(0, 0, L, 0); if (m & 2) lin(S, 0, S - L, 0); if (m & 4) lin(0, 0, 0, L); if (m & 8) lin(0, S, 0, S - L);
+  if ((m & 16) && !(m & 5)) rad(0, 0); if ((m & 32) && !(m & 6)) rad(S, 0); if ((m & 64) && !(m & 9)) rad(0, S); if ((m & 128) && !(m & 10)) rad(S, S);
+  vFC.set(key, c); return c;
+}
+const VG = 32, vgk = (x, y, z) => ((x + 4) * VG + (y + 4)) * 64 + (z + 4);
+let vOps = null, vOpsScene = null, vOpsRot = -1;
+const vCmp = (a, b) => (a.x + a.y + a.z) - (b.x + b.y + b.z) || a.z - b.z || a.x - b.x;
+function vPrep(now) {
+  if (vOps && vOpsScene === vScene && vOpsRot === vRot && !vBorn.size) return vOps;
+  const vi = meta.vil.cur, grid = new Uint8Array(VG * VG * 64), items = [];
+  for (const q of vScene) {
+    const [x, y] = vR4(q.x, q.y), bk = vi + ':' + q.x + ',' + q.y + ',' + q.z, bt = vBorn.get(bk);
+    let fz = 0; if (bt) { if (now < bt) continue; const k = Math.min(1, (now - bt) / 380); fz = (1 - k) * (1 - k) * 9; if (k >= 1) vBorn.delete(bk); }
+    items.push({ x, y, z: q.z, t: q.t, fz });
+    const b = VB[q.t]; if (!fz && Array.isArray(b)) grid[vgk(x, y, q.z)] = !b[2] ? 1 : (q.t === 'leaves' || q.t === 'sleaves') ? 2 : 3;
+  }
+  const fences = new Set(); for (const it of items) if (!it.fz && VB[it.t] && VB[it.t].fence) fences.add(vgk(it.x, it.y, it.z));
+  const at = (x, y, z) => (x < -4 || y < -4 || z < -4 || x >= VG - 4 || y >= VG - 4 || z >= 60) ? 0 : grid[vgk(x, y, z)];
+  const op = (x, y, z) => at(x, y, z) === 1, so = (x, y, z) => { const v = at(x, y, z); return v === 1 || v === 2 ? 1 : 0; };
+  for (const it of items) {
+    const b = VB[it.t]; if (!b || b.spr) continue; const { x, y, z } = it;
+    if (b.fence) { const c = (dx, dy) => fences.has(vgk(x + dx, y + dy, z)) || op(x + dx, y + dy, z); it.fc = (c(1, 0) ? 1 : 0) | (c(-1, 0) ? 2 : 0) | (c(0, 1) ? 4 : 0) | (c(0, -1) ? 8 : 0); continue; }
+    const [top, side] = b;
+    if (it.fz) { it.f = [vFace(side, 1, 0), vFace(side, 2, 0), vFace(top, 0, 0)]; continue; }
+    it.f = [
+      op(x, y + 1, z) ? null : vFace(side, 1, so(x - 1, y + 1, z) | so(x + 1, y + 1, z) << 1 | so(x, y + 1, z + 1) << 2 | so(x, y + 1, z - 1) << 3),
+      op(x + 1, y, z) ? null : vFace(side, 2, so(x + 1, y + 1, z) | so(x + 1, y - 1, z) << 1 | so(x + 1, y, z + 1) << 2 | so(x + 1, y, z - 1) << 3),
+      null];
+    if (!op(x, y, z + 1)) {
+      const u = z + 1; let m = so(x - 1, y, u) | so(x + 1, y, u) << 1 | so(x, y - 1, u) << 2 | so(x, y + 1, u) << 3 | so(x - 1, y - 1, u) << 4 | so(x + 1, y - 1, u) << 5 | so(x - 1, y + 1, u) << 6 | so(x + 1, y + 1, u) << 7;
+      for (let k = 1; k <= 8; k++) if (so(x - k, y - (k >> 1), z + k)) { m |= 256; break; }
+      it.f[2] = vFace(top, 0, m);
+    }
+  }
+  items.sort(vCmp); vOps = items; vOpsScene = vScene; vOpsRot = vRot; return items;
+}
+// Настоящий 3D-забор: столб 4/16 и две перекладины 2/16, которые тянутся к соседним заборам и стенам.
+function vBox(g, T, cx, cy, cz, x0, y0, z0, x1, y1, z1) {
+  const S = vFace(T, 1, 0), E = vFace(T, 2, 0), U = vFace(T, 0, 0), q = vtw / 2, r = vtw / 4, dx = x1 - x0, dy = y1 - y0, dz = z1 - z0, k = 32;
+  const put = (img, a, b, c, d, [e, f], sx, sy, sw, sh) => { g.setTransform(vDpr * a, vDpr * b, vDpr * c, vDpr * d, vDpr * e, vDpr * f); g.drawImage(img, sx * k, sy * k, Math.max(.5, sw * k), Math.max(.5, sh * k), -0.02, -0.02, 1.04, 1.04); };
+  put(S, dx * q, dx * r, 0, dz * q, vP(cx + x0, cy + y1, cz + z1), x0, 1 - z1, dx, dz);
+  put(E, dy * q, -dy * r, 0, dz * q, vP(cx + x1, cy + y1, cz + z1), 1 - y1, 1 - z1, dy, dz);
+  put(U, dx * q, dx * r, -dy * q, dy * r, vP(cx + x0, cy + y0, cz + z1), x0, y0, dx, dy);
+}
+function vFence(g, T, x, y, z, m) {
+  const a = .4375, b = .5625, P = .375, Q = .625, rails = [[.375, .5625], [.75, .9375]], B = (...v) => vBox(g, T, x, y, z, ...v);
+  if (m & 2) for (const [z0, z1] of rails) B(0, a, z0, P, b, z1);
+  if (m & 8) for (const [z0, z1] of rails) B(a, 0, z0, b, P, z1);
+  B(P, P, 0, Q, Q, 1);
+  if (m & 1) for (const [z0, z1] of rails) B(Q, a, z0, 1, b, z1);
+  if (m & 4) for (const [z0, z1] of rails) B(a, Q, z0, b, 1, z1);
+}
 function vDraw(now) {
   const cv = $('vcv'), g = cv.getContext('2d'), dt = Math.min(.05, (now - (vLast || now)) / 1000); vLast = now;
   const V = VILLAGES[meta.vil.cur], locked = !vilUnlocked(meta.vil.cur);
+  vCam();
   g.setTransform(1, 0, 0, 1, 0, 0);
   const sky = g.createLinearGradient(0, 0, 0, cv.height); sky.addColorStop(0, V.sky[0]); sky.addColorStop(1, V.sky[1]); g.fillStyle = sky; g.fillRect(0, 0, cv.width, cv.height);
   g.imageSmoothingEnabled = false;
@@ -2409,28 +2665,23 @@ function vDraw(now) {
     const keep = dirs.find(([a, b]) => a === p.dx && b === p.dy), [a, b] = keep && Math.random() < .7 ? keep : dirs[Math.floor(Math.random() * dirs.length)];
     p.dx = a; p.dy = b; p.tx += a; p.ty += b;
   }
-  const occ = new Map(), list = [];
-  for (const q of vScene) {
-    const [x, y] = vR4(q.x, q.y), bt = vBorn.get(meta.vil.cur + ':' + q.x + ',' + q.y + ',' + q.z);
-    let fz = 0; if (bt) { if (now < bt) continue; const k = Math.min(1, (now - bt) / 380); fz = (1 - k) * (1 - k) * 9; if (k >= 1) vBorn.delete(meta.vil.cur + ':' + q.x + ',' + q.y + ',' + q.z); }
-    list.push({ x, y, z: q.z, t: q.t, fz }); if (fz === 0) occ.set(x + ',' + y + ',' + q.z, q.t);
-  }
-  for (const p of vPeople) { const [x, y] = vR4(p.x, p.y); list.push({ x, y, z: 1, person: 1, ph: p.ph }); }
-  list.sort((a, b) => (a.x + a.y + a.z) - (b.x + b.y + b.z) || a.z - b.z || a.x - b.x);
+  const ops = vPrep(now); let list = ops;
+  if (vPeople.length) { list = ops.slice(); for (const p of vPeople) { const [x, y] = vR4(p.x, p.y); list.push({ x, y, z: 1, person: 1, ph: p.ph }); } list.sort(vCmp); }
   const h = vtw / 2;
-  const face = (tex, a, b, c, d, e, f, shade) => {
-    g.setTransform(vDpr * a / 16, vDpr * b / 16, vDpr * c / 16, vDpr * d / 16, vDpr * e, vDpr * f); g.drawImage(tex, -0.08, -0.08, 16.16, 16.16);
-    if (shade) { g.fillStyle = `rgba(0,0,0,${shade})`; g.fillRect(-0.08, -0.08, 16.16, 16.16); }
-  };
+  const face = (tex, a, b, c, d, e, f) => { g.setTransform(vDpr * a / 16, vDpr * b / 16, vDpr * c / 16, vDpr * d / 16, vDpr * e, vDpr * f); g.drawImage(tex, -0.08, -0.08, 16.16, 16.16); };
   for (const it of list) {
-    if (it.person) { const [cx, cy] = vP(it.x + .5, it.y + .5, 1), w = vtw * .62, hh = vtw * .78, bob = Math.abs(Math.sin(now / 160 + it.ph)) * vtw * .05;
-      g.setTransform(vDpr * w / 16, 0, 0, vDpr * hh / 16, vDpr * (cx - w / 2), vDpr * (cy - hh - vtw / 10 - bob)); g.drawImage(VTX[V.vil], 0, 0); continue; }
+    if (it.person) {
+      const [cx, cy] = vP(it.x + .5, it.y + .5, 1), hh = vtw * .95, w = hh * .6, bob = Math.abs(Math.sin(now / 160 + it.ph)) * vtw * .05;
+      g.setTransform(vDpr, 0, 0, vDpr, 0, 0); g.fillStyle = 'rgba(0,0,0,.28)'; g.beginPath(); g.ellipse(cx, cy, w * .55, w * .26, 0, 0, 7); g.fill();
+      g.setTransform(vDpr * w / 12, 0, 0, vDpr * hh / 20, vDpr * (cx - w / 2), vDpr * (cy - hh + vtw * .04 - bob)); g.drawImage(VTX[V.vil], 0, 0); continue;
+    }
     const bt = VB[it.t]; if (!bt) continue; const z = it.z + it.fz;
-    if (bt.spr) { const s = bt.s || .9, [cx, cy] = vP(it.x + .5, it.y + .5, z), w = vtw * s * .75; g.setTransform(vDpr * w / 16, 0, 0, vDpr * w / 16, vDpr * (cx - w / 2), vDpr * (cy - w - vtw / 8)); g.drawImage(bt.spr, 0, 0); continue; }
-    const [top, side] = bt, free = (dx, dy, dz) => it.fz || !vOpaque(occ.get((it.x + dx) + ',' + (it.y + dy) + ',' + (it.z + dz)));
-    if (free(0, 1, 0)) { const [e, f] = vP(it.x, it.y + 1, z + 1); face(side, vtw / 2, vtw / 4, 0, h, e, f, .22); }
-    if (free(1, 0, 0)) { const [e, f] = vP(it.x + 1, it.y + 1, z + 1); face(side, vtw / 2, -vtw / 4, 0, h, e, f, .38); }
-    if (free(0, 0, 1)) { const [e, f] = vP(it.x, it.y, z + 1); face(top, vtw / 2, vtw / 4, -vtw / 2, vtw / 4, e, f, 0); }
+    if (bt.fence) { vFence(g, bt.fence, it.x, it.y, z, it.fc || 0); continue; }
+    if (bt.spr) { const s = bt.s || .9, [cx, cy] = vP(it.x + .5, it.y + .5, z), w = vtw * s * .75; g.setTransform(vDpr * w / 16, 0, 0, vDpr * w / 16, vDpr * (cx - w / 2), vDpr * (cy - w - vtw / 8)); g.drawImage(bt.spr, 0, 0, 16, 16); continue; }
+    const F = it.f; if (!F) continue;
+    if (F[0]) { const [e, f] = vP(it.x, it.y + 1, z + 1); face(F[0], vtw / 2, vtw / 4, 0, h, e, f); }
+    if (F[1]) { const [e, f] = vP(it.x + 1, it.y + 1, z + 1); face(F[1], vtw / 2, -vtw / 4, 0, h, e, f); }
+    if (F[2]) { const [e, f] = vP(it.x, it.y, z + 1); face(F[2], vtw / 2, vtw / 4, -vtw / 2, vtw / 4, e, f); }
   }
   g.setTransform(vDpr, 0, 0, vDpr, 0, 0);
   // дым из труб
@@ -2512,6 +2763,18 @@ $('mMode').onclick = e => { e.currentTarget.blur(); openSheet('mode'); };
 $('mPay').onclick = e => { e.currentTarget.blur(); openSheet('pay'); };
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => closeSheet());
 window.addEventListener('popstate', () => closeSheet(true)); // кнопка «назад» сворачивает окно
+// Подстройка раскладки: решение принимается по «базовой» высоте поля (без классов), поэтому не дёргается туда-обратно.
+function fitLayout() {
+  const B = document.body, st = $('stage'); if (!st) return;
+  B.classList.remove('cmp', 'cmp2'); if (window.innerWidth >= 900) return;
+  const want = Math.min(330, st.clientWidth * .8);
+  if (st.getBoundingClientRect().height >= want) return;
+  B.classList.add('cmp'); if (st.getBoundingClientRect().height < want - 10) B.classList.add('cmp2');
+}
+let fitRaf = 0; const fitSoon = () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitLayout); };
+window.addEventListener('resize', fitSoon); window.addEventListener('orientationchange', fitSoon); if (window.visualViewport) visualViewport.addEventListener('resize', fitSoon);
+if (window.ResizeObserver) { const ro = new ResizeObserver(fitSoon); for (const el of document.querySelectorAll('.topbar,.controls,.histrow')) ro.observe(el); }
+fitLayout(); setTimeout(fitLayout, 300);
 if (window.ResizeObserver) new ResizeObserver(() => resize()).observe($('stage')); // поле меняет размер, когда появляются/прячутся кнопки забега
 $('runAmt').addEventListener('keydown', e => { if (e.key === 'Enter') runGo(); });
 document.querySelectorAll('[data-ra]').forEach(b => b.onclick = () => { $('runAmt').value = b.dataset.ra; $('runErr').textContent = ''; markRunAmt(); });
@@ -2546,6 +2809,15 @@ $('mBank').onclick = e => { e.currentTarget.blur(); openSheet('bank'); };
 $('vTabs').addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (!b || +b.dataset.v === meta.vil.cur) return; meta.vil.cur = +b.dataset.v; saveMeta(); vPeople = []; vBuild(); renderVil(); });
 $('vCards').addEventListener('click', e => { const b = e.target.closest('.vbuy[data-b]'); if (b && !b.disabled) vilBuy(b.dataset.b); });
 $('vRot').onclick = () => { vRot = (vRot + 1) % 4; tone(520, .05, 'square', .03); };
+$('vZi').onclick = () => { vSetZoom(vZoomI + 1); tone(600, .04, 'square', .03); };
+$('vZo').onclick = () => { vSetZoom(vZoomI - 1); tone(440, .04, 'square', .03); };
+(() => {
+  const cv = $('vcv'); let drag = null; cv.style.touchAction = 'pan-y';
+  cv.addEventListener('pointerdown', e => { if (vZoom <= 1) return; drag = { x: e.clientX, y: e.clientY, px: vPanX, py: vPanY }; try { cv.setPointerCapture(e.pointerId); } catch (_) { } cv.style.cursor = 'grabbing'; });
+  cv.addEventListener('pointermove', e => { if (!drag) return; vPanX = drag.px + e.clientX - drag.x; vPanY = drag.py + e.clientY - drag.y; vCam(); });
+  const up = () => { if (drag) { drag = null; cv.style.cursor = vZoom > 1 ? 'grab' : ''; } };
+  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+})();
 $('gDailyBtn').onclick = claimDaily;
 $('gRescueBtn').onclick = claimRescue;
 $('gQuests').addEventListener('click', e => { const b = e.target.closest('[data-qi]'); if (b && !b.disabled) claimQuest(+b.dataset.qi); });
