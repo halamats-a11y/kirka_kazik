@@ -7,7 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <!-- iPhone / веб-приложение (добавлено make-iphone.py) -->
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Кирка">
 <meta name="application-name" content="Кирка">
 <meta name="format-detection" content="telephone=no">
@@ -100,6 +100,12 @@
   .hist{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
   .chip{font-size:12px;font-weight:800;padding:3px 7px;border-radius:5px;background:#2b2b35}
   .chip.w{color:#0b2a12;background:var(--green)} .chip.l{color:#fff;background:#7a2323}
+  .chip.p{color:#2a1a00;background:#e0b020} /* забрал, но меньше ставки — убыток */
+  .vgoal{font-size:11px;color:#ffcf6a;margin-top:3px} .vgoal b{color:#ffe08a}
+  .vgbar{height:5px;background:#0008;border-radius:3px;overflow:hidden;margin-top:3px;max-width:180px}
+  .vgbar i{display:block;height:100%;background:linear-gradient(90deg,#e09a00,#ffcf3a)}
+  .vcard.goal{border-color:#ffd23f!important;box-shadow:0 0 10px rgba(255,210,63,.35)}
+  .vgoaltop{margin-top:4px;color:#ffcf6a}
   .overlay{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%) scale(.8);opacity:0;pointer-events:none;
     text-align:center;transition:all .25s;background:#000b;border:3px solid #000;border-radius:12px;padding:16px 22px;min-width:260px;box-shadow:0 0 0 2px #444}
   .overlay.show{opacity:1;transform:translate(-50%,-50%) scale(1)}
@@ -236,6 +242,24 @@
   .tile{background:#16161c;border-radius:8px;padding:7px 4px;text-align:center}
   .tile b{display:block;font-size:16px} .tile span{font-size:10px;color:var(--muted);text-transform:uppercase}
   .paytbl td{padding:6px 2px} .paytbl td img{width:26px;height:26px}
+  /* ===== справка «Как играть» ===== */
+  .hlp{flex:none;background:var(--panel);border:2px solid var(--line);border-radius:10px;overflow:hidden}
+  #helpBody>.btn{flex:none}
+  .hlp>summary{list-style:none;cursor:pointer;padding:11px 12px;font-weight:700;display:flex;align-items:center;gap:8px;-webkit-tap-highlight-color:transparent}
+  .hlp>summary::-webkit-details-marker{display:none}
+  .hlp>summary::after{content:'▸';margin-left:auto;color:var(--muted);transition:transform .2s}
+  .hlp[open]>summary::after{transform:rotate(90deg)}
+  .hlp[open]>summary{border-bottom:1px solid var(--line)}
+  .hlp .hb{padding:10px 12px 12px;font-size:13px;line-height:1.55;color:#d6dbe6}
+  .hlp .hb p{margin:0 0 8px} .hlp .hb p:last-child{margin-bottom:0}
+  .hlp .hb b{color:#fff}
+  .hrow{display:flex;align-items:center;gap:10px;padding:5px 0;border-top:1px dashed rgba(255,255,255,.07)}
+  .hrow:first-child{border-top:0}
+  .hrow img{width:28px;height:28px;image-rendering:pixelated;flex:none}
+  .hrow .hi{width:28px;text-align:center;font-size:20px;flex:none}
+  .hrow span{flex:1}
+  .hsteps{margin:0;padding-left:20px} .hsteps li{margin:3px 0}
+  .htip{background:rgba(255,200,40,.08);border:1px solid rgba(255,200,40,.35);border-radius:8px;padding:8px 10px;color:#ffe7a3}
   .seg .btn.on{outline:none}
   .qgrid5 .btn.on{outline:2px solid var(--gold)}
   @media (max-height:700px){
@@ -276,6 +300,10 @@
   .menubar .btn .i{font-size:20px}
   .menubar .btn small{font-size:11px}
   @media (max-height:700px){ .menubar{gap:4px} .menubar .btn{display:block;text-align:center;font-size:12px;padding:3px 2px 4px} .menubar .btn .i{font-size:13px;margin-right:3px} .menubar .btn small{display:block;font-size:10px} .controls .hint{display:none} }
+  /* iOS 26+: в старых установках с black-translucent система размывает ~40px под статус-баром — сдвигаем шапку ниже */
+  html.glass .app{padding-top:calc(46px + env(safe-area-inset-top))}
+  html.glass .sh-head{padding-top:calc(50px + env(safe-area-inset-top))}
+  html.glass .gtoast{top:calc(48px + env(safe-area-inset-top))}
   .gtoast{position:fixed;left:50%;top:calc(8px + env(safe-area-inset-top));transform:translateX(-50%);z-index:95;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none;width:min(440px,94vw)}
   .gtoast div{background:#111118f2;border:2px solid #000;box-shadow:0 0 0 2px #3a3a48,0 8px 24px #000a;border-radius:10px;padding:8px 12px;font-weight:800;font-size:13px;text-align:center;animation:gin 3.2s forwards;line-height:1.35}
   .gtoast div.big{font-size:15px;padding:10px 14px;box-shadow:0 0 0 2px #8a6a10,0 0 26px #ffd23f55;animation-duration:4.2s}
@@ -411,6 +439,55 @@
   .btn.vcol:disabled{background:#2b2b35;color:#a4a4b8;opacity:1;filter:none}
   .vinc1{font-size:11px;color:#bfe0a0;margin-top:2px} .vinc1.full{color:#ffd23f;font-weight:800}
   .menubar .btn.vcash small{color:#ffd23f}
+
+  /* ===== обучение: учебный раунд с подсветкой и линиями-указателями ===== */
+  .tut{position:fixed;inset:0;z-index:150;display:none;pointer-events:none}
+  .tut.show{display:block}
+  .tut-blk{position:fixed;pointer-events:auto}
+  .tut-svg{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+  .tut-ol{fill:none;stroke:#ffd23f;stroke-width:3;filter:drop-shadow(0 0 6px rgba(255,210,63,.75))}
+  .tut-ln{fill:none;stroke:#ffd23f;stroke-width:2.6;stroke-linecap:round;stroke-dasharray:8 7;animation:tutAnts .9s linear infinite;filter:drop-shadow(0 0 4px rgba(255,210,63,.8)) drop-shadow(0 1px 1px #000)}
+  @keyframes tutAnts{to{stroke-dashoffset:-15}}
+  .tut-dot{fill:#ffd23f;stroke:#000;stroke-width:1.5}
+  .tut-pulse{fill:none;stroke:#ffd23f;stroke-width:2.5;transform-box:fill-box;transform-origin:center;animation:tutPulse 1.2s ease-out infinite}
+  @keyframes tutPulse{0%{transform:scale(.4);opacity:1}100%{transform:scale(2.2);opacity:0}}
+  .tut-bub{position:fixed;pointer-events:auto;width:min(340px,calc(100vw - 24px));background:#1b1b24;border:3px solid #ffd23f;border-radius:14px;padding:12px 14px;color:#fff;box-shadow:0 10px 34px #000c,0 0 18px rgba(255,210,63,.25)}
+  .tut-bub.pop{animation:tutPop .28s ease-out}
+  @keyframes tutPop{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+  .tut-bub .temo{font-size:34px;text-align:center;line-height:1.1;margin-bottom:4px}
+  .tut-bub h3{margin:0 0 5px;font-size:16px;color:#ffd23f;display:flex;align-items:center;gap:8px}
+  .tut-bub h3 img{width:26px;height:26px;image-rendering:pixelated;flex:none;border-radius:3px;box-shadow:0 0 0 2px #000}
+  .tut-bub p{margin:0;font-size:13.5px;line-height:1.45;color:#ececf4}
+  .tut-row{display:flex;gap:8px;justify-content:flex-end;align-items:center;margin-top:10px}
+  .btn.tut-skip{background:#2b2b35;color:#c9c9d6;font-size:12px;padding:7px 10px;box-shadow:none}
+  .btn.tut-next{background:linear-gradient(#ffcf3a,#e09a00);color:#2a1a00;font-size:14px;padding:8px 14px;text-shadow:none}
+  .tut-fin{position:fixed;font-size:36px;pointer-events:none;animation:tutTap .9s ease-in-out infinite;filter:drop-shadow(0 3px 3px #000)}
+  @keyframes tutTap{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  .tut-tag{position:absolute;left:50%;transform:translateX(-50%);bottom:8px;display:none;pointer-events:none;z-index:3}
+  .tut-tag.show{display:block}
+  .tut-tag b{display:block;white-space:nowrap;background:#3a2a00e6;border:2px solid #ffd23f;color:#ffd23f;border-radius:8px;padding:3px 9px;font-size:11px;letter-spacing:.5px}
+  .tut-tag span:empty{display:none}
+  .tut-rew{display:table;margin:2px 0 10px;padding:4px 10px;border-radius:8px;background:linear-gradient(#ffcf3a,#e09a00);color:#2a1a00;font-weight:900;font-size:15px;box-shadow:0 0 14px rgba(255,210,63,.5)}
+  .tut-rew .coin{filter:none}
+  .lhint{position:fixed;z-index:96;width:max-content;max-width:min(240px,70vw);background:#1b1b24;border:2px solid #ffd23f;border-radius:10px;padding:8px 11px;font-size:12.5px;line-height:1.4;color:#fff;box-shadow:0 8px 24px #000c,0 0 14px rgba(255,210,63,.3);animation:tutPop .3s ease-out;cursor:pointer}
+  .lhint b{color:#ffd23f}
+  .lhint::before{content:'';position:absolute;top:-9px;left:var(--ax,50%);margin-left:-8px;border:8px solid transparent;border-top:0;border-bottom-color:#ffd23f}
+  /* кнопка «Обучение» в шапке: светится, пока есть обучения с наградой */
+  .learn{position:relative;font:inherit;font-size:17px;line-height:1;border-radius:9px;border:2px solid #000;padding:6px 8px;flex:none;cursor:pointer;background:#2b2b35;color:#fff;box-shadow:inset 0 -3px 0 #0006}
+  .learn b{position:absolute;right:-6px;top:-7px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#ff4d4d;border:2px solid #000;color:#fff;font-size:10px;line-height:13px;font-weight:900}
+  .learn b:empty{display:none}
+  .learn.glow{background:linear-gradient(#ffcf3a,#e09a00);animation:learnGlow 1.3s ease-in-out infinite}
+  @keyframes learnGlow{0%,100%{box-shadow:inset 0 -3px 0 #0006,0 0 4px rgba(255,210,63,.4)}50%{box-shadow:inset 0 -3px 0 #0006,0 0 18px 3px rgba(255,210,63,.9)}}
+  @media (max-width:359px){.topbar .logo .lt{display:none}}
+  .lcard{display:flex;align-items:center;gap:10px;background:var(--panel);border:2px solid var(--line);border-radius:10px;padding:10px;flex:none}
+  .lcard.done{opacity:.8}
+  .lcard .li{font-size:28px;width:38px;text-align:center;flex:none}
+  .lcard .ltx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+  .lcard .ltx b{font-size:15px} .lcard .ltx small{font-size:12px;color:var(--muted);line-height:1.4}
+  .lcard .lrw{font-size:12px;font-weight:900;color:var(--gold);display:flex;align-items:center;gap:3px}
+  .lcard.done .lrw{color:var(--green)} .lcard.done .lrw .coin{display:none}
+  .lcard .lgo{flex:none;padding:9px 10px;font-size:13px}
+  .lcard:not(.done) .lgo{background:linear-gradient(#ffcf3a,#e09a00);color:#2a1a00;text-shadow:none}
 </style>
 </head>
 <body>
@@ -420,6 +497,7 @@
     <div class="logo" id="logoBox"><img id="logo" alt=""><span class="lt">КИРКА</span></div>
     <div class="runline" id="runLine"></div>
     <div class="balrow"><span class="label" id="balLabel">Баланс</span><span class="balance"><span id="balance">0</span><i class="coin"></i></span></div>
+    <button class="learn" id="learnBtn" title="Обучение (с наградой)">🎓<b id="learnN"></b></button>
     <button class="gift" id="free" title="Бесплатные монеты">🎁 +1000</button>
   </div>
 
@@ -434,6 +512,7 @@
     </div>
     <div class="overlay" id="overlay"><h2 id="ovTitle"></h2><div class="big" id="ovBig"></div><div class="sub" id="ovSub"></div></div>
     <div class="toast" id="toast"></div>
+    <div class="tut-tag" id="tutTag"><b id="tutTagT">🎓 УЧЕБНЫЙ РАУНД · бесплатно</b></div>
     <button class="mute" id="mute" title="Звук">🔊</button>
   </div>
 
@@ -544,6 +623,24 @@
   <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
 </div></div>
 
+<!-- ===== Окно «Как играть» ===== -->
+<div class="sheet" id="sh-help"><div class="sh-in">
+  <div class="sh-head"><h1>❓ Как играть</h1><button class="btn sh-x" data-close title="Закрыть">✕</button></div>
+  <div class="sh-body" id="helpBody"></div>
+  <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
+</div></div>
+
+<!-- ===== Окно «Обучение» ===== -->
+<div class="sheet" id="sh-learn"><div class="sh-in">
+  <div class="sh-head"><h1>🎓 Обучение</h1><button class="btn sh-x" data-close title="Закрыть">✕</button></div>
+  <div class="sh-body">
+    <div class="note" id="learnNote"></div>
+    <div id="learnList" style="display:flex;flex-direction:column;gap:10px"></div>
+    <button class="btn" id="learnHelp" style="flex:none">❓ Все правила — «Как играть»</button>
+  </div>
+  <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
+</div></div>
+
 <!-- ===== Окно «Деревня» ===== -->
 <div class="sheet" id="sh-vil"><div class="sh-in">
   <div class="sh-head"><h1>🏘 Деревня</h1><button class="btn sh-x" data-close title="Закрыть">✕</button></div>
@@ -568,6 +665,7 @@
     <div class="card"><div class="label">Статистика</div><div id="pStats" style="margin-top:6px"></div></div>
     <div class="card"><div class="label" id="pAchT">Достижения</div><div id="pAch"></div></div>
     <div class="card"><div class="label">✨ Следы за киркой</div><div class="note" style="margin-top:4px">Только для красоты — видно, пока кирка летит.</div><div id="pTrails"></div></div>
+    <div class="card"><div class="label">🎓 Обучение и правила</div><div class="note" style="margin-top:4px">Все правила в одном месте — или обучения с подсветкой (шахта, кнопки, деревня, бонуска) с наградой за каждое.</div><div class="mrow" style="margin-top:8px"><button class="btn" id="pHelp">❓ Как играть</button><button class="btn" id="pTut">🎓 Обучения</button></div></div>
     <div class="card"><div class="label">💾 Сохранение</div><div class="note" style="margin-top:4px">Перенеси прогресс на другое устройство или спрячь копию в заметки.</div>
       <div class="mrow" style="margin-top:8px"><button class="btn" id="pExport">📤 Код сохранения</button><button class="btn" id="pImport">📥 Загрузить</button></div>
       <textarea class="savebox" id="pSaveTxt" style="display:none" spellcheck="false"></textarea><div class="note" id="pSaveMsg"></div></div>
@@ -607,6 +705,17 @@
 </div></div>
 
 <div class="gtoast" id="gtoast"></div>
+<div class="tut" id="tut">
+  <svg class="tut-svg" id="tutSvg" xmlns="http://www.w3.org/2000/svg"><defs><mask id="tutMask" maskUnits="userSpaceOnUse" x="0" y="0" width="10000" height="10000"><rect x="0" y="0" width="10000" height="10000" fill="#fff"/><rect id="tutM0" rx="12" fill="#000"/><rect id="tutM1" rx="10" fill="#000"/><rect id="tutM2" rx="10" fill="#000"/></mask></defs>
+    <rect x="0" y="0" width="10000" height="10000" fill="rgba(0,0,0,.68)" mask="url(#tutMask)"/>
+    <rect id="tutO0" class="tut-ol" rx="12"/><rect id="tutO1" class="tut-ol" rx="10"/><rect id="tutO2" class="tut-ol" rx="10"/>
+    <path id="tutL0" class="tut-ln"/><path id="tutL1" class="tut-ln"/><path id="tutL2" class="tut-ln"/>
+    <circle id="tutS0" class="tut-dot" r="3.5"/><circle id="tutS1" class="tut-dot" r="3.5"/><circle id="tutS2" class="tut-dot" r="3.5"/>
+    <circle id="tutE0" class="tut-dot" r="4.5"/><circle id="tutE1" class="tut-dot" r="4.5"/><circle id="tutE2" class="tut-dot" r="4.5"/>
+    <circle id="tutP0" class="tut-pulse" r="9"/><circle id="tutP1" class="tut-pulse" r="9"/><circle id="tutP2" class="tut-pulse" r="9"/></svg>
+  <div class="tut-blk" id="tutB0"></div><div class="tut-blk" id="tutB1"></div><div class="tut-blk" id="tutB2"></div><div class="tut-blk" id="tutB3"></div><div class="tut-blk" id="tutB4"></div>
+  <div class="tut-bub" id="tutBub"><div id="tutBody"></div><div class="tut-row"><button class="btn tut-skip" id="tutSkip">Пропустить</button><button class="btn tut-next" id="tutNext">Дальше ▶</button></div></div>
+  <div class="tut-fin" id="tutFin" style="display:none">👆</div></div>
 <div class="modal" id="intro"><div class="card introcard"><div id="introBody"></div><div class="mrow"><button class="btn" id="introSkip">Пропустить</button><button class="btn runstart" id="introNext" style="margin-top:0">Дальше ▶</button></div></div></div>
 
 <script>
@@ -1318,8 +1427,9 @@ function save() {
 function buildPayTable() {
   const bet = getBet() || 0, M = MODES[mode]; $('payBet').innerHTML = fmt(bet) + COIN; $('payMode').textContent = `${M.name} волатильность · ${fair ? 'обычная версия' : 'чит'}`;
   const chestMin = M.chest[0][0], chestMax = M.chest[M.chest.length - 1][0];
+  const fm = fair ? FAIR_VALUE_MUL * M.fairMul : 1; // в Обычной руда платит ×fairMul (как в Game.val)
   const rows = ['dirt', 'stone', 'deepslate', 'coal', 'iron', 'lapis', 'redstone', 'gold', 'diamond', 'emerald', 'obsidian'].map(k =>
-    `<tr><td><img src="${ICON[k]}"></td><td>${BLOCKS[k].name}</td><td class="d">×${M.values[k]}</td><td class="v">${fmt(M.values[k] * bet)}${COIN}</td></tr>`);
+    `<tr><td><img src="${ICON[k]}"></td><td>${BLOCKS[k].name}</td><td class="d">×${+(M.values[k] * fm).toFixed(3)}</td><td class="v">${fmt(Math.round(M.values[k] * fm * bet * 100) / 100)}${COIN}</td></tr>`);
   const sp = [['tnt', 'взрыв 5×5'], ['crafting', `+${REPAIR_HEAL} прочности`], ['anvil', `кирка лучше, +${UPGRADE_HEAL} прочности`], ['chest', `${fmt(chestMin * bet)}–${fmt(chestMax * bet)}`], ['enchant', `×${M.luckMult} на ${LUCK_BLOCKS} блоков`], ['magma', `−${BLOCKS.magma.hpCost} прочности`]].map(([k, d]) =>
     `<tr><td><img src="${ICON[k]}"></td><td>${BLOCKS[k].name}</td><td class="v" colspan="2" style="color:#bcd">${d}</td></tr>`);
   const hv = M.hell, hm = hv.mul * (fair ? 1 : HELL.cheatMul);
@@ -1329,9 +1439,50 @@ function buildPayTable() {
     .concat([`<tr><td><img src="${ICON.chest}"></td><td>Сундук ада</td><td class="v" colspan="2">${fmt(hv.chest[0][0] * hm * bet)}–${fmt(hv.chest[hv.chest.length - 1][0] * hm * bet)}${COIN}</td></tr>`]);
   $('payTable').innerHTML = rows.join('') + sp.join('') + hell.join('');
 }
+// ---------- справка «Как играть» (цифры берутся из настоящих констант игры) ----------
+const helpOpen = {};
+function renderHelp() {
+  const M = MODES[mode], row = (ic, t) => `<div class="hrow">${ic.length > 4 ? `<img src="${ic}">` : `<div class="hi">${ic}</div>`}<span>${t}</span></div>`;
+  const tiers = TIERS.map((t, i) => row(PICKICON[i], `<b>${t.name}</b> — ${t.hp} ❤, урон ×${t.dmg}`)).join('');
+  const ores = ['coal', 'iron', 'lapis', 'redstone', 'gold', 'diamond', 'emerald'].map(k => `<img src="${ICON[k]}" title="${BLOCKS[k].name}" style="width:24px;height:24px;image-rendering:pixelated;margin-right:3px;vertical-align:middle">`).join('');
+  const sec = (id, title, body) => `<details class="hlp" data-h="${id}"${helpOpen[id] ? ' open' : ''}><summary>${title}</summary><div class="hb">${body}</div></details>`;
+  $('helpBody').innerHTML = [
+    sec('base', '⛏ Основы — за 20 секунд', `<ol class="hsteps"><li>Выбери <b>ставку</b> и жми <b>ИГРАТЬ</b>.</li><li>Кирка падает, <b>бьёт блоки</b> и отскакивает в разные стороны. Блоки открываются по мере того, как она копает вглубь.</li><li>Руда даёт монеты — это <b>иксы от ставки</b>: ×2 при ставке 100 = 200${COIN}. Выигрыш копится в счётчике.</li><li>Жми <b>ЗАБРАТЬ</b> в любой момент — накопленное твоё.</li><li>Кирка <b>сломалась</b> до того, как ты забрал, — ставка и всё накопленное сгорают.</li></ol>
+      <div class="htip" style="margin-top:8px">💡 Главное решение в игре — <b>когда забирать</b>. Дольше копаешь — больше денег, но и риск больше.</div>`),
+    sec('hp', '❤ Прочность кирки', `<p>Каждый удар отнимает прочность: мягкие блоки (земля) почти не тратят её, крепкие (глубинный сланец, обсидиан) — больше. Полоска прочности всегда честно показывает, сколько осталось.</p>
+      <p>Кирки бывают разные — чем лучше, тем больше прочности и сильнее удар:</p>${tiers}
+      <p style="margin-top:8px">В начале каждого раунда кирка — деревянная. Улучшить её прямо в раунде можно наковальней.</p>
+      <p>🎰 <b>В Обычной версии</b> изношенная кирка может <b>треснуть</b> — потерять разом 10–30% прочности. Чем меньше осталось, тем выше шанс; он написан на полоске («трещина 2.4%»). В Чите трещин нет.</p>`),
+    sec('blk', '💎 Руда и особые блоки', `<p>Чем реже руда, тем дороже: ${ores}<br>Земля и камень платят копейки. Точные суммы при твоей ставке — в таблице выплат.</p>
+      ${row(ICON.tnt, `<b>${BLOCKS.tnt.name}</b> — взрывается и разносит блоки вокруг (5×5). За всю руду в зоне — монеты.`)}
+      ${row(ICON.crafting, `<b>${BLOCKS.crafting.name}</b> — чинит кирку: +${REPAIR_HEAL} ❤ (не выше максимума).`)}
+      ${row(ICON.anvil, `<b>${BLOCKS.anvil.name}</b> — кирка становится следующей по уровню (больше прочности) и сразу +${UPGRADE_HEAL} ❤.`)}
+      ${row(ICON.chest, `<b>${BLOCKS.chest.name}</b> — мешок монет, от ×${M.chest[0][0]} до ×${M.chest[M.chest.length - 1][0]} от ставки.`)}
+      ${row(ICON.enchant, `<b>${BLOCKS.enchant.name}</b> — следующие ${LUCK_BLOCKS} блоков платят ×${M.luckMult}.`)}
+      ${row(ICON.magma, `<b>${BLOCKS.magma.name}</b> — обжигает: −${BLOCKS.magma.hpCost} ❤.`)}
+      ${row(ICON.obsidian, `<b>${BLOCKS.obsidian.name}</b> — очень крепкий, кирка долго его пробивает.`)}
+      <button class="btn" id="hPay" style="width:100%;margin-top:8px">📋 Таблица выплат</button>`),
+    sec('hell', '🔥 Портал в ад — бонуска', `${row(ICON.portal, `<b>${BLOCKS.portal.name}</b> иногда попадается в шахте. Кирка в него влетела — начинается бесплатная бонуска.`)}
+      <p style="margin-top:6px">В аду кирка <b>не сгорает</b>: всё, что накопала, — твоё. Там дорогая руда на незерраке и чернокамне, а чем глубже — тем больше множитель (×1…×${HELL.maxMult}).</p>
+      <p>Бонуску можно и <b>купить</b> кнопкой «🔥 ПОРТАЛ В АД» за ×${BONUS_PRICE} от ставки (нужно нажать два раза — защита от случайного тапа).</p>`),
+    sec('mode', '⚙ Версии и волатильность', `<p><b>🎰 Обычная</b> — как настоящее казино: честная прочность, трещины, основной кошелёк. Здесь растут ранг, деревня, банк, задания и достижения.</p>
+      <p><b>😈 Чит</b> — щедрая демка без трещин, свой отдельный кошелёк и 🎁 +1000 без ограничений. На деревню и ранг не влияет.</p>
+      <p><b>🟦 Низкая волатильность</b> — частые небольшие выигрыши. <b>🟥 Высокая</b> — реже, но крупнее. Переключается в «⚙ Режим».</p>`),
+    sec('meta', '🏆 Ранг, подарки, банк, деревня', `${row('👑', `<b>Ранг</b> растёт от рекорда богатства (баланс + банк + вложенное в деревню). Чем выше ранг — тем больше <b>макс. ставка</b> и ежедневный подарок. Сейчас: ${rank().i} ${rank().n}, ставка до ${isFinite(rank().bet) ? fmtShort(rank().bet) : '∞'}.`)}
+      ${row('🎁', `<b>Подарки</b> (кнопка справа сверху): ежедневный подарок, 3 задания в день и спасательный круг — +${fmt(RESCUE)}, если монеты кончились.`)}
+      ${row('🏦', `<b>Банк</b>: положи монеты — +${BANK_RATE * 100}% в день (проценты идут с первых ${fmtShort(BANK_CAP)}). В шахте их не потеряешь.`)}
+      ${row('🏘', `<b>Деревня</b>: строй здания — они копят монеты, а ты собираешь урожай вручную. Способ заработать, даже когда на балансе пусто.`)}
+      ${row('🏁', `<b>Забеги</b>: отдельный кошелёк с выбранной суммой — проверь, сколько сможешь из неё накопать. Без подарков и чита, график — в истории.`)}
+      ${row('🏅', `<b>Достижения</b> и ✨ <b>следы за киркой</b> — в Профиле.`)}`),
+  ].join('') + `<button class="btn" id="hTut" style="width:100%;padding:12px;flex:none">🎓 Обучения с подсветкой (с наградой)</button>`;
+  $('helpBody').querySelectorAll('details').forEach(d => d.ontoggle = () => { helpOpen[d.dataset.h] = d.open; });
+  $('hPay').onclick = e => { e.currentTarget.blur(); openSheet('pay'); };
+  $('hTut').onclick = e => { e.currentTarget.blur(); openSheet('learn'); };
+}
+helpOpen.base = true;
 function buildTiers() { $('tiers').innerHTML = TIERS.map((t, i) => `<img src="${PICKICON[i]}" title="${t.name}: ${t.hp} прочности, урон ${t.dmg}" data-i="${i}">`).join(''); }
 function renderHistory() {
-  $('hist').innerHTML = history.length ? history.slice(0, 20).map(h => h.b ? `<span class="chip b">🔥×${h.m.toFixed(1)}</span>` : `<span class="chip ${h.w ? 'w' : 'l'}" title="${h.d} м">${h.w ? '×' + h.m.toFixed(2) : '✖ ×' + (h.m || 0).toFixed(2)}</span>`).join('') : '<span class="sub">История ставок пока пуста</span>';
+  $('hist').innerHTML = history.length ? history.slice(0, 20).map(h => h.b ? `<span class="chip b">🔥×${h.m.toFixed(1)}</span>` : `<span class="chip ${h.w ? (h.m < 1 ? 'p' : 'w') : 'l'}" title="${h.d} м${h.w && h.m < 1 ? ' · забрал меньше ставки' : ''}">${h.w ? '×' + h.m.toFixed(2) : '✖ ×' + (h.m || 0).toFixed(2)}</span>`).join('') : '<span class="sub">История ставок пока пуста</span>';
 }
 // Обновляем DOM только если значение реально изменилось (никаких innerHTML каждый кадр)
 const _cache = new Map();
@@ -1350,22 +1501,26 @@ function updatePanel() {
   const bet = getBet(), inHell = (phase === 'play' && game.bonus) || phase === 'portal', playing = phase === 'play' || phase === 'portal', locked = performance.now() < playLockUntil;
   setDig(playing || (locked && phase === 'done'));
   const mxb = maxBet(), over = bet > mxb;
-  setProp($('play'), 'playDis', 'disabled', playing || locked || !(bet >= 1 && bet <= balance) || over);
+  const tutP = !!(tut && tut.step === 'play'); // учебный раунд бесплатный — баланс и лимит не важны
+  setProp($('play'), 'playDis', 'disabled', playing || locked || (!tutP && (!(bet >= 1 && bet <= balance) || over)));
   setText('playLabel', inHell ? '🔥 АД' : playing ? '⛏ КОПАЕМ' : 'ИГРАТЬ');
-  setText('playSub', inHell ? 'бонуска идёт' : playing ? 'раунд идёт' : (over ? `макс. ставка ${fmtShort(mxb)}` : bet > balance ? 'мало монет' : `ставка ${fmt(bet)}`));
+  setText('playSub', inHell ? 'бонуска идёт' : playing ? 'раунд идёт' : tutP ? 'бесплатно' : (over ? `макс. ставка ${fmtShort(mxb)}` : bet > balance ? 'мало монет' : `ставка ${fmt(bet)}`));
   setProp($('cash'), 'cashDis', 'disabled', !playing || inHell);
   setProp($('cash'), 'cashCls', 'className', 'btn cashbtn' + (inHell ? ' bonus' : ''));
   setText('cashLabel', inHell ? '🔥 ВСЁ ТВОЁ' : 'ЗАБРАТЬ');
   setText('cashAmt', fmt(playing && phase === 'play' ? game.win : 0));
   setText('cashMult', '×' + (playing && phase === 'play' && game.bet ? (game.win / game.bet).toFixed(2) : '0.00'));
+  setProp($('cashMult').style, 'cashMultC', 'color', playing && phase === 'play' && !inHell && game.bet ? (game.win < game.bet ? '#8f1d00' : '#0b5d1e') : ''); // меньше ×1 — пока в минусе
   const price = BONUS_PRICE * bet, armed = performance.now() < buyArmedUntil;
-  setProp($('buyBonus'), 'buyDis', 'disabled', playing || locked || !(bet >= 1 && price <= balance) || over);
+  const tutB = !!(tut && tut.step === 'hBuy'); // учебная бонуска — бесплатно
+  setProp($('buyBonus'), 'buyDis', 'disabled', playing || locked || (!tutB && (!(bet >= 1 && price <= balance) || over)));
   setProp($('buyBonus'), 'buyCls', 'className', 'btn buybonus' + (armed && !playing ? ' armed' : ''));
   setText('buyLabel', armed && !playing ? 'ТОЧНО КУПИТЬ?' : '🔥 ПОРТАЛ В АД');
-  setText('buySub', armed && !playing ? `нажми ещё раз — ${fmt(price)} монет` : (over ? `ставка выше лимита ранга (${fmtShort(mxb)})` : price > balance ? `бонуска ×${BONUS_PRICE} — нужно ${fmt(price)}` : `купить бонуску за ${fmt(price)} (×${BONUS_PRICE})`));
+  setText('buySub', tutB ? 'бесплатно — учебная бонуска' : armed && !playing ? `нажми ещё раз — ${fmt(price)} монет` : (over ? `ставка выше лимита ранга (${fmtShort(mxb)})` : price > balance ? `бонуска ×${BONUS_PRICE} — нужно ${fmt(price)}` : `купить бонуску за ${fmt(price)} (×${BONUS_PRICE})`));
   const ra = runActive(), outArmed = performance.now() < runOutArmedUntil;
   setProp($('runLine').style, 'runLineD', 'display', ra ? 'block' : 'none');
   setProp($('logoBox').style, 'logoD', 'display', ra ? 'none' : '');
+  { const ll = learnLeft(); setText('learnN', ll ? String(ll) : ''); setProp($('learnBtn'), 'learnCls', 'className', 'learn' + (ll ? ' glow' : '')); setProp($('learnBtn').style, 'learnD', 'display', ra ? 'none' : ''); }
   if (ra) setText('runLine', `🏁 Забег · ${MODES[run.vol].name} · старт ${fmtShort(run.start)} · раунд ${run.rounds}`);
   setText('balLabel', ra ? 'Баланс забега' : 'Баланс');
   setProp($('runBtns').style, 'runBtnsD', 'display', ra ? 'grid' : 'none');
@@ -1422,7 +1577,7 @@ function updatePanel() {
   const hpFrac = game.maxHp ? game.hp / game.maxHp : 1;
   setProp($('hudHpFill').style, 'hudHpW', 'width', (100 * hpFrac).toFixed(1) + '%');
   setText('hudHpText', `❤ ${Math.ceil(game.hp)} / ${game.maxHp}`);
-  setText('hudCrack', game.bonus && phase !== 'idle' ? '· не сгорит' : (fair ? `· трещина ${(game.crackChance() * 100).toFixed(1)}%` : ''));
+  setText('hudCrack', game.bonus && phase !== 'idle' ? '· не сгорит' : ((fair || (tut && tut.round)) ? `· трещина ${(game.crackChance() * 100).toFixed(1)}%` : ''));
   setProp($('hudHp'), 'hudHpCls', 'className', 'hudhp' + (hpFrac < .3 ? ' low' : hpFrac < .6 ? ' mid' : ''));
   setProp($('hudTier'), 'hudTierSrc', 'src', PICKICON[game.tier] || '');
   setProp($('hudTier'), 'hudTierT', 'title', TIERS[game.tier].name + ' кирка');
@@ -1440,9 +1595,28 @@ function overlay(title, big, sub, color) {
 
 const PLAY_LOCK_MS = 700; // после конца раунда «Играть» недоступна 0.7 с — защита от случайного нажатия
 let playLockUntil = 0;
-const BUILD = '2026-10-28 · доход деревень';
+function learnHint(ms) {
+  // первый заход (или первое знакомство с обучениями) — сразу окно с предложением; закрыл — стрелка на кнопку 🎓
+  if (meta.learnOffer || learnLeft() < LEARN.length) return;
+  meta.learnOffer = 1; meta.learnHint = 1; saveMeta();
+  const old = !metaFresh && !!(meta.stats && meta.stats.rounds);
+  setTimeout(() => { if (tut || busy() || sheetId) return showLearnHint(); tut = { kind: 'welcome', step: 'welcome', hold: false, round: false, seen: {}, bet: getBet(), n: 0, plan: [], old }; tutShow(); }, ms);
+}
+// пузырь со стрелкой прямо под кнопкой 🎓 (не закрывает её); исчезает по тапу, при открытии окна или через 8 с
+function showLearnHint(txt) {
+  const btn = $('learnBtn'), r = btn.getBoundingClientRect(); if (r.width < 2 || tut || sheetId) return;
+  const h = document.createElement('div'); h.className = 'lhint'; h.id = 'lhint';
+  h.innerHTML = `<b>🎓 Обучения с наградой</b><br>` + (txt || `Пройди — получишь до +${fmt(LEARN.reduce((a, L) => a + L.r, 0))} монет. Это не обязательно.`);
+  document.body.appendChild(h);
+  const w = h.offsetWidth, cx = r.left + r.width / 2, left = Math.max(8, Math.min(innerWidth - w - 8, cx - w / 2));
+  h.style.left = left + 'px'; h.style.top = (r.bottom + 10) + 'px'; h.style.setProperty('--ax', (cx - left) + 'px');
+  const kill = () => { h.remove(); removeEventListener('pointerdown', kill, true); };
+  addEventListener('pointerdown', kill, true); setTimeout(kill, 8000);
+}
+const BUILD = '2026-10-28 · правки ревьюера';
 function play() {
   ac();
+  if (tut) { if (tut.step === 'play') tutPlayRound(); return; } // во время обучения — только учебный раунд
   if (phase === 'play' || phase === 'portal' || performance.now() < playLockUntil) return;
   const bet = getBet(); if (!(bet >= 1 && bet <= balance && bet <= maxBet())) return;
   balance -= bet; save(); roundCrack = false;
@@ -1452,6 +1626,7 @@ function play() {
   updatePanel();
 }
 function endBonus(win, maxed) {
+  if (tut && tut.round) return tutRoundEnd(win, false);
   phase = 'done';
   localStorage.removeItem('pk_pendingBonus');
   playLockUntil = performance.now() + PLAY_LOCK_MS * 2;
@@ -1486,6 +1661,7 @@ function enterPortal(win) {
 let buyArmedUntil = 0;
 function buyBonus() {
   ac();
+  if (tut) { if (tut.step === 'hBuy') tutHellRound(); return; } // во время обучения — только учебная бонуска
   if (phase === 'play' || phase === 'portal' || performance.now() < playLockUntil) return;
   const bet = getBet(), price = BONUS_PRICE * bet; if (!(bet >= 1 && price <= balance && bet <= maxBet())) return;
   if (performance.now() > buyArmedUntil) { buyArmedUntil = performance.now() + 3000; updatePanel(); setTimeout(updatePanel, 3050); return; }
@@ -1607,6 +1783,8 @@ function openSheet(id) {
   if (sheetId) $('sh-' + sheetId).classList.remove('show');
   if (id === 'runs') { if (!run) prepRunForm(); renderRuns(); }
   if (id === 'pay') buildPayTable();
+  if (id === 'help') renderHelp();
+  if (id === 'learn') renderLearn();
   sheetId = id; const el = $('sh-' + id); el.querySelector('.sh-body').scrollTop = 0; el.classList.add('show');
   if (id === 'vil') openVil();
   if (id === 'prof') { $('pSaveMsg').textContent = ''; renderProfile(); }
@@ -1616,7 +1794,9 @@ function openSheet(id) {
 }
 function closeSheet(fromPop) {
   if (!sheetId) return;
+  const was = sheetId;
   $('sh-' + sheetId).classList.remove('show'); sheetId = null;
+  if (tut && tut.kind === 'vil' && was === 'vil') tutFinish(tut.step === 'end'); // закрыли деревню посреди обучения — выходим
   if (fromPop !== true) try { if (window.history.state && window.history.state.sheet) window.history.back(); } catch (e) { }
 }
 
@@ -1747,10 +1927,12 @@ function drawRunChart(cv, rec, hx) {
 }
 function cashOut() {
   if (phase !== 'play' || !game.running) return;
+  if (tut && tut.round) { if (tut.hold && tut.step !== 'cash') return; tutCash(); }
   game.cashOut();
   handleEvents(); // начисляем сразу, не дожидаясь следующего кадра
 }
 function endRound(win, broke) {
+  if (tut && tut.round) return tutRoundEnd(win, broke);
   phase = 'done';
   playLockUntil = performance.now() + PLAY_LOCK_MS;
   setTimeout(updatePanel, PLAY_LOCK_MS + 20);
@@ -1779,8 +1961,9 @@ const cc = (r, c) => [(c + .5) * CELL, (r + .5) * CELL];
 const vibe = p => { if (!muted && navigator.vibrate && (!navigator.userActivation || navigator.userActivation.hasBeenActive)) try { navigator.vibrate(p); } catch (e) { } };
 function handleEvents() {
   let coinSfx = 0;
+  const tutR = !!(tut && tut.round);
   for (const e of game.events) {
-    metaEv(e);
+    if (!tutR) metaEv(e); // учебный раунд не идёт в статистику, задания и достижения
     switch (e.type) {
       case 'hit': { const [x, y] = cc(e.r, e.c); spawnParts(x + (game.p.x - x) * .6, y + (game.p.y - y) * .6, TEX.pal[e.t], 4, 150, 4); SFX.hit(e.t); shake = Math.max(shake, 1.5);
         if (e.crack) { floatText(game.p.x, game.p.y - 24, `ТРЕЩИНА −${e.cost}`, '#ff3b3b', 17); toast(`💔 Трещина! −${e.cost} прочности`, '#ff6b6b'); SFX.crack(); shake = Math.max(shake, 9); vibe(90); }
@@ -1928,12 +2111,13 @@ function drawPick(x, y, a) {
 let last = performance.now(), acc = 0;
 function frame(now) {
   let dt = Math.min(.05, (now - last) / 1000); last = now; renderT += dt;
-  if (phase === 'play') {
+  if (phase === 'play' && !(tut && tut.hold)) {
     const ax = parseFloat($('auto').value);
     acc += dt * 0.85;
     while (acc >= 1 / 120) {
       game.step(1 / 120); acc -= 1 / 120;
       if (!game.running) break;
+      if (tut && tut.round) { if (tutWatch()) break; continue; } // учебный раунд: стоп-кадры, без авто-забора
       if (ax > 1 && !game.bonus && game.win >= ax * game.bet) { game.cashOut(); break; } // авто-забор проверяется на каждом шаге физики
     }
   }
@@ -2337,7 +2521,359 @@ function renderIntro() {
 function introNext(skip) {
   if (!skip && introI < introPages.length - 1) { introI++; renderIntro(); return; }
   $('intro').classList.remove('show'); meta.intro = 2; saveMeta();
+  learnHint(900);
 }
+
+// ====================== ОБУЧЕНИЕ ======================
+// Не обязательное: светящаяся кнопка 🎓 наверху открывает окно с 4 обучениями, за каждое — разовая награда
+// (на баланс Обычной). Экран темнеет (SVG-маска с вырезами), светится только то, о чём речь, от пузыря к объекту —
+// пунктирные линии-указатели. Учебные раунды (шахта, бонуска) идут на учебные монеты: баланс, история, статистика,
+// задания и забеги не трогаются. Шахта заранее подобрана (сид) и заранее сгенерирована на TUT_ROWS рядов — поэтому раунд
+// одинаковый на любом экране. Перед раундом он «прокручивается» вхолостую (tutPlan): так мы знаем, на каком шаге
+// физики кирка впервые ударит руду/динамит/верстак…, и останавливаем время ЗА TUT_AHEAD шагов ДО удара — блок ещё целый.
+const TUT_SEED = 42496, TUT_HSEED = 4066, TUT_BET = 100, TUT_AHEAD = 22, TUT_ROWS = 160;
+const TUT_PLAIN = ['dirt', 'grass', 'stone', 'deepslate', 'magma', 'obsidian', 'bedrock', 'air', 'netherrack', 'blackstone'];
+const TUT_HELLORE = ['hgold', 'hredstone', 'hdiamond', 'hemerald'];
+const TUT_SPEC = { tnt: 'lit', crafting: 'repair', anvil: 'upgrade', chest: 'chest', enchant: 'luck' };
+var tut = null; // var, а не let: на него смотрит updatePanel, который может сработать раньше этой строки
+var LEARN = [
+  { k: 'mine', i: '⛏', n: 'Шахта', d: 'Учебный раунд: как копает кирка, руда и особые блоки, прочность и когда забирать.', r: 100 },
+  { k: 'ui', i: '🎛', n: 'Кнопки и экран', d: 'Что где: баланс, подарки, ставка, ИГРАТЬ / ЗАБРАТЬ, портал, авто-забор, история и меню.', r: 100 },
+  { k: 'vil', i: '🏘', n: 'Деревня', d: 'Как устроены деревни, стройка, доход и как его собирать.', r: 150 },
+  { k: 'hell', i: '🔥', n: 'Бонуска', d: 'Бесплатный учебный заход в ад: множитель глубины, руда ада, почему кирка там не сгорает.', r: 150 },
+];
+function learnLeft() { try { return LEARN.filter(L => !(meta.learn && meta.learn[L.k])).length; } catch (e) { return 0; } }
+const tutWin = () => fmt(Math.round(game.win));
+// прямоугольники на экране: элемент страницы или точка в шахте (мировые координаты → экран)
+const rEl = el => { if (!el) return null; const r = el.getBoundingClientRect(); return r.width > 1 && r.height > 1 ? { l: r.left, t: r.top, r: r.right, b: r.bottom } : null; };
+const rWorld = (x, y, s) => { const cr = $('c').getBoundingClientRect(), cx = cr.left + x * SC, cy = cr.top + (y - camY) * SC, h = s * SC / 2; return { l: cx - h, t: cy - h, r: cx + h, b: cy + h }; };
+const rPad = (r, p) => r && { l: r.l - p, t: r.t - p, r: r.r + p, b: r.b + p };
+const rUnion = (...a) => { a = a.filter(Boolean); return a.length ? { l: Math.min(...a.map(q => q.l)), t: Math.min(...a.map(q => q.t)), r: Math.max(...a.map(q => q.r)), b: Math.max(...a.map(q => q.b)) } : null; };
+const tutPt = () => tut.pt ? rWorld(tut.pt.x, tut.pt.y, CELL * 1.15) : null;
+const blkImg = k => ICON[k] ? `<img src="${ICON[k]}" alt="">` : '';
+const winPill = () => rEl($('hudWin').parentElement);
+const bName = () => BLOCKS[tut.blk] ? BLOCKS[tut.blk].name : '';
+const qs = s => document.querySelector(s);
+const TUT = {
+  // ---------- шахта ----------
+  mine: { holes: () => [rEl($('stage'))], ptrs: () => [rWorld(CELL * COLS / 2, -110 + Math.sin(renderT * 2.5) * 8, 46)],
+    t: 'Это шахта и твоя кирка', d: 'Кирка падает сверху, <b>разбивает блоки</b> и отскакивает от них в разные стороны. Блоки открываются по мере того, как она копает вглубь.' },
+  bet: { holes: () => [rEl(qs('.betline'))], ptrs: () => [rEl($('bet'))],
+    t: 'Ставка', d: 'Все выплаты — это <b>иксы от ставки</b>: ×2 при ставке 100 — это 200 монет. Важно: <b>×1 — это просто ставка вернулась</b>, прибыль — всё, что выше ×1. Сейчас ставка учебная — 100, баланс не тратится.' },
+  play: { holes: () => [rEl($('play'))], ptrs: () => [rEl($('play'))], wait: 1,
+    t: 'Жми «ИГРАТЬ»', d: 'Кирка полетит вниз. Я остановлю время <b>прямо перед</b> тем, как она ударит что-то новое.' },
+  ore: { holes: () => [tutPt(), winPill()], ptrs: () => [tutPt(), winPill()],
+    t: () => `${blkImg(tut.blk)}${bName()} — это монеты!`,
+    d: () => `Кирка летит прямо в ${bName().toLowerCase()}. Разобьёт — в счётчик капнет <b>+${fmt(game.val(tut.blk) * TUT_BET)}</b> (×${+game.val(tut.blk).toFixed(2)}). Крепкие блоки бьются в 2–3 удара. Чем реже руда, тем дороже: уголь → железо → золото… дороже всего <b>алмаз и изумруд</b>. Земля и камень — копейки.` },
+  hp: { holes: () => [rEl($('hudHp'))], ptrs: () => [rEl($('hudHp'))], next: 'Понятно ▶',
+    t: 'Прочность кирки ❤', d: 'Каждый удар её тратит — твёрдые блоки больше. Дойдёт до нуля — кирка <b>сломается</b>, и всё накопанное за раунд <b>сгорит</b>. Справа на полоске — <b>шанс трещины</b>: он растёт, когда кирка изнашивается.' },
+  crack: { holes: () => [rEl($('hudHp')), tutPt()], ptrs: () => [rEl($('hudHp')), tutPt()],
+    t: '💔 Трещина!', d: () => `Кирка треснула и разом потеряла <b>${tut.crackCost} ❤</b>. Так бывает в Обычной версии: чем сильнее кирка изношена, тем выше шанс трещины (10–30% прочности за раз). Шанс написан на полоске — сейчас <b>${(game.crackChance() * 100).toFixed(1)}%</b>. Поэтому «дотянуть до 1 ❤» не выйдет — <b>забирай с запасом</b>.` },
+  lit: { holes: () => [rPad(tutPt(), CELL * SC * 1.9)], ptrs: () => [tutPt()],
+    t: () => `${blkImg('tnt')}Динамит!`, d: 'Кирка летит в динамит: от удара он <b>загорится</b> и через полсекунды рванёт — разнесёт блоки в зоне 5×5 (она подсвечена). Руда в зоне взрыва — тоже монеты. Кирку взрыв не ранит.' },
+  repair: { holes: () => [tutPt(), rEl($('hudHp'))], ptrs: () => [tutPt(), rEl($('hudHp'))],
+    t: () => `${blkImg('crafting')}Верстак`, d: () => `Кирка летит в верстак. Разобьёт — <b>починится на +${REPAIR_HEAL} ❤</b> (не выше максимума). Следи за полоской прочности.` },
+  upgrade: { holes: () => [tutPt(), rEl($('hudHp'))], ptrs: () => [tutPt(), rEl($('hudHp'))],
+    t: () => `${blkImg('anvil')}Наковальня`, d: () => { const n = TIERS[Math.min(TIERS.length - 1, game.tier + 1)]; return `Кирка летит в наковальню. Разобьёт — станет <b>${n.name.toLowerCase()}</b>: ${Math.round(n.hp * game.cfg.hpMul)} прочности и бьёт сильнее. Плюс сразу +${UPGRADE_HEAL} ❤.`; } },
+  chest: { holes: () => [tutPt(), winPill()], ptrs: () => [tutPt(), winPill()],
+    t: () => `${blkImg('chest')}Сундук`, d: 'Кирка летит в сундук. Внутри — случайный приз: сразу несколько иксов от ставки.' },
+  luck: { holes: () => [tutPt()], ptrs: () => [tutPt()],
+    t: () => `${blkImg('enchant')}Стол зачарований`, d: () => `Кирка летит в стол зачарований. Разобьёт — следующие ${LUCK_BLOCKS} блоков платят <b>×${game.cfg.luckMult}</b> (такие выплаты фиолетовые).` },
+  x1: { holes: () => [rEl($('cash')), winPill()], ptrs: () => [rEl($('cash')), winPill()],
+    t: 'Меньше ×1 — это минус', d: () => `Накопано <b>${tutWin()}</b> при ставке ${TUT_BET} — это <b>×${(game.win / TUT_BET).toFixed(2)}</b>. Забрать сейчас — вернёшь не всю ставку: <b>убыток −${fmt(Math.round(TUT_BET - game.win))}</b> (в истории такие — жёлтые). <b>×1 — это просто ставка вернулась</b>, прибыль начинается выше. Икс на кнопке «Забрать» красный, пока ты в минусе, и зелёный в плюсе.` },
+  cash: { holes: () => [rEl($('cash')), rEl($('hudHp'))], ptrs: () => [rEl($('cash')), rEl($('hudHp'))], wait: 1,
+    t: 'Забирай вовремя!', d: () => `Накопано <b>${tutWin()}</b> (×${(game.win / TUT_BET).toFixed(2)}), а прочности осталось всего <b>${Math.round(game.hp)} из ${game.maxHp}</b>. Это ставка назад плюс <b>${Math.max(0, game.win / TUT_BET - 1).toFixed(2)}× прибыли</b>. Дальше — риск: шанс трещины уже <b>${(game.crackChance() * 100).toFixed(1)}%</b> и растёт. Жми <b>«ЗАБРАТЬ»</b>, и выигрыш твой.` },
+  // ---------- кнопки и экран ----------
+  uBal: { holes: () => [rEl(qs('.topbar .balrow'))], ptrs: () => [rEl($('balance'))],
+    t: '💰 Баланс', d: () => `Твои монеты. Ставка списывается отсюда, выигрыш приходит сюда. У Обычной версии и Чита — <b>разные кошельки</b>.` },
+  uGift: { holes: () => [rEl($('free'))], ptrs: () => [rEl($('free'))],
+    t: '🎁 Подарки', d: () => fair ? 'Ежедневный подарок (серия 7 дней), 3 задания в день и спасательный круг, если монеты кончились. Зелёная точка — есть что забрать.' : 'В Чите — +1000 монет на демо-кошелёк без ограничений. В Обычной тут ежедневный подарок, задания и спасательный круг.' },
+  uLearn: { holes: () => [rEl($('learnBtn'))], ptrs: () => [rEl($('learnBtn'))],
+    t: '🎓 Обучения', d: 'Эта кнопка. Светится, пока есть обучения с наградой. Цифра — сколько осталось.' },
+  uStage: { holes: () => [rEl($('stage'))], ptrs: () => [rEl($('hudDepth')), winPill(), rEl($('hudHp'))],
+    t: '⛏ Шахта', d: 'Сверху: <b>глубина</b>, <b>выигрыш раунда</b> и <b>прочность кирки ❤</b> (в Обычной там же шанс трещины). 🔊 в углу — звук.' },
+  uBet: { holes: () => [rEl(qs('.betline'))], ptrs: () => [rEl($('bet'))],
+    t: '🪙 Ставка', d: () => `− и + меняют ставку, ½ и ×2 — половина и вдвое, 10 — быстро поставить 10, MAX — максимум (не больше баланса и лимита ранга: сейчас ${isFinite(maxBet()) ? fmtShort(maxBet()) : '∞'}).` },
+  uPlay: { holes: () => [rEl($('play')), rEl($('cash'))], ptrs: () => [rEl($('play')), rEl($('cash'))],
+    t: '▶ ИГРАТЬ и ЗАБРАТЬ', d: '<b>ИГРАТЬ</b> — списать ставку и запустить кирку. <b>ЗАБРАТЬ</b> — забрать накопленное, пока кирка цела. Две разные кнопки — чтобы не промахнуться. На компьютере — пробел.' },
+  uBuy: { holes: () => [rEl($('buyBonus'))], ptrs: () => [rEl($('buyBonus'))],
+    t: '🔥 Портал в ад', d: () => `Купить бонуску за ×${BONUS_PRICE} от ставки. Нажимать <b>два раза</b> — защита от случайного тапа. Подробно — в обучении «Бонуска».` },
+  uAuto: { holes: () => [rEl(qs('label.auto'))], ptrs: () => [rEl($('auto'))], need: () => !!rEl(qs('label.auto')),
+    t: '🤖 Авто-забор', d: 'Впиши множитель, например 2 — игра сама заберёт, когда выигрыш дойдёт до ×2 от ставки. Пусто — выключено.' },
+  uHist: { holes: () => [rEl($('hist'))], ptrs: () => [rEl($('hist'))], need: () => !!rEl($('hist')),
+    t: '📜 История', d: 'Последние ставки: зелёные — забрал (×множитель), красные ✖ — сгорело, 🔥 — бонуска.' },
+  uMenuA: { holes: () => [rEl($('mVil')), rEl($('mBank')), rEl($('mProf'))], ptrs: () => [rEl($('mVil')), rEl($('mBank')), rEl($('mProf'))],
+    t: '☰ Меню', d: '🏘 <b>Деревня</b> — строй и собирай доход. 🏦 <b>Банк</b> — +1% в день, монеты там не сгорят. 👤 <b>Профиль</b> — ранг, статистика, достижения, следы, сохранение и справка «Как играть».' },
+  uMenuB: { holes: () => [rEl($('mRuns')), rEl($('mMode')), rEl($('mPay'))], ptrs: () => [rEl($('mRuns')), rEl($('mMode')), rEl($('mPay'))],
+    t: '☰ Меню', d: '🏁 <b>Забеги</b> — испытание с отдельным кошельком. ⚙ <b>Режим</b> — Обычная / Чит и волатильность. 📋 <b>Выплаты</b> — сколько платит каждый блок при твоей ставке.' },
+  // ---------- деревня (окно деревни открыто) ----------
+  vTabs: { holes: () => [rEl($('vTabs'))], ptrs: () => [rEl($('vTabs'))], scroll: () => $('vTabs'), area: 1,
+    t: '🏘 Четыре деревни', d: 'Равнины → Пустыня → Снега → Незер. Следующая открывается, когда достроишь предыдущую. Каждая дороже и доходнее.' },
+  vStage: { holes: () => [rEl(qs('#sh-vil .vstage'))], ptrs: () => [rEl($('vcv'))], scroll: () => qs('#sh-vil .vstage'), area: 1,
+    t: '🏠 Твоя деревня', d: 'Пока здания копят доход, деревня <b>работает</b>: дым из труб, искры в кузнице, жители бегают с грузом. Над зданием с монетами — 💰, тапни — соберёшь.' },
+  vRot: { holes: () => [rEl($('vRot'))], ptrs: () => [rEl($('vRot'))], wait: 1, waitFor: 'vRot', scroll: () => qs('#sh-vil .vstage'), area: 1,
+    t: '⟳ Поверни деревню', d: 'Жми ⟳ — деревня повернётся. Кнопки + и − — приблизить и отдалить.' },
+  vProg: { holes: () => [rEl($('vProgT') && $('vProgT').parentElement.parentElement)], ptrs: () => [rEl($('vProgB') && $('vProgB').parentElement)], scroll: () => $('vProgB'), area: 1,
+    t: '📊 Прогресс', d: 'Сколько стадий построено из всех. Достроишь всё — деревня готова.' },
+  vCards: { holes: () => [rEl($('vCards').firstElementChild)], ptrs: () => [rEl($('vCards').firstElementChild)], scroll: () => $('vCards').firstElementChild || $('vCards'), area: 1,
+    t: '🔨 Здания', d: 'Каждое строится <b>стадиями</b> за монеты Обычной версии (не хватает — добираем из банка). Стройка не роняет ранг: вложенное считается в богатство.' },
+  vInc: { holes: () => [rEl(qs('#sh-vil .vinc'))], ptrs: () => [rEl($('vIncB') && $('vIncB').parentElement), rEl($('vCollect'))], scroll: () => qs('#sh-vil .vinc'), area: 1,
+    t: '💰 Доход', d: 'Здания копят <b>0,25% в час</b> от вложенного, склад — на 6 часов. Само на баланс не капает: заходи и жми <b>«Собрать»</b>. Склад полон — работа стоит.' },
+  vReward: { holes: () => [rEl($('vReward'))], ptrs: () => [rEl($('vReward'))], scroll: () => $('vReward'), area: 1, need: () => !!rEl($('vReward')),
+    t: '🎉 Награда', d: 'Достроишь деревню — получишь новый след за киркой и откроется следующая деревня.' },
+  // ---------- бонуска ----------
+  welcome: { emo: '🎓', next: 'Начать обучение ▶', skip: 'Не сейчас',
+    t: () => tut.old ? 'Появились обучения с наградой' : 'Привет! Это Кирка ⛏',
+    d: () => (tut.old ? '' : 'Шахтёрское казино: кирка копает блоки, а <b>ты решаешь, когда забрать</b> выигрыш. ') + `Пройди короткое обучение «Шахта» — минута, бесплатно, проиграть нельзя, а в награду <b>+${LEARN[0].r} монет</b>. Ещё ${LEARN.length - 1} обучения (кнопки, деревня, бонуска) — в кнопке <b>🎓</b> наверху, всего до +${fmt(LEARN.reduce((a, L) => a + L.r, 0))}.` },
+  hPortal: { holes: () => [rEl($('stage'))], ptrs: () => [],
+    t: () => `${blkImg('portal')}Портал в ад`, d: 'С 6 м в шахте иногда попадается портал. Кирка в него влетела — выигрыш раунда твой, и начинается <b>бесплатная бонуска в аду</b>.' },
+  hBuy: { holes: () => [rEl($('buyBonus'))], ptrs: () => [rEl($('buyBonus'))], wait: 1,
+    t: '🔥 Или купи вход', d: () => `Кнопка «Портал в ад» — бонуска за ×${BONUS_PRICE} от ставки (по-настоящему нажимать два раза). Сейчас — <b>бесплатно</b>, монеты учебные. Жми!` },
+  hore: { holes: () => [tutPt(), winPill()], ptrs: () => [tutPt(), winPill()],
+    t: () => `${blkImg(tut.blk)}Руда ада`, d: () => `Здесь руда на незерраке и чернокамне — золото, редстоун, алмазы, изумруды, и платит она больше, чем наверху. Кирка летит в ${bName().toLowerCase()} — это <b>+${fmt(Math.round(game.val(tut.blk) * TUT_BET * game.hellMult()))}</b>.` },
+  hmult: { holes: () => [rEl($('hudMult')), winPill()], ptrs: () => [rEl($('hudMult'))],
+    t: '🔥 Множитель глубины', d: () => `Каждые ${HELL.step} м множитель растёт: ×2, ×3 … до ×${HELL.maxMult}. Всё, что кирка выкопает, <b>умножается на него</b> — чем глубже, тем жирнее.` },
+  hhp: { holes: () => [rEl($('hudHp')), winPill()], ptrs: () => [rEl($('hudHp')), winPill()],
+    t: '❤ Кирка не сгорит', d: () => `В аду «Забрать» не нужно: кончится прочность — бонуска просто закончится, и <b>всё накопанное твоё</b>. Уже <b>${tutWin()}</b>. Смотри до конца!` },
+};
+const TUT_FLOW = {
+  mine: ['mine', 'bet', 'play'],
+  ui: ['uBal', 'uGift', 'uLearn', 'uStage', 'uBet', 'uPlay', 'uBuy', 'uAuto', 'uHist', 'uMenuA', 'uMenuB'],
+  vil: ['vTabs', 'vStage', 'vRot', 'vProg', 'vCards', 'vInc', 'vReward'],
+  hell: ['hPortal', 'hBuy'],
+  welcome: ['welcome'],
+};
+const TUT_OUTRO = {
+  mine: 'Дальше игра <b>по-настоящему</b>: ставка списывается с баланса, а сгоревшее не вернуть. Главное правило — <b>не жадничай, забирай, пока кирка цела.</b>',
+  ui: 'Теперь ты знаешь, где что. Все правила — в 👤 Профиль → ❓ Как играть.',
+  vil: 'Копи на здания: деревня приносит доход, даже когда на балансе пусто. Заходи собирать — само не капает.',
+  hell: () => `По-настоящему бонуска стоит ×${BONUS_PRICE} от ставки или ловится бесплатно через портал в шахте. Итог бывает и меньше цены, и в разы больше.`,
+};
+// холостой прогон учебного раунда: на каком шаге кирка впервые ударит каждый новый объект
+let tutSim = null;
+function tutKind(t, bonus) {
+  if (bonus) return TUT_HELLORE.includes(t) ? 'hore' : t === 'chest' ? 'chest' : null;
+  if (TUT_SPEC[t]) return TUT_SPEC[t];
+  return !TUT_PLAIN.includes(t) && BLOCKS[t] && !BLOCKS[t].special && (MODES.low.values[t] || 0) > 0 ? 'ore' : null;
+}
+function tutPlan(seed, bonus) {
+  if (!tutSim) tutSim = new Game();
+  const g = tutSim, plan = [], seen = {};
+  RNG = srng(seed);
+  if (bonus) g.startBonus(TUT_BET, 'low', true); else g.start(TUT_BET, 'low', true); // правила Обычной версии (с трещинами)
+  for (let r = 0; r < TUT_ROWS; r++) g.row(r);
+  for (let n = 1; n <= 120 * 40 && g.running; n++) {
+    g.step(1 / 120);
+    for (const e of g.events) if (e.type === 'hit') {
+      const k = tutKind(e.t, bonus); if (k && !seen[k]) { seen[k] = 1; plan.push({ n, r: e.r, c: e.c, t: e.t, k }); }
+      if (e.crack && !seen.crack) { seen.crack = 1; plan.push({ n, k: 'crack', post: 1, cost: e.cost }); } // трещину показываем сразу ПОСЛЕ удара
+    }
+    g.events.length = 0;
+  }
+  g.running = false; g.events.length = 0;
+  RNG = srng(seed); // настоящий раунд пойдёт ровно так же
+  return plan;
+}
+function tutBegin(kind) {
+  kind = kind || 'mine';
+  if (busy() || runActive() || !TUT_FLOW[kind]) return;
+  if (tut) tutFinish(false);
+  tut = { kind, step: TUT_FLOW[kind][0], hold: false, round: false, seen: {}, bet: getBet(), n: 0, plan: [] };
+  $('overlay').classList.remove('show');
+  if (phase === 'done') { phase = 'idle'; syncIdlePick(); }
+  if (kind === 'mine' || kind === 'hell') { $('bet').value = TUT_BET; updatePanel(); }
+  if (kind === 'vil') { if (sheetId !== 'vil') openSheet('vil'); setTimeout(() => { if (tut && tut.kind === 'vil') tutShow(); }, 380); return; }
+  if (sheetId) { closeSheet(); setTimeout(() => { if (tut && tut.kind === kind) tutShow(); }, 320); return; }
+  tutShow();
+}
+function tutAdvance() {
+  if (!tut) return;
+  const F = TUT_FLOW[tut.kind], i = F.indexOf(tut.step);
+  if (i >= 0 && i + 1 < F.length) { tut.step = F[i + 1]; return tutShow(); }
+  tutComplete();
+}
+function tutShow() {
+  const T = TUT[tut.step], f = v => typeof v === 'function' ? v() : v;
+  if (T.need && !T.need()) return tutAdvance();
+  if (T.scroll) { const el = T.scroll(); if (el) el.scrollIntoView({ block: 'center' }); }
+  $('tutBody').innerHTML = (T.emo ? `<div class="temo">${T.emo}</div>` : '') + `<h3>${f(T.t)}</h3><p>${f(T.d)}</p>`;
+  $('tutNext').style.display = T.wait ? 'none' : '';
+  $('tutNext').textContent = T.next || 'Дальше ▶';
+  $('tutSkip').textContent = T.skip || 'Пропустить';
+  $('tutFin').style.display = T.wait ? '' : 'none';
+  const bub = $('tutBub'); bub.classList.remove('pop'); void bub.offsetWidth; bub.classList.add('pop');
+  $('tut').classList.add('show');
+  tutPos();
+  if (!tut.loop) { tut.loop = true; requestAnimationFrame(tutLoop); }
+}
+function tutHide() { $('tut').classList.remove('show'); }
+function tutLoop() { if (!tut || !$('tut').classList.contains('show')) { if (tut) tut.loop = false; return; } tutPos(); requestAnimationFrame(tutLoop); }
+const SVGA = (id, a) => { const e = $(id); for (const k in a) e.setAttribute(k, a[k]); };
+const hit = (a, b) => a && b && a.l < b.r && a.r > b.l && a.t < b.b && a.b > b.t;
+function tutPos() {
+  if (!tut || !TUT[tut.step]) return;
+  const T = TUT[tut.step], W = innerWidth, H = innerHeight, bub = $('tutBub');
+  const holes = (T.holes ? T.holes() : []).map(r => r && rPad(r, 6)), ptrs = T.ptrs ? T.ptrs() : [];
+  const h0 = holes[0];
+  // вырезы в затемнении + золотые рамки
+  for (let i = 0; i < 3; i++) {
+    const r = holes[i];
+    if (r) { const a = { x: r.l, y: r.t, width: r.r - r.l, height: r.b - r.t }; SVGA('tutM' + i, a); SVGA('tutO' + i, a); $('tutO' + i).style.display = ''; }
+    else { SVGA('tutM' + i, { width: 0, height: 0 }); $('tutO' + i).style.display = 'none'; }
+  }
+  // блокираторы кликов: всё, кроме первого выреза (и его — тоже, если мы не ждём нажатия)
+  const B = [0, 1, 2, 3, 4].map(i => $('tutB' + i).style), set = (st, x, y, w, h) => { st.left = x + 'px'; st.top = y + 'px'; st.width = Math.max(0, w) + 'px'; st.height = Math.max(0, h) + 'px'; };
+  if (!h0 || !T.wait) { set(B[0], 0, 0, W, H); for (let i = 1; i < 5; i++) set(B[i], 0, 0, 0, 0); }
+  else { set(B[0], 0, 0, W, h0.t); set(B[1], 0, h0.b, W, H - h0.b); set(B[2], 0, h0.t, h0.l, h0.b - h0.t); set(B[3], h0.r, h0.t, W - h0.r, h0.b - h0.t); set(B[4], 0, 0, 0, 0); }
+  // пузырь: ниже / выше главного объекта, низ / верх области, по центру — первое место, где он ничего не закрывает
+  const bw = bub.offsetWidth, bh = bub.offsetHeight, gap = 26, sr = (!T.area && rEl($('stage'))) || { l: 0, t: 0, r: W, b: H };
+  const cx = h0 ? (h0.l + h0.r) / 2 : W / 2, left = Math.max(8, Math.min(W - bw - 8, cx - bw / 2));
+  const cands = h0 ? [h0.b + gap, h0.t - gap - bh, sr.b - bh - 40, sr.t + 60, H - bh - 16, 16, (H - bh) / 2] : [(H - bh) / 2];
+  let top = null;
+  for (const c of cands) { const r = { l: left, t: c, r: left + bw, b: c + bh }; if (c < 8 || c + bh > H - 8) continue; if (holes.some(h => hit(h, r))) continue; top = c; break; }
+  if (top === null) top = Math.max(8, Math.min(H - bh - 8, h0 ? h0.b + gap : (H - bh) / 2));
+  bub.style.left = Math.round(left) + 'px'; bub.style.top = Math.round(top) + 'px';
+  // линии-указатели от пузыря к объектам
+  const bb = { l: left, t: top, r: left + bw, b: top + bh }, cl = (v, a, b) => Math.max(a, Math.min(b, v));
+  for (let i = 0; i < 3; i++) {
+    let r = ptrs[i];
+    if (r) { // если объект в своей подсвеченной рамке (и рамка не намного больше) — линия упирается в край рамки
+      const mx = (r.l + r.r) / 2, my = (r.t + r.b) / 2, area = q => (q.r - q.l) * (q.b - q.t);
+      const hh = holes.find(h => h && mx > h.l && mx < h.r && my > h.t && my < h.b && area(h) < area(r) * 9); if (hh) r = rPad(hh, -5);
+    }
+    const on = !!r && !hit(rPad(r, 4), bb);
+    for (const k of ['tutL', 'tutS', 'tutE', 'tutP']) $(k + i).style.display = on ? '' : 'none';
+    if (!on) continue;
+    let tx = (r.l + r.r) / 2; const ty = (r.t + r.b) / 2;
+    if (i === 1 && ptrs.length === 2 && ptrs[0] && r.r - r.l > 160) { const c0 = (ptrs[0].l + ptrs[0].r) / 2; tx = c0 < tx ? r.r - 36 : r.l + 36; } // к широкой полоске — сбоку, мимо первого объекта
+    let sx, sy, ex, ey, vert = true;
+    if (ty < bb.t) { sx = cl(tx, bb.l + 22, bb.r - 22); sy = bb.t; ex = tx; ey = r.b + 7; }
+    else if (ty > bb.b) { sx = cl(tx, bb.l + 22, bb.r - 22); sy = bb.b; ex = tx; ey = r.t - 7; }
+    else { vert = false; sy = cl(ty, bb.t + 18, bb.b - 18); if (tx < bb.l) { sx = bb.l; ex = r.r + 7; } else { sx = bb.r; ex = r.l - 7; } ey = ty; }
+    if (i === 1 && ptrs.length === 2 && ptrs[0]) sx += sx < (bb.l + bb.r) / 2 ? 14 : -14; // две линии не сливаются у пузыря
+    const d = vert ? `M${sx},${sy} C${sx},${(sy + ey) / 2} ${ex},${(sy + ey) / 2} ${ex},${ey}` : `M${sx},${sy} C${(sx + ex) / 2},${sy} ${(sx + ex) / 2},${ey} ${ex},${ey}`;
+    SVGA('tutL' + i, { d }); SVGA('tutS' + i, { cx: sx, cy: sy }); SVGA('tutE' + i, { cx: ex, cy: ey }); SVGA('tutP' + i, { cx: ex, cy: ey });
+  }
+  if (T.wait && h0) { const f = $('tutFin').style; f.left = Math.round((h0.l + h0.r) / 2 + 4) + 'px'; f.top = Math.round(h0.b - 30) + 'px'; }
+}
+function tutNextClick() {
+  if (!tut) return; tone(660, .04, 'square', .03);
+  if (tut.step === 'end') return tutFinish(true);
+  if (tut.step === 'welcome') return tutBegin('mine');
+  if (tut.round) { tut.hold = false; tutHide(); return; } // стоп-кадр во время раунда — летим дальше
+  if (!TUT[tut.step].wait) tutAdvance();
+}
+// шаг «нажми на кнопку» (например ⟳ в деревне): ловим нажатие и идём дальше
+document.addEventListener('click', e => {
+  if (!tut || !TUT[tut.step] || !TUT[tut.step].waitFor || !e.target.closest('#' + TUT[tut.step].waitFor)) return;
+  const st = tut.step; setTimeout(() => { if (tut && tut.step === st) tutAdvance(); }, 500);
+}, true);
+function tutRoundStart() {
+  roundCrack = false; parts.length = 0; floats.length = 0; trail.length = 0;
+  $('overlay').classList.remove('show');
+  tut.round = true; tut.hold = false; tut.step = 'run'; tut.n = 0; tutHide();
+  $('tutTagT').textContent = tut.kind === 'hell' ? '🎓 УЧЕБНАЯ БОНУСКА · бесплатно' : '🎓 УЧЕБНЫЙ РАУНД · бесплатно';
+  $('tutTag').classList.add('show');
+}
+function tutPlayRound() {
+  if (phase === 'play' || phase === 'portal') return;
+  tut.plan = tutPlan(TUT_SEED, false);
+  game.start(TUT_BET, 'low', true); for (let r = 0; r < TUT_ROWS; r++) game.row(r);
+  phase = 'play'; acc = 0; tutRoundStart(); updatePanel();
+}
+function tutHellRound() {
+  if (phase === 'play' || phase === 'portal') return;
+  tut.plan = tutPlan(TUT_HSEED, true);
+  game.startBonus(TUT_BET, 'low', true); for (let r = 0; r < TUT_ROWS; r++) game.row(r);
+  phase = 'play'; acc = 0; camY = -400; tutRoundStart();
+  overlay('ПОРТАЛ В АД', `×1 → ×${HELL.maxMult}`, 'учебная бонуска · бесплатно', '#ff7a2a');
+  SFX.portal(); vibe([60, 40, 60]); shake = 10;
+  updatePanel();
+}
+// вызывается после каждого шага физики: true — остановить время и показать подсказку
+function tutWatch() {
+  const T = tut; T.n++;
+  for (const p of T.plan) if (!p.done && T.n >= p.n - (p.post ? 0 : TUT_AHEAD)) {
+    p.done = 1; T.seen[p.k] = 1;
+    if (p.k === 'crack') { T.crackCost = p.cost; return tutHold('crack', game.p.x, game.p.y); }
+    T.blk = p.t; const [x, y] = cc(p.r, p.c); return tutHold(p.k, x, y);
+  }
+  if (T.kind === 'hell') {
+    for (const e of game.events) if (e.type === 'mult' && !T.seen.hmult) { T.seen.hmult = 1; return tutHold('hmult', e.x, e.y); }
+    if (!T.seen.hhp && game.hp <= game.maxHp * .5) { T.seen.hhp = 1; return tutHold('hhp'); }
+    return false;
+  }
+  if (T.seen.ore && !T.seen.hp && game.hp <= game.maxHp * .8) { T.seen.hp = 1; return tutHold('hp'); }
+  if (T.seen.hp && !T.seen.x1 && game.win >= TUT_BET * .3 && game.win < TUT_BET) { T.seen.x1 = 1; return tutHold('x1'); }
+  if (T.seen.hp && T.seen.x1 && !T.seen.cash && game.hp <= game.maxHp * .5 && game.win >= TUT_BET) { T.seen.cash = 1; return tutHold('cash'); }
+  return false;
+}
+function tutHold(step, x, y) {
+  tut.hold = true; tut.step = step; tut.pt = x === undefined ? null : { x, y };
+  $('overlay').classList.remove('show');
+  setTimeout(() => { if (tut && tut.step === step) tutShow(); }, 0); return true;
+}
+function tutCash() { if (!tut || tut.step !== 'cash') return false; tut.hold = false; tutHide(); return true; }
+function tutRoundEnd(win, broke) {
+  const hell = tut.kind === 'hell';
+  phase = 'done'; playLockUntil = performance.now() + PLAY_LOCK_MS; setTimeout(updatePanel, PLAY_LOCK_MS + 20);
+  RNG = Math.random; tut.round = false; tut.hold = false;
+  $('tutTag').classList.remove('show');
+  if (tut.skipping) { updatePanel(); return tutFinish(false); } // пропустили посреди раунда — тихо выходим
+  if (hell) { overlay('АД ПРОЙДЕН', `+${fmt(win)}${COIN}`, `×${(win / TUT_BET).toFixed(1)} · учебные монеты`, '#ffb02a'); SFX.hellEnd(); }
+  else if (broke) overlay('КИРКА СЛОМАЛАСЬ', 'учебный раунд', 'Вот так сгорает накопанное, если не забрать', '#ff5a5a');
+  else overlay('ЗАБРАНО!', `+${fmt(win)}${COIN}`, `×${(win / TUT_BET).toFixed(2)} · учебные монеты`, '#3ddc63');
+  updatePanel();
+  setTimeout(() => { if (tut) tutComplete(); }, 1600);
+}
+// обучение пройдено: награда (один раз) и финальная карточка «обучение закончено»
+function tutComplete() {
+  const L = LEARN.find(q => q.k === tut.kind); if (!L) return tutFinish(true);
+  meta.learn = meta.learn || {};
+  const first = !meta.learn[L.k];
+  if (first) {
+    meta.learn[L.k] = 1; addMain(L.r); saveMeta(); updatePanel();
+    gtoast(`🎓 Награда за обучение: +${fmt(L.r)}${COIN}` + (isMain() ? '' : ' <small>(на баланс Обычной)</small>'), '#ffd23f', true); sfxAch();
+  }
+  const left = learnLeft(), f = v => typeof v === 'function' ? v() : v;
+  TUT.end = { emo: '🎓', t: `✅ Обучение «${L.n}» закончено`,
+    d: (first ? `<span class="tut-rew">+${fmt(L.r)} <i class="coin"></i> на баланс${isMain() ? '' : ' Обычной'}</span>` : '') + f(TUT_OUTRO[L.k]) +
+      (left ? `<br><br>Ещё ${left} ${left === 1 ? 'обучение' : 'обучения'} с наградой — кнопка <b>🎓</b> наверху.` : '<br><br>🎉 <b>Все обучения пройдены!</b>'),
+    next: 'Понятно ▶', skip: left ? '🎓 Другие' : 'Закрыть' };
+  tut.step = 'end'; tut.pt = null; tut.round = false; tutShow();
+}
+function tutFinish(done) {
+  if (!tut) return;
+  const t = tut; tut = null; tutHide(); RNG = Math.random;
+  $('tutTag').classList.remove('show');
+  if (meta.intro < 2) meta.intro = 2; saveMeta();
+  game.cfg = MODES[mode];
+  if ((t.kind === 'mine' || t.kind === 'hell') && (phase === 'idle' || phase === 'done')) { $('bet').value = t.bet > 0 ? t.bet : 10; syncIdlePick(); }
+  updatePanel();
+}
+function tutSkipClick() {
+  if (!tut) return;
+  if (tut.step === 'welcome') { tutFinish(false); setTimeout(() => showLearnHint('Обучения всегда здесь — кнопка 🎓. За каждое — награда.'), 250); return; }
+  if (tut.step === 'end') { const more = learnLeft() > 0; tutFinish(true); if (more) setTimeout(() => openSheet('learn'), 60); return; }
+  if (tut.round && game.running) { tut.skipping = true; tut.hold = false; if (game.bonus) game.endBonus(); else game.cashOut(); handleEvents(); return; } // учебный раунд просто обрывается
+  tutFinish(false);
+}
+// окно «Обучение»
+function renderLearn() {
+  const ra = runActive();
+  meta.learn = meta.learn || {};
+  $('learnList').innerHTML = LEARN.map(L => { const d = !!meta.learn[L.k]; return `<div class="lcard${d ? ' done' : ''}"><div class="li">${L.i}</div><div class="ltx"><b>${L.n}</b><small>${L.d}</small><span class="lrw">${d ? '✓ пройдено' : `награда +${fmt(L.r)}`}<i class="coin"></i></span></div><button class="btn lgo" data-l="${L.k}"${ra ? ' disabled' : ''}>${d ? 'Ещё раз' : 'Начать ▶'}</button></div>`; }).join('');
+  const left = learnLeft(), sum = LEARN.filter(L => !meta.learn[L.k]).reduce((a, L) => a + L.r, 0);
+  $('learnNote').innerHTML = ra ? '🏁 Идёт забег — обучения доступны после него или на паузе.' : left ? `Осталось ${left} из ${LEARN.length} · ещё <b style="color:var(--gold)">+${fmt(sum)}</b><i class="coin"></i>. Награда — один раз за каждое обучение, монеты идут на баланс Обычной версии. Всё бесплатно: баланс не тратится, проиграть нельзя.` : '🎉 Все обучения пройдены. Можно пройти любое ещё раз — уже без награды.';
+}
+$('learnList').addEventListener('click', e => { const b = e.target.closest('[data-l]'); if (b && !b.disabled) { b.blur(); tutBegin(b.dataset.l); } });
+$('learnBtn').onclick = e => { e.currentTarget.blur(); if (tut) return; openSheet('learn'); };
+$('learnHelp').onclick = e => { e.currentTarget.blur(); openSheet('help'); };
+$('tutNext').onclick = tutNextClick;
+$('tutSkip').onclick = tutSkipClick;
+$('pTut').onclick = e => { e.currentTarget.blur(); openSheet('learn'); };
+$('pHelp').onclick = e => { e.currentTarget.blur(); openSheet('help'); };
+addEventListener('resize', () => { if (tut) tutPos(); });
 
 // ====================== ДЕРЕВНЯ ======================
 // Изометрия из кубиков 16×16, все текстуры рисуются кодом. Здания строятся стадиями за монеты Обычной версии.
@@ -3009,12 +3545,15 @@ function renderVil() {
   $('vProgT').textContent = `${V.i} ${V.n}: построено ${done} / ${total}`; $('vProgP').textContent = Math.round(100 * done / total) + '%';
   $('vProgB').style.width = (100 * done / total) + '%';
   $('vMoney').innerHTML = `Для стройки: баланс <b>${fmt(mb)}</b>${COIN}` + (bank > 0 ? ` + банк <b>${fmt(bank)}</b>${COIN}` : '') + (fair && !runActive() ? '' : ' <span style="color:#ffcf6a">(монеты Обычной версии)</span>');
+  // ближайшая цель — самая дешёвая следующая стадия, на которую пока не хватает
+  let goal = null; if (unl) for (const b of V.b) { const n2 = b.st[vilLv(V, b)]; if (n2 && mb + bank < n2[1] && (!goal || n2[1] < goal.p)) goal = { id: b.id, p: n2[1], n: b.n, s: n2[0] }; }
+  if (goal) $('vMoney').innerHTML += `<div class="vgoaltop">🎯 Ближайшая цель: <b>${goal.n} → ${goal.s}</b> — ещё <b>${fmt(Math.ceil(goal.p - mb - bank))}</b>${COIN}</div>`;
   $('vCards').innerHTML = V.b.map(b => {
     const L = vilLv(V, b), nx = b.st[L], can = unl && nx && mb + bank >= nx[1] && !busy(), fromBank = nx ? Math.max(0, nx[1] - mb) : 0, armed = vBuyArmed.id === b.id && performance.now() < vBuyArmed.until;
     const btn = !nx ? '<button class="btn vbuy" disabled>✓ Готово</button>'
       : `<button class="btn vbuy${armed ? ' armed' : ''}" data-b="${b.id}" ${can ? '' : 'disabled'}>${armed ? 'Точно?' : 'Построить'}<small>${fmt(nx[1])}${COIN}${can && fromBank > 0 ? ' · банк' : ''}</small></button>`;
-    return `<div class="vcard"><div class="vi">${b.i}</div><div class="vn"><b>${b.n}</b><div class="vdots">${b.st.map((_, i) => `<span class="${i < L ? 'on' : ''}"></span>`).join('')}</div>
-      <div class="vst">${L ? b.st[L - 1][0] : 'пустой участок'}${nx ? ' → <b>' + nx[0] + '</b>' : ' · достроено'}</div><div class="vinc1" id="vs-${b.id}"></div></div>${btn}</div>`;
+    return `<div class="vcard${goal && goal.id === b.id ? ' goal' : ''}"><div class="vi">${b.i}</div><div class="vn"><b>${b.n}</b><div class="vdots">${b.st.map((_, i) => `<span class="${i < L ? 'on' : ''}"></span>`).join('')}</div>
+      <div class="vst">${L ? b.st[L - 1][0] : 'пустой участок'}${nx ? ' → <b>' + nx[0] + '</b>' : ' · достроено'}</div>${nx && unl && mb + bank < nx[1] ? `<div class="vgoal">ещё <b>${fmt(Math.ceil(nx[1] - mb - bank))}</b>${COIN} до «${nx[0]}»</div><div class="vgbar"><i style="width:${Math.min(100, 100 * (mb + bank) / nx[1]).toFixed(1)}%"></i></div>` : ''}<div class="vinc1" id="vs-${b.id}"></div></div>${btn}</div>`;
   }).join('');
   const T = TRAILS[V.reward];
   $('vReward').innerHTML = vilComplete(vi) ? `🎉 Деревня «${V.n}» достроена! Награда получена: след «${T.n}»${vi + 1 < VILLAGES.length ? ` · открыта деревня «${VILLAGES[vi + 1].n}»` : ''}` :
@@ -3070,7 +3609,15 @@ window.addEventListener('popstate', () => closeSheet(true)); // кнопка «�
 // Подстройка раскладки: решение принимается по «базовой» высоте поля (без классов), поэтому не дёргается туда-обратно.
 // Шахта должна занимать не меньше половины видимой области (без статус-бара и полоски «домой»).
 // Не помещается — ужимаем интерфейс: body.cmp, потом body.cmp2. В «режиме копания» не пересчитываем.
-function safeInsets() { const p = $('safeProbe'), cs = p ? getComputedStyle(p) : null; return cs ? [parseFloat(cs.paddingTop) || 0, parseFloat(cs.paddingBottom) || 0] : [0, 0]; }
+function safeInsets() { const p = $('safeProbe'), cs = p ? getComputedStyle(p) : null; return cs ? [(parseFloat(cs.paddingTop) || 0) + (document.documentElement.classList.contains('glass') ? 40 : 0), parseFloat(cs.paddingBottom) || 0] : [0, 0]; }
+// Иконка на экране «Домой», установленная со старым black-translucent (iOS 26 размывает верх): определяем и сдвигаем шапку.
+// Новые установки идут с black — там отступ сверху 0 и сдвиг не нужен.
+function glassCheck() {
+  const m = /OS (\d+)_(\d+)/.exec(navigator.userAgent), v = m ? +m[1] + m[2] / 100 : 0, p = $('safeProbe');
+  const top = p ? parseFloat(getComputedStyle(p).paddingTop) || 0 : 0;
+  document.documentElement.classList.toggle('glass', navigator.standalone === true && v >= 18.06 && top >= 20 && window.innerHeight > window.innerWidth);
+}
+glassCheck(); addEventListener('resize', glassCheck);
 function fitLayout() {
   const B = document.body, st = $('stage'), app = $('app'); if (!st || !app || B.classList.contains('dig')) return;
   B.classList.remove('cmp', 'cmp2'); if (window.innerWidth >= 900) return;
@@ -3176,7 +3723,9 @@ window.addEventListener('resize', () => { if (sheetId === 'vil') vResize(); });
 bankAccrue(); ensureQuests();
 if (metaFresh || !meta.peak) meta.peak = wealth();
 saveMeta(); checkAch();
-if (meta.intro < 2) setTimeout(() => showIntro(oldSaveVer >= 1 ? INTRO_UPD : INTRO_NEW), 400);
+if (meta.intro < 2 && oldSaveVer >= 1) setTimeout(() => showIntro(INTRO_UPD), 400); // игравшим до 2.0 — «Что нового», потом предложим обучение
+else if (meta.intro < 2) { meta.intro = 2; saveMeta(); learnHint(700); }    // новичкам — сразу окно «пройди обучение» (можно закрыть)
+else if (!meta.learnOffer) learnHint(1200);                                   // старым игрокам — один раз предложить обучения с наградой
 else if (meta.bank.pend >= 1) setTimeout(() => { gtoast(`🏦 Пока тебя не было, банк начислил +${fmt(meta.bank.pend)}${COIN}`, '#7fd0ff'); meta.bank.pend = 0; saveMeta(); }, 1200);
 setInterval(() => { metaTick(); if (sheetId === 'gift') renderGifts(); if (sheetId === 'bank') renderBank(); }, 1000);
 window.addEventListener('pagehide', () => { saveMeta(); });
@@ -3186,6 +3735,7 @@ $('mute').onclick = () => { muted = !muted; localStorage.setItem('pk_muted', mut
 // Пробел: во время раунда — забрать, иначе — играть. Зажатый пробел (автоповтор) игнорируется.
 window.addEventListener('keydown', e => {
   if (e.key === 'Escape' && sheetId) { closeSheet(); return; }
+  if (tut) return; // в обучении — только кнопки
   if (e.code !== 'Space' || document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA' || sheetId || $('intro').classList.contains('show')) return;
   e.preventDefault();
   if (e.repeat) return;
