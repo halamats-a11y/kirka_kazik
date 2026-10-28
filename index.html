@@ -401,6 +401,16 @@
   .controls .runbtns .runout{min-width:0} .controls .runbtns .runout small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #diag{position:fixed;inset:0;z-index:200;background:#000d;display:flex;align-items:center;justify-content:center;padding:16px}
   #diag pre{margin:0;max-width:440px;width:100%;white-space:pre-wrap;font:12px/1.5 ui-monospace,monospace;color:#e8e8f0;background:#16161c;border:2px solid #ffd23f;border-radius:10px;padding:12px}
+
+  /* ===== доход деревни ===== */
+  .vinc{display:flex;align-items:center;gap:10px;background:#1b2214;border:2px solid #3d5a22;border-radius:12px;padding:8px 10px}
+  .vinc .vit{flex:1;min-width:0;font-size:12px;color:#cfe8b0;line-height:1.35} .vinc .vit b{color:#ffd23f;font-size:13px}
+  .vinc .bar{margin-top:5px} .vinc .bar i{background:linear-gradient(90deg,#c98a00,#ffd23f)}
+  .btn.vcol{flex:none;background:linear-gradient(#ffcf3a,#e09a00);color:#2a1a00;font-size:14px;padding:7px 12px;text-shadow:none;min-width:96px}
+  .btn.vcol small{display:block;font-size:11px;margin-top:1px}
+  .btn.vcol:disabled{background:#2b2b35;color:#a4a4b8;opacity:1;filter:none}
+  .vinc1{font-size:11px;color:#bfe0a0;margin-top:2px} .vinc1.full{color:#ffd23f;font-weight:800}
+  .menubar .btn.vcash small{color:#ffd23f}
 </style>
 </head>
 <body>
@@ -542,9 +552,10 @@
     <div class="vstage"><canvas id="vcv"></canvas><div class="vtools"><button class="vrot" id="vZo" title="Отдалить" disabled>−</button><button class="vrot" id="vZi" title="Приблизить">+</button><button class="vrot" id="vRot" title="Повернуть">⟳</button></div></div>
     <div><div class="vprog"><span id="vProgT"></span><span id="vProgP"></span></div><div class="bar"><i id="vProgB"></i></div></div>
     <div class="note" id="vMoney"></div>
+    <div class="vinc"><div class="vit"><b id="vIncT"></b><span id="vIncS"></span><div class="bar sm"><i id="vIncB"></i></div></div><button class="btn vcol" id="vCollect" disabled>💰 Собрать<small id="vColS">0</small></button></div>
     <div class="vcards" id="vCards"></div>
     <div class="vreward" id="vReward"></div>
-    <div class="note">Деревня — для красоты и гордости, на выплаты не влияет. Стройка идёт на монеты Обычной версии (если на балансе не хватает — добираем из банка) и не роняет ранг.</div>
+    <div class="note"><b>Деревня приносит монеты.</b> Каждое здание копит в час 0,25% от того, что в него вложено, склад — на 6 часов. Пока склад не полон, здание работает: дым из труб, искры в кузнице, растёт пшеница, жители бегают с грузом. Склад полон — работа стоит, деревня живёт обычной жизнью. Собирай: тапни по 💰 над зданием или «Собрать». На выплаты в шахте не влияет. Стройка идёт на монеты Обычной версии (если на балансе не хватает — добираем из банка) и не роняет ранг.</div>
   </div>
   <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
 </div></div>
@@ -1375,7 +1386,7 @@ function updatePanel() {
   setProp($('runStart'), 'runStartDis', 'disabled', playing);
   // нижнее меню (во время раунда заблокировано)
   for (const id of ['mVil', 'mBank', 'mRuns', 'mProf', 'mMode', 'mPay']) setProp($(id), id + 'Dis', 'disabled', playing);
-  setText('mVilSub', `${vilDone(-1)}/${vilTotal(-1)}`);
+  if (!vilBadge) vilUi();
   setText('mProfSub', rank().n);
   setText('mBankSub', isMain() ? fmtShort(meta.bank.amt) + ' · +1%' : '🔒 ' + (ra ? 'забег' : 'чит'));
   setProp($('mRuns'), 'mRunsCls', 'className', 'btn' + (run ? ' hot' : ''));
@@ -1429,7 +1440,7 @@ function overlay(title, big, sub, color) {
 
 const PLAY_LOCK_MS = 700; // после конца раунда «Играть» недоступна 0.7 с — защита от случайного нажатия
 let playLockUntil = 0;
-const BUILD = '2026-10-28 · раскладка 50% + режим копания';
+const BUILD = '2026-10-28 · доход деревень';
 function play() {
   ac();
   if (phase === 'play' || phase === 'portal' || performance.now() < playLockUntil) return;
@@ -1953,7 +1964,7 @@ function metaDefaults() {
     bank: { amt: 0, t: Date.now(), earned: 0, pend: 0, log: [] }, daily: { streak: 0, last: '' }, quests: { day: '', list: [] },
     stats: { rounds: 0, wins: 0, breaks: 0, cracks: 0, bet: 0, won: 0, bestX: 0, bestWin: 0, maxDepth: 0, maxTier: 0, blocks: {}, tnt: 0, chests: 0, portals: 0,
       buys: 0, bonuses: 0, bonusBest: 0, closeCalls: 0, crackWins: 0, upgrades: 0, runBestX: 0, runBigBust: 0 },
-    ach: {}, vil: { lv: {}, cur: 0 }, trail: 'classic', owned: ['classic'], peak: 0, spentVil: 0, rescueT: 0, intro: 0,
+    ach: {}, vil: { lv: {}, cur: 0, at: {} }, trail: 'classic', owned: ['classic'], peak: 0, spentVil: 0, rescueT: 0, intro: 0,
   };
 }
 let meta; try { meta = JSON.parse(localStorage.getItem('pk_meta') || 'null'); } catch (e) { meta = null; }
@@ -2184,6 +2195,7 @@ const ACH = [
   { id: 'vil0', i: '🌳', n: 'Равнины', d: 'Достроить деревню «Равнины»', v: () => vilComplete(0) ? 1 : 0, g: 1, r: 0 },
   { id: 'vil1', i: '🏜', n: 'Пустыня', d: 'Достроить деревню «Пустыня»', v: () => vilComplete(1) ? 1 : 0, g: 1, r: 0 },
   { id: 'vil2', i: '❄', n: 'Снега', d: 'Достроить деревню «Снега»', v: () => vilComplete(2) ? 1 : 0, g: 1, r: 0 },
+  { id: 'farm1', i: '💰', n: 'Хозяйство', d: 'Собрать 100 000 с деревень', v: () => meta.vilEarned || 0, g: 100000, r: 5000 },
   { id: 'vil3', i: '🔥', n: 'Незер', d: 'Достроить деревню «Незер»', v: () => vilComplete(3) ? 1 : 0, g: 1, r: 0 },
   { id: 'run2', i: '📈', n: 'Удвоил', d: 'Закончить забег с ×2 или больше', v: s => s.runBestX || 0, g: 2, r: 0 },
   { id: 'runbust', i: '💀', n: 'Слил миллион', d: 'Слить забег, начатый с 1 000 000', v: s => s.runBigBust || 0, g: 1, r: 0 },
@@ -2311,7 +2323,7 @@ const INTRO_NEW = [
 ];
 const INTRO_UPD = [
   ['🚀', 'Кирка 2.0', 'Большое обновление! Теперь у монет есть цель: <b>🏘 деревня</b>, <b>🏦 банк</b>, <b>🎁 подарки</b> и задания, <b>👤 профиль</b> с рангами, 33 достижениями и следами за киркой.'],
-  ['🏘', 'Деревня', 'Строй деревню из блоков, как в Майнкрафте: дом, кузница, ферма… Четыре деревни — Равнины, Пустыня, Снега и Незер, 60 стадий. Здания вырастают на глазах, по дорожкам ходят жители.'],
+  ['🏘', 'Деревня', 'Строй деревню из блоков, как в Майнкрафте: дом, кузница, ферма… Четыре деревни — Равнины, Пустыня, Снега и Незер, 60 стадий. Здания копят монеты — заходи собирать. Здания вырастают на глазах, по дорожкам ходят жители.'],
   ['🎁', 'Подарки и банк', 'Каждый день — подарок (серия 7 дней) и 3 задания. 🏦 Банк: отложи монеты на чёрный день, они растут на 1% в день. Бесплатные +1000 теперь — спасательный круг, когда монеты кончились.'],
   ['😈', 'Важно про Чит', 'Чит-версия теперь — <b>отдельный демо-кошелёк</b> (10 000 монет). Твой прежний баланс остался в Обычной версии. Деревня, банк, задания и достижения работают на монеты Обычной.'],
 ];
@@ -2489,6 +2501,7 @@ function vTextures() {
       if (x % 3 !== 1) { const sx = x - 1; if (x % 3 === 0 || x % 3 === 2) { const c = x % 3 === 2 ? x - 1 : x + 1, t = 2 + (c * 7) % 4; if ((y === t + 1 || y === t + 3) && c >= 0 && c < 16) return '#c9a33e'; } return null; }
       const t = 2 + (x * 7) % 4; if (y < t) return null; if (y <= t + 4) return (y - t) % 2 ? '#e8c95e' : '#d9b44a'; return y > 12 ? '#6f8a2a' : '#9a8a2a';
     }),
+    wheatMid: mk((x, y) => { if (x % 3 !== 1) return null; const t = 6 + (x * 7) % 4; if (y < t) return null; if (y <= t + 3) return (y - t) % 2 ? '#c2c650' : '#a8b23e'; return y > 12 ? '#5f8a2a' : '#7a9a2a'; }),
     sprout: mk((x, y) => (x % 4 === 1 && y > 9) || (x % 4 === 2 && y > 11 && y < 13) ? (y > 13 ? '#3f9a2c' : '#5fc044') : null),
     poppy: mk((x, y) => {
       if (y >= 4 && y <= 7 && Math.hypot((x - 7.5) / 3.6, (y - 5.5) / 2.4) < 1) return (x === 7 || x === 8) && (y === 5 || y === 6) ? '#2a1a0a' : y === 4 ? '#ef3a2a' : y === 7 ? '#a51010' : '#d41e1e';
@@ -2691,15 +2704,106 @@ const VILLAGES = [
       ] },
     ] },
 ];
+// Что делают здания, пока склад не полон: [эффект, x, y, z, с какой стадии, цвет]. Координаты — как у блоков деревни.
+const VFX = {
+  'plains.house': [['smoke', 4.5, 2.5, 9.2, 5], ['glint', 3.5, 5.5, 3.6, 3, '#ffe9a0']],
+  'plains.forge': [['smoke', 9.5, 2.5, 9.2, 4], ['spark', 10.5, 3.5, 2.9, 4], ['spark', 10, 1.4, 2.6, 2]],
+  'plains.well': [['splash', 2.5, 10.5, 1.3, 1]],
+  'plains.farm': [['spore', 10, 9.5, 1.5, 2, '#b6f07a']],
+  'desert.sandhouse': [['smoke', 2.5, 2.5, 7, 3]],
+  'desert.pyramid': [['glint', 10.5, 3.5, 5.2, 4]],
+  'desert.market': [['glint', 6.5, 9.5, 2.2, 4], ['glint', 3.5, 9.5, 2.6, 4, '#ffe0a0']],
+  'desert.oasis': [['splash', 10, 11, 1, 1]],
+  'snow.igloo': [['smoke', 2.5, 3.5, 6.2, 3]],
+  'snow.tower': [['glint', 10.5, 3.5, 11.2, 4, '#dff6ff']],
+  'snow.xtree': [['glint', 3.5, 9.5, 10.2, 3], ['glint', 3.5, 9.5, 5, 3, '#ff9a9a'], ['glint', 3.5, 9.5, 4, 3, '#9ad0ff']],
+  'snow.rink': [['spore', 10, 10.5, 1.4, 1, '#ffffff']],
+  'nether.bastion': [['glint', 3.5, 3.5, 8.6, 4], ['ember', 3.5, 3.5, 2, 2]],
+  'nether.nportal': [['portal', 11, 2.5, 3.5, 2]],
+  'nether.fortress': [['ember', 3.5, 10.5, 8.1, 4], ['smoke', 3.5, 10.5, 8.4, 4]],
+  'nether.grove': [['spore', 9.5, 9.5, 6.5, 3, '#ff6a4a'], ['spore', 12.5, 12.5, 6, 4, '#4af0e0']],
+};
+const VFXR = { smoke: 5, spark: 9, glint: 2.4, splash: 5, portal: 8, spore: 3, ember: 5 };
+// жители, пока деревня работает, носят грузы
+const VCARRY = { plains: ['hay', 'planks'], desert: ['goldb', 'sandstone'], snow: ['packed', 'blueice'], nether: ['goldb', 'magma'] };
+function vFxAdd(k, x, y, z, c) {
+  if (vSmoke.length > 420) return;
+  const r = Math.random, P = { k, x, y, z, vx: 0, vy: 0, vz: 0, g: 0, t: 0, life: 1, s: .06, c: c || '#fff6c0', v: meta.vil.cur };
+  if (k === 'smoke') Object.assign(P, { vx: (r() - .5) * .3, vz: 1.2, life: 2.8, s: .2 + r() * .15 });
+  else if (k === 'spark') Object.assign(P, { vx: (r() - .5) * 1.6, vy: (r() - .5) * 1.6, vz: 1.4 + r() * 1.6, g: 6, life: .45 + r() * .3, s: .055, c: r() < .5 ? '#ffd23f' : '#ff8a1a' });
+  else if (k === 'ember') Object.assign(P, { x: x + (r() - .5) * .9, y: y + (r() - .5) * .9, vx: (r() - .5) * .3, vz: .8 + r() * .8, life: 1.4, s: .05, c: r() < .5 ? '#ffb02a' : '#ff5a1a' });
+  else if (k === 'glint') Object.assign(P, { x: x + (r() - .5) * 1.2, y: y + (r() - .5) * 1.2, z: z + (r() - .5) * .8, life: .75, s: .1 });
+  else if (k === 'splash') Object.assign(P, { x: x + (r() - .5) * .6, y: y + (r() - .5) * .6, vx: (r() - .5) * .5, vy: (r() - .5) * .5, vz: 1.4 + r(), g: 5, life: .6, s: .05, c: r() < .5 ? '#9fd0ff' : '#5a9aff' });
+  else if (k === 'portal') { const a = r() * 6.28; Object.assign(P, { x: x + Math.cos(a) * .55, y: y + Math.sin(a) * .2, z: z + (r() - .5) * 2, vx: -Math.cos(a) * .3, vz: .5, life: 1.1, s: .055, c: r() < .5 ? '#d58bff' : '#8a3af0' }); }
+  else if (k === 'spore') Object.assign(P, { x: x + (r() - .5) * 2.2, y: y + (r() - .5) * 2.2, z: z + r() * .5, vx: (r() - .5) * .3, vy: (r() - .5) * .3, vz: .25 + r() * .2, life: 2.2, s: .05 });
+  vSmoke.push(P);
+}
+function vCoinFx(bid, n) {
+  const a = vAnch[bid]; if (!a) return; const [rx, ry] = vR4(a.x, a.y), [px, py] = vP(rx + .5, ry + .5, a.z + 1.5);
+  for (let i = 0; i < 16; i++) vCoins.push({ x: px, y: py - 10, vx: (Math.random() - .5) * 170, vy: -120 - Math.random() * 150, t: 0, life: .8 + Math.random() * .4 });
+  vFloats.push({ x: Math.max(40, Math.min(vW - 40, px)), y: Math.max(64, py - 26), t: 0, text: '+' + fmt(n) });
+}
 const vKey = (V, b) => V.id + '.' + b.id;
 const vilLv = (V, b) => Math.min(b.st.length, meta.vil.lv[vKey(V, b)] || 0);
 function vilDone(vi) { if (vi < 0) return VILLAGES.reduce((a, _, i) => a + vilDone(i), 0); const V = VILLAGES[vi]; return V.b.reduce((a, b) => a + vilLv(V, b), 0); }
 function vilTotal(vi) { if (vi < 0) return VILLAGES.reduce((a, _, i) => a + vilTotal(i), 0); return VILLAGES[vi].b.reduce((a, b) => a + b.st.length, 0); }
 const vilComplete = vi => vilDone(vi) === vilTotal(vi);
 const vilUnlocked = vi => vi === 0 || vilComplete(vi - 1);
+// ---------- доход деревни ----------
+// Каждое здание копит в час VINC от вложенного в него, склад — на VCAP_H часов. Полный склад — производство стоит.
+const VINC = 0.0025, VCAP_H = 6;
+const vSpent = (V, b) => b.st.slice(0, vilLv(V, b)).reduce((a, q) => a + q[1], 0);
+function vStore(V, b, now = Date.now()) {
+  const L = vilLv(V, b); if (!L) return { rate: 0, cap: 0, amt: 0, take: 0, full: false, on: false };
+  if (!meta.vil.at) meta.vil.at = {}; const k = vKey(V, b);
+  let at = meta.vil.at[k]; if (!at || at > now) at = meta.vil.at[k] = now; // новое здание или часы телефона перевели назад
+  const rate = vSpent(V, b) * VINC, cap = rate * VCAP_H, amt = Math.min(cap, rate * (now - at) / 3600000);
+  return { rate, cap, amt, take: Math.floor(amt), full: amt >= cap - 1e-6, on: true };
+}
+function vilStoreSum(vi) {
+  const V = VILLAGES[vi], S = { rate: 0, cap: 0, amt: 0, take: 0, full: 0, n: 0 }; if (!vilUnlocked(vi)) return S;
+  for (const b of V.b) { const q = vStore(V, b); if (!q.on) continue; S.n++; S.rate += q.rate; S.cap += q.cap; S.amt += q.amt; S.take += q.take; if (q.full) S.full++; }
+  return S;
+}
+function vilCollect(vi, bid, quiet) {
+  const V = VILLAGES[vi]; if (!vilUnlocked(vi)) return 0;
+  const now = Date.now(); let sum = 0; const got = [];
+  for (const b of V.b) {
+    if (bid && b.id !== bid) continue; const q = vStore(V, b, now); if (q.take < 1) continue;
+    sum += q.take; got.push([b.id, q.take]);
+    meta.vil.at[vKey(V, b)] = q.full ? now : now - (q.amt - q.take) / q.rate * 3600000; // дробный остаток не сгорает
+  }
+  if (!sum) return 0;
+  addMain(sum); meta.vilEarned = (meta.vilEarned || 0) + sum; saveMeta();
+  if (sheetId === 'vil' && vi === meta.vil.cur) for (const [id, n] of got) vCoinFx(id, n);
+  SFX.cash(); vibe(25);
+  if (!quiet) gtoast(`💰 +${fmt(sum)}${COIN} с деревни «${V.n}»`, '#ffd23f');
+  checkAch(); updatePanel(); vilUi();
+  return sum;
+}
+var vilBadge = '';
+function vilUi() {
+  let amt = 0, full = 0; for (let i = 0; i < VILLAGES.length; i++) { const S = vilStoreSum(i); amt += S.take; full += S.full; }
+  vilBadge = `${vilDone(-1)}/${vilTotal(-1)}` + (full ? ' · 💰!' : amt >= 1 ? ' · 💰' : '');
+  setText('mVilSub', vilBadge); $('mVil').classList.toggle('vcash', full > 0);
+  if (sheetId !== 'vil') return;
+  const vi = meta.vil.cur, V = VILLAGES[vi], S = vilStoreSum(vi);
+  setText('vIncT', S.n ? `💰 Доход: ${fmt(Math.round(S.rate))}/ч` : '💰 Доход: пока нет');
+  setText('vIncS', !vilUnlocked(vi) ? ' · деревня закрыта' : S.n ? ` · на складе ${fmt(Math.floor(S.amt))} из ${fmt(Math.floor(S.cap))}${S.full && S.full === S.n ? ' — всё полно, работа стоит!' : ''}` : ' · построй первую стадию любого здания');
+  $('vIncB').style.width = (S.cap ? 100 * S.amt / S.cap : 0).toFixed(1) + '%';
+  setProp($('vCollect'), 'vColDis', 'disabled', S.take < 1 || busy());
+  setText('vColS', fmt(S.take));
+  for (const b of V.b) {
+    const el = $('vs-' + b.id); if (!el) continue; const q = vStore(V, b);
+    const t = !q.on ? `💰 после постройки: +${fmt(Math.round(b.st[0][1] * VINC))}/ч` : q.full ? `💰 склад полон: ${fmt(q.take)} — собери!` : `💰 +${fmt(Math.round(q.rate))}/ч · ${fmt(q.take)} из ${fmt(Math.floor(q.cap))}`;
+    if (el.textContent !== t) el.textContent = t; el.classList.toggle('full', q.full);
+  }
+}
+setInterval(vilUi, 1000);
 const vilPrice = vi => VILLAGES[vi].b.reduce((a, b) => a + b.st.reduce((s, q) => s + q[1], 0), 0);
 
 // ---------- сцена и отрисовка ----------
+let vAnch = {}, vHits = [], vCoins = [], vFloats = [];
 let vScene = [], vRot = 0, vW = 0, vH = 0, vDpr = 1, vtw = 24, vox = 0, voy = 0, vLoop = false, vLast = 0;
 const vBorn = new Map(), vSmoke = [], vConf = []; let vPeople = [];
 function vBuild() {
@@ -2709,6 +2813,12 @@ function vBuild() {
   const dec = []; V.decor(dec); for (const q of dec) put(...q);
   if (vilUnlocked(vi)) for (const b of V.b) { const L = vilLv(V, b); for (let s = 0; s < L; s++) { const o = []; b.st[s][2](o); for (const [x, y, z, t] of o) put(b.ox + x, b.oy + y, z, t); } }
   vScene = [...map.values()];
+  vAnch = {};
+  if (vilUnlocked(vi)) for (const b of V.b) {
+    const L = vilLv(V, b); if (!L) continue; let sx = 0, sy = 0, n = 0, mz = 0;
+    for (let s = 0; s < L; s++) { const o = []; b.st[s][2](o); for (const [x, y, z, t] of o) { if (t === 'air') continue; sx += x; sy += y; n++; mz = Math.max(mz, z); } }
+    if (n) vAnch[b.id] = { x: b.ox + sx / n, y: b.oy + sy / n, z: mz };
+  }
   // жители: по одному на каждое здание, построенное хотя бы на 2 стадии
   const occ = new Set(vScene.map(q => q.x + ',' + q.y + ',' + q.z)), groundOk = new Set(vScene.filter(q => q.z === 0 && vOpaque(q.t) && q.t !== 'lava' && q.t !== 'magma').map(q => q.x + ',' + q.y));
   vScene.walk = (x, y) => x >= 0 && y >= 0 && x < VN && y < VN && groundOk.has(x + ',' + y) && !occ.has(x + ',' + y + ',1') && !occ.has(x + ',' + y + ',2');
@@ -2804,6 +2914,10 @@ function vFence(g, T, x, y, z, m) {
 function vDraw(now) {
   const cv = $('vcv'), g = cv.getContext('2d'), dt = Math.min(.05, (now - (vLast || now)) / 1000); vLast = now;
   const V = VILLAGES[meta.vil.cur], locked = !vilUnlocked(meta.vil.cur);
+  // какие здания сейчас работают (склад не полон)
+  const vSt = {}; let vWork = false;
+  if (!locked) for (const b of V.b) { const q = vStore(V, b); vSt[b.id] = q; if (q.on && !q.full) vWork = true; }
+  const fq = vSt.farm, vGrow = fq && fq.on && !fq.full ? fq.amt / fq.cap : 1; // пшеница дозревает, пока копится склад фермы
   vCam();
   g.setTransform(1, 0, 0, 1, 0, 0);
   const sky = g.createLinearGradient(0, 0, 0, cv.height); sky.addColorStop(0, V.sky[0]); sky.addColorStop(1, V.sky[1]); g.fillStyle = sky; g.fillRect(0, 0, cv.width, cv.height);
@@ -2811,43 +2925,75 @@ function vDraw(now) {
   // жители ходят по клеткам
   for (const p of vPeople) {
     if (p.wait > 0) { p.wait -= dt; continue; }
-    const ddx = p.tx - p.x, ddy = p.ty - p.y, d = Math.hypot(ddx, ddy), sp = 1.1 * dt;
+    const ddx = p.tx - p.x, ddy = p.ty - p.y, d = Math.hypot(ddx, ddy), sp = (vWork ? 1.75 : .8) * dt;
     if (d > sp) { p.x += ddx / d * sp; p.y += ddy / d * sp; continue; }
     p.x = p.tx; p.y = p.ty;
     const dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]].filter(([a, b]) => vScene.walk(p.tx + a, p.ty + b));
-    if (!dirs.length || Math.random() < .12) { p.wait = .5 + Math.random() * 2; continue; }
+    if (!dirs.length || Math.random() < (vWork ? .08 : .14)) { p.wait = vWork ? .15 + Math.random() * .7 : 1 + Math.random() * 2.6; continue; }
     const keep = dirs.find(([a, b]) => a === p.dx && b === p.dy), [a, b] = keep && Math.random() < .7 ? keep : dirs[Math.floor(Math.random() * dirs.length)];
     p.dx = a; p.dy = b; p.tx += a; p.ty += b;
   }
   const ops = vPrep(now); let list = ops;
-  if (vPeople.length) { list = ops.slice(); for (const p of vPeople) { const [x, y] = vR4(p.x, p.y); list.push({ x, y, z: 1, person: 1, ph: p.ph }); } list.sort(vCmp); }
+  if (vPeople.length) { list = ops.slice(); vPeople.forEach((p, ci) => { const [x, y] = vR4(p.x, p.y); list.push({ x, y, z: 1, person: 1, ph: p.ph, ci }); }); list.sort(vCmp); }
   const h = vtw / 2;
   const face = (tex, a, b, c, d, e, f) => { g.setTransform(vDpr * a / 16, vDpr * b / 16, vDpr * c / 16, vDpr * d / 16, vDpr * e, vDpr * f); g.drawImage(tex, -0.08, -0.08, 16.16, 16.16); };
   for (const it of list) {
     if (it.person) {
-      const [cx, cy] = vP(it.x + .5, it.y + .5, 1), hh = vtw * .95, w = hh * .6, bob = Math.abs(Math.sin(now / 160 + it.ph)) * vtw * .05;
+      const [cx, cy] = vP(it.x + .5, it.y + .5, 1), hh = vtw * .95, w = hh * .6, bob = Math.abs(Math.sin(now / (vWork ? 110 : 190) + it.ph)) * vtw * .05;
       g.setTransform(vDpr, 0, 0, vDpr, 0, 0); g.fillStyle = 'rgba(0,0,0,.28)'; g.beginPath(); g.ellipse(cx, cy, w * .55, w * .26, 0, 0, 7); g.fill();
-      g.setTransform(vDpr * w / 12, 0, 0, vDpr * hh / 20, vDpr * (cx - w / 2), vDpr * (cy - hh + vtw * .04 - bob)); g.drawImage(VTX[V.vil], 0, 0); continue;
+      g.setTransform(vDpr * w / 12, 0, 0, vDpr * hh / 20, vDpr * (cx - w / 2), vDpr * (cy - hh + vtw * .04 - bob)); g.drawImage(VTX[V.vil], 0, 0);
+      if (vWork && VCARRY[V.id]) { const cs = w * .55, tx = VTX[VCARRY[V.id][it.ci % 2]]; g.setTransform(vDpr * cs / 16, 0, 0, vDpr * cs / 16, vDpr * (cx - cs / 2), vDpr * (cy - hh * .5 - bob)); g.drawImage(tx, 0, 0); }
+      continue;
     }
     const bt = VB[it.t]; if (!bt) continue; const z = it.z + it.fz;
     if (bt.fence) { vFence(g, bt.fence, it.x, it.y, z, it.fc || 0); continue; }
-    if (bt.spr) { const s = bt.s || .9, [cx, cy] = vP(it.x + .5, it.y + .5, z), w = vtw * s * .75; g.setTransform(vDpr * w / 16, 0, 0, vDpr * w / 16, vDpr * (cx - w / 2), vDpr * (cy - w - vtw / 8)); g.drawImage(bt.spr, 0, 0, 16, 16); continue; }
+    if (bt.spr) { const s = bt.s || .9, [cx, cy] = vP(it.x + .5, it.y + .5, z), w = vtw * s * .75; g.setTransform(vDpr * w / 16, 0, 0, vDpr * w / 16, vDpr * (cx - w / 2), vDpr * (cy - w - vtw / 8)); g.drawImage(it.t === 'wheat' && vGrow < 1 ? (vGrow < .34 ? VTX.sprout : vGrow < .67 ? VTX.wheatMid : VTX.wheat) : bt.spr, 0, 0, 16, 16); continue; }
     const F = it.f; if (!F) continue;
     if (F[0]) { const [e, f] = vP(it.x, it.y + 1, z + 1); face(F[0], vtw / 2, vtw / 4, 0, h, e, f); }
     if (F[1]) { const [e, f] = vP(it.x + 1, it.y + 1, z + 1); face(F[1], vtw / 2, -vtw / 4, 0, h, e, f); }
     if (F[2]) { const [e, f] = vP(it.x, it.y, z + 1); face(F[2], vtw / 2, vtw / 4, -vtw / 2, vtw / 4, e, f); }
   }
   g.setTransform(vDpr, 0, 0, vDpr, 0, 0);
-  // дым из труб
-  if (!locked) for (const [bid, lv, x, y, z] of V.smoke) { const b = V.b.find(q => q.id === bid); if (b && vilLv(V, b) >= lv && Math.random() < dt * 5) vSmoke.push({ x, y, z, a: 1, s: .2 + Math.random() * .15, dx: (Math.random() - .5) * .3, v: meta.vil.cur }); }
-  for (let i = vSmoke.length - 1; i >= 0; i--) { const p = vSmoke[i]; p.z += dt * 1.2; p.x += p.dx * dt; p.a -= dt * .35; p.s += dt * .12; if (p.a <= 0 || p.v !== meta.vil.cur) { vSmoke.splice(i, 1); continue; }
-    const [rx, ry] = vR4(p.x - .5, p.y - .5), [sx, sy] = vP(rx + .5, ry + .5, p.z), sz = p.s * vtw; g.fillStyle = `rgba(225,225,230,${p.a * .7})`; g.fillRect(sx - sz / 2, sy - sz / 2, sz, sz); }
-  // снег в снежной деревне
-  if (V.id === 'snow') { g.fillStyle = 'rgba(255,255,255,.85)'; for (let i = 0; i < 40; i++) { const x = (i * 83.7 + Math.sin(now / 900 + i) * 14) % vW, y = (now / (30 + i % 7 * 6) + i * 47) % vH; g.fillRect(x, y, 2, 2); } }
+  // здания «работают», пока склад не полон: дым, искры, блеск, брызги, споры
+  if (!locked) for (const b of V.b) {
+    const q = vSt[b.id]; if (!q || !q.on || q.full) continue; const L = vilLv(V, b);
+    for (const [k, x, y, z, lv, c] of (VFX[V.id + '.' + b.id] || [])) if (L >= lv && Math.random() < dt * (VFXR[k] || 3)) vFxAdd(k, x, y, z, c);
+  }
+  for (let i = vSmoke.length - 1; i >= 0; i--) {
+    const p = vSmoke[i]; p.t += dt; if (p.t >= p.life || p.v !== meta.vil.cur) { vSmoke.splice(i, 1); continue; }
+    p.vz -= p.g * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt; const k = 1 - p.t / p.life;
+    const [rx, ry] = vR4(p.x - .5, p.y - .5), [sx, sy] = vP(rx + .5, ry + .5, p.z);
+    if (p.k === 'smoke') { const sz = (p.s + p.t * .12) * vtw; g.fillStyle = `rgba(225,225,230,${k * .7})`; g.fillRect(sx - sz / 2, sy - sz / 2, sz, sz); continue; }
+    g.globalAlpha = Math.min(1, k * 1.6); g.fillStyle = p.c; const sz = Math.max(1.5, p.s * vtw);
+    if (p.k === 'glint') { const q = sz * (1 - Math.abs(1 - 2 * p.t / p.life)) * 1.4; g.fillRect(sx - q, sy - q / 4, q * 2, q / 2); g.fillRect(sx - q / 4, sy - q, q / 2, q * 2); }
+    else g.fillRect(sx - sz / 2, sy - sz / 2, sz, sz);
+  }
+  g.globalAlpha = 1;
   // искры в Незере летят вверх
   if (V.embers) for (let i = 0; i < 36; i++) { const x = (i * 97.3 + Math.sin(now / 700 + i * 1.7) * 12) % vW, y = vH - ((now / (22 + i % 5 * 8) + i * 53) % (vH + 10)); g.fillStyle = i % 3 ? 'rgba(255,150,40,.85)' : 'rgba(255,220,110,.9)'; g.fillRect(x, y, i % 4 ? 2 : 3, i % 4 ? 2 : 3); }
   // салют при достройке
   for (let i = vConf.length - 1; i >= 0; i--) { const c = vConf[i]; c.t += dt; c.vy += 260 * dt; c.x += c.vx * dt; c.y += c.vy * dt; if (c.t > c.life) { vConf.splice(i, 1); continue; } g.globalAlpha = 1 - c.t / c.life; g.fillStyle = c.c; g.fillRect(c.x, c.y, 4, 4); }
+  g.globalAlpha = 1;
+  // пузыри с монетами над зданиями — тапни, чтобы собрать
+  vHits = [];
+  if (!locked) {
+    g.font = '900 12px ui-monospace,monospace'; g.textAlign = 'left'; g.textBaseline = 'middle';
+    V.b.forEach((b, i) => {
+      const q = vSt[b.id], a = vAnch[b.id]; if (!q || !q.on || !a || q.take < Math.max(1, q.cap * .1)) return;
+      const [rx, ry] = vR4(a.x, a.y), [px, py0] = vP(rx + .5, ry + .5, a.z + 1.5), py = py0 + Math.sin(now / 320 + i * 1.7) * 3;
+      const txt = fmtShort(q.take) + (q.full ? ' !' : ''), w = g.measureText(txt).width + 30, h = 22, x0 = px - w / 2, y0 = py - h, pul = q.full ? 1 + Math.sin(now / 170) * .07 : 1;
+      g.save(); g.translate(px, py - h / 2); g.scale(pul, pul); g.translate(-px, -(py - h / 2));
+      g.fillStyle = '#000'; g.beginPath(); g.moveTo(px - 6, py - 1); g.lineTo(px + 6, py - 1); g.lineTo(px, py + 7); g.fill();
+      g.fillStyle = q.full ? '#ffd23f' : 'rgba(22,22,30,.93)'; g.strokeStyle = '#000'; g.lineWidth = 2; g.beginPath(); if (g.roundRect) g.roundRect(x0, y0, w, h, 8); else g.rect(x0, y0, w, h); g.fill(); g.stroke();
+      g.fillStyle = q.full ? '#c98a00' : '#ffd23f'; g.beginPath(); g.arc(x0 + 12, y0 + h / 2, 6, 0, 7); g.fill(); g.strokeStyle = q.full ? '#5a3a00' : '#8a5a00'; g.lineWidth = 1.5; g.stroke();
+      g.fillStyle = q.full ? '#2a1a00' : '#ffd23f'; g.fillText(txt, x0 + 22, y0 + h / 2 + 1);
+      g.restore();
+      vHits.push({ bid: b.id, x0: x0 - 10, y0: y0 - 12, x1: x0 + w + 10, y1: py + 12 });
+    });
+    g.textBaseline = 'alphabetic';
+  }
+  for (let i = vCoins.length - 1; i >= 0; i--) { const c = vCoins[i]; c.t += dt; if (c.t > c.life) { vCoins.splice(i, 1); continue; } c.vy += 420 * dt; c.x += c.vx * dt; c.y += c.vy * dt; g.globalAlpha = 1 - c.t / c.life; g.fillStyle = '#ffd23f'; g.strokeStyle = '#8a5a00'; g.lineWidth = 1.5; g.beginPath(); g.arc(c.x, c.y, 4, 0, 7); g.fill(); g.stroke(); }
+  for (let i = vFloats.length - 1; i >= 0; i--) { const f = vFloats[i]; f.t += dt; if (f.t > 1.3) { vFloats.splice(i, 1); continue; } g.globalAlpha = Math.max(0, Math.min(1, 2.6 - f.t * 2)); g.font = '900 16px ui-monospace,monospace'; g.textAlign = 'center'; g.lineJoin = 'round'; g.lineWidth = 4; g.strokeStyle = '#000'; const y = f.y - f.t * 36; g.strokeText(f.text, f.x, y); g.fillStyle = '#ffd23f'; g.fillText(f.text, f.x, y); }
   g.globalAlpha = 1;
   if (locked) { g.fillStyle = 'rgba(10,10,16,.55)'; g.fillRect(0, 0, vW, vH); g.font = '900 16px ui-monospace,monospace'; g.textAlign = 'center'; g.fillStyle = '#fff'; g.fillText('🔒 Сначала дострой «' + VILLAGES[meta.vil.cur - 1].n + '»', vW / 2, vH / 2); }
 }
@@ -2868,24 +3014,26 @@ function renderVil() {
     const btn = !nx ? '<button class="btn vbuy" disabled>✓ Готово</button>'
       : `<button class="btn vbuy${armed ? ' armed' : ''}" data-b="${b.id}" ${can ? '' : 'disabled'}>${armed ? 'Точно?' : 'Построить'}<small>${fmt(nx[1])}${COIN}${can && fromBank > 0 ? ' · банк' : ''}</small></button>`;
     return `<div class="vcard"><div class="vi">${b.i}</div><div class="vn"><b>${b.n}</b><div class="vdots">${b.st.map((_, i) => `<span class="${i < L ? 'on' : ''}"></span>`).join('')}</div>
-      <div class="vst">${L ? b.st[L - 1][0] : 'пустой участок'}${nx ? ' → <b>' + nx[0] + '</b>' : ' · достроено'}</div></div>${btn}</div>`;
+      <div class="vst">${L ? b.st[L - 1][0] : 'пустой участок'}${nx ? ' → <b>' + nx[0] + '</b>' : ' · достроено'}</div><div class="vinc1" id="vs-${b.id}"></div></div>${btn}</div>`;
   }).join('');
   const T = TRAILS[V.reward];
   $('vReward').innerHTML = vilComplete(vi) ? `🎉 Деревня «${V.n}» достроена! Награда получена: след «${T.n}»${vi + 1 < VILLAGES.length ? ` · открыта деревня «${VILLAGES[vi + 1].n}»` : ''}` :
     `🎁 За всю деревню: след за киркой «${T.n}»${vi + 1 < VILLAGES.length ? ` и новая деревня «${VILLAGES[vi + 1].n}»` : ''} · осталось ${fmt(V.b.reduce((a, b) => a + b.st.slice(vilLv(V, b)).reduce((s, q) => s + q[1], 0), 0))}${COIN}`;
   if (!unl) $('vReward').innerHTML = `🔒 Откроется, когда достроишь «${VILLAGES[vi - 1].n}». Вся деревня стоит ${fmt(vilPrice(vi))}${COIN}.`;
+  vilUi();
 }
 function vilBuy(bid) {
   if (busy()) return;
   const vi = meta.vil.cur, V = VILLAGES[vi], b = V.b.find(q => q.id === bid); if (!b || !vilUnlocked(vi)) return;
   const L = vilLv(V, b), st = b.st[L]; if (!st) return;
+  vilCollect(vi, bid, true); // перед стройкой склад здания собирается (иначе накопленное сгорело бы)
   const price = st[1], mb = mainBal(); if (mb + meta.bank.amt < price) return;
   const fromBank = Math.max(0, price - mb);
   if (fromBank > 0 && !(vBuyArmed.id === bid && performance.now() < vBuyArmed.until)) { vBuyArmed = { id: bid, until: performance.now() + 3000 }; renderVil(); setTimeout(renderVil, 3050); gtoast(`На балансе не хватает — ${fmt(fromBank)} возьмём из банка. Нажми ещё раз.`, '#ffcf6a'); return; }
   vBuyArmed = { id: '', until: 0 };
   bankAccrue(); addMain(-(price - fromBank));
   if (fromBank > 0) { meta.bank.amt = Math.max(0, meta.bank.amt - fromBank); meta.bank.log.unshift({ t: Date.now(), k: 'vil', a: fromBank }); meta.bank.log = meta.bank.log.slice(0, 12); }
-  meta.vil.lv[vKey(V, b)] = L + 1; meta.spentVil += price; saveMeta();
+  meta.vil.lv[vKey(V, b)] = L + 1; meta.spentVil += price; meta.vil.at[vKey(V, b)] = Date.now(); saveMeta();
   const o = []; st[2](o); o.sort((a, c) => a[2] - c[2] || (a[0] + a[1]) - (c[0] + c[1]));
   const now = performance.now(), gap = Math.max(10, Math.min(60, 900 / Math.max(1, o.length)));
   o.forEach((q, i) => { if (q[3] !== 'air') vBorn.set(vi + ':' + (b.ox + q[0]) + ',' + (b.oy + q[1]) + ',' + q[2], now + i * gap); });
@@ -2991,6 +3139,15 @@ $('mProf').onclick = e => { e.currentTarget.blur(); openSheet('prof'); };
 $('mBank').onclick = e => { e.currentTarget.blur(); openSheet('bank'); };
 $('vTabs').addEventListener('click', e => { const b = e.target.closest('[data-v]'); if (!b || +b.dataset.v === meta.vil.cur) return; meta.vil.cur = +b.dataset.v; saveMeta(); vPeople = []; vBuild(); renderVil(); });
 $('vCards').addEventListener('click', e => { const b = e.target.closest('.vbuy[data-b]'); if (b && !b.disabled) vilBuy(b.dataset.b); });
+$('vCollect').onclick = e => { e.currentTarget.blur(); if (!busy()) vilCollect(meta.vil.cur); };
+(() => { const cv = $('vcv'); let d0 = null;
+  cv.addEventListener('pointerdown', e => { d0 = [e.clientX, e.clientY]; });
+  cv.addEventListener('click', e => {
+    if (d0 && Math.hypot(e.clientX - d0[0], e.clientY - d0[1]) > 10) return; // это было перетаскивание
+    const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, h = vHits.find(q => x >= q.x0 && x <= q.x1 && y >= q.y0 && y <= q.y1);
+    if (h && !busy()) vilCollect(meta.vil.cur, h.bid);
+  });
+})();
 $('vRot').onclick = () => { vRot = (vRot + 1) % 4; tone(520, .05, 'square', .03); };
 $('vZi').onclick = () => { vSetZoom(vZoomI + 1); tone(600, .04, 'square', .03); };
 $('vZo').onclick = () => { vSetZoom(vZoomI - 1); tone(440, .04, 'square', .03); };
