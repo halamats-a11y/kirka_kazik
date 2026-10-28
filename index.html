@@ -340,13 +340,76 @@
   .introcard p{margin:0;color:#cfcfe0;font-size:14px;line-height:1.55}
   .idots{display:flex;gap:6px;justify-content:center;margin:14px 0 12px}.idots i{width:8px;height:8px;border-radius:50%;background:#444}.idots i.on{background:var(--gold)}
   #intro{z-index:80}
+
+  /* ===== контраст: текст не должен сливаться с фоном ===== */
+  .ladder span{opacity:.5}
+  .btn.vtab:disabled{opacity:.9}
+  .btn:disabled{opacity:.72;filter:saturate(.5)}
+  .play{background:linear-gradient(#379140,#1a5e22)}
+  .play small{color:#ffffff;opacity:1;text-shadow:1px 1px 0 #0009}
+  .play:disabled{opacity:1;filter:none;background:linear-gradient(#2e5a34,#1d3d22);color:#d6ecd8;text-shadow:1px 1px 0 #000a}
+  .play:disabled small{color:#b9d6bc}
+  .cashbtn:disabled{opacity:1;filter:none;background:#2b2b35;color:#a4a4b8}
+  .cashbtn:disabled small{color:#b0b0c4}
+  .buybonus:disabled{opacity:1;filter:none;background:linear-gradient(#5e2a32,#3b1820);color:#f0d2d6}
+  .buybonus:disabled small{color:#dcb3b9}
+  .menubar .btn:disabled{opacity:.8;filter:saturate(.6)}
+  .menubar .btn:disabled small{color:#a6a6ba}
+  .vbuy{background:linear-gradient(#2a9244,#17682d);text-shadow:1px 1px 0 #0008}
+  .vbuy small{color:#f0ffe0}
+  .vtab small{color:#bcbcd0}
+  .vtab:disabled small{color:#c0c0d4}
+
+  /* ===== раскладка: шахта ≥ 50% экрана, «режим копания», настоящая высота экрана на iPhone ===== */
+  /* не 100dvh: на iPhone, запущенном с иконки, iOS считает 100dvh без статус-бара — внизу оставалась пустая полоса */
+  .app{position:fixed;top:0;right:0;bottom:0;left:0;height:auto}
+  .topbar .balrow{display:flex;flex-direction:column;align-items:flex-end;line-height:1.05;margin-left:auto;flex:none;min-width:0}
+  .topbar .balrow .label{font-size:9px;letter-spacing:.5px}
+  .topbar .balance{font-size:20px}
+  .topbar .gift{margin-left:0}
+  body.cmp .topbar .balance{font-size:18px}
+  @media (max-width:359px){.topbar .logo .lt{display:none}}
+  .controls .betline{display:flex;gap:6px}
+  .controls .betline .betbox{flex:1 1 0;min-width:0;margin-top:0}
+  .controls .betline .quick{flex:1.15 1 0;min-width:0;margin-top:0;gap:4px}
+  .controls .betline .quick .btn{padding-left:0;padding-right:0;font-size:14px;min-width:0}
+  .controls .betline .betbox .btn,body.cmp .controls .betline .betbox .btn{padding-left:9px;padding-right:9px}
+  body.cmp .controls .betline .betbox input{padding-left:8px;padding-right:6px}
+  @media (max-width:359px){.controls .betline{flex-wrap:wrap}.controls .betline .betbox,.controls .betline .quick{flex:1 1 100%}}
+  .controls .bonusline{display:flex;gap:6px;margin-top:6px;align-items:stretch}
+  .controls .bonusline .buybonus{flex:1 1 auto;min-width:0;width:auto;margin-top:0}
+  .controls .bonusline .buybonus small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .controls .bonusline .auto,body.cmp .controls .bonusline .auto{flex:none;width:76px;margin:0;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:2px;font-size:10px;line-height:1.1;text-align:center}
+  .controls .bonusline .auto input{width:100%;box-sizing:border-box;padding:4px 6px;text-align:center}
+  @media (max-width:899px){
+    /* «режим копания»: во время раунда ставки, меню и история всё равно заблокированы — прячем их, шахта растёт */
+    body.dig .controls .betline,body.dig .controls .bonusline,body.dig .runbtns,body.dig .histrow,body.dig .menubar,body.dig .hint{display:none!important}
+    body.dig .app{padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+    body.dig .controls .actions{margin-top:0}
+    body.dig .controls .actions .btn{min-height:66px;font-size:20px}
+    body.undig .menubar{pointer-events:none}
+    body.undig .menubar,body.undig .controls .betline,body.undig .controls .bonusline,body.undig .histrow{animation:digBack .28s ease-out}
+  }
+  @keyframes digBack{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @media (min-width:900px){
+    .controls .betline,.controls .bonusline{display:block}
+    .controls .betline .betbox{margin-top:8px} .controls .betline .quick{margin-top:6px}
+    .controls .bonusline .buybonus{width:100%}
+    .controls .bonusline .auto{flex-direction:row;align-items:center;width:auto;font-size:12px;margin-top:8px;gap:8px}
+    .controls .bonusline .auto input{width:80px}
+  }
+  .controls .runbtns .runout{min-width:0} .controls .runbtns .runout small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #diag{position:fixed;inset:0;z-index:200;background:#000d;display:flex;align-items:center;justify-content:center;padding:16px}
+  #diag pre{margin:0;max-width:440px;width:100%;white-space:pre-wrap;font:12px/1.5 ui-monospace,monospace;color:#e8e8f0;background:#16161c;border:2px solid #ffd23f;border-radius:10px;padding:12px}
 </style>
 </head>
 <body>
+<div id="safeProbe" style="position:fixed;left:0;top:0;width:0;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)"></div>
 <div class="app" id="app">
   <div class="topbar">
-    <div class="logo" id="logoBox"><img id="logo" alt="">КИРКА</div>
+    <div class="logo" id="logoBox"><img id="logo" alt=""><span class="lt">КИРКА</span></div>
     <div class="runline" id="runLine"></div>
+    <div class="balrow"><span class="label" id="balLabel">Баланс</span><span class="balance"><span id="balance">0</span><i class="coin"></i></span></div>
     <button class="gift" id="free" title="Бесплатные монеты">🎁 +1000</button>
   </div>
 
@@ -365,7 +428,7 @@
   </div>
 
   <div class="card controls">
-    <div class="balrow"><span class="label" id="balLabel">Баланс</span><span class="balance"><span id="balance">0</span><i class="coin"></i></span></div>
+    <div class="betline">
     <div class="betbox">
       <button class="btn" id="betMinus">−</button>
       <input id="bet" type="number" min="1" step="1" value="100">
@@ -377,6 +440,7 @@
       <button class="btn" data-q="10">10</button>
       <button class="btn" data-q="max">MAX</button>
     </div>
+    </div>
     <div class="actions">
       <button class="btn play" id="play"><span id="playLabel">ИГРАТЬ</span><small id="playSub">ставка 100</small></button>
       <button class="btn cashbtn" id="cash" disabled><span id="cashLabel">ЗАБРАТЬ</span><small><span id="cashAmt">0</span><i class="coin"></i> · <span id="cashMult">×0.00</span></small></button>
@@ -385,8 +449,10 @@
       <button class="btn runout" id="runOut"><span id="runOutLabel">💰 ВЫВОД</span><small id="runOutSub"></small></button>
       <button class="btn runpause" id="runPause" title="Выйти в обычную игру, забег сохранится">⏸ Пауза</button>
     </div>
+    <div class="bonusline">
     <button class="btn buybonus" id="buyBonus"><span id="buyLabel">🔥 ПОРТАЛ В АД</span><small id="buySub">купить бонуску</small></button>
-    <label class="auto">Авто-забор при ×<input id="auto" type="number" min="1.1" step="0.1" placeholder="выкл"></label>
+    <label class="auto" title="Авто-забор: забрать автоматически, когда выигрыш дойдёт до этого множителя ставки"><span>Авто-забор ×</span><input id="auto" type="number" min="1.1" step="0.1" placeholder="выкл"></label>
+    </div>
     <div class="hint">Пробел — играть / забрать · Esc — закрыть окно</div>
   </div>
 
@@ -1260,9 +1326,18 @@ function renderHistory() {
 const _cache = new Map();
 function setText(id, v) { if (_cache.get(id) !== v) { _cache.set(id, v); $(id).textContent = v; } }
 function setProp(el, key, prop, v) { if (_cache.get(key) !== v) { _cache.set(key, v); el[prop] = v; } }
+// «режим копания»: пока идёт раунд (и ещё 0.7 с после, пока «ИГРАТЬ» заблокирована) — ставки и меню прячутся, шахта растёт
+var digOn = false, undigT = 0;
+function setDig(on) {
+  if (on === digOn) return; digOn = on; const B = document.body;
+  if (on) { clearTimeout(undigT); B.classList.remove('undig'); B.classList.add('dig'); }
+  else { B.classList.remove('dig'); B.classList.add('undig'); clearTimeout(undigT); undigT = setTimeout(() => B.classList.remove('undig'), 450); fitLayout(); }
+  resize();
+}
 function updatePanel() {
   setText('balance', fmt(balance));
   const bet = getBet(), inHell = (phase === 'play' && game.bonus) || phase === 'portal', playing = phase === 'play' || phase === 'portal', locked = performance.now() < playLockUntil;
+  setDig(playing || (locked && phase === 'done'));
   const mxb = maxBet(), over = bet > mxb;
   setProp($('play'), 'playDis', 'disabled', playing || locked || !(bet >= 1 && bet <= balance) || over);
   setText('playLabel', inHell ? '🔥 АД' : playing ? '⛏ КОПАЕМ' : 'ИГРАТЬ');
@@ -1354,6 +1429,7 @@ function overlay(title, big, sub, color) {
 
 const PLAY_LOCK_MS = 700; // после конца раунда «Играть» недоступна 0.7 с — защита от случайного нажатия
 let playLockUntil = 0;
+const BUILD = '2026-10-28 · раскладка 50% + режим копания';
 function play() {
   ac();
   if (phase === 'play' || phase === 'portal' || performance.now() < playLockUntil) return;
@@ -1812,7 +1888,8 @@ function draw() {
     ctx.globalAlpha = k < .7 ? 1 : 1 - (k - .7) / .3;
     ctx.font = `900 ${f.size}px ui-monospace,Menlo,Consolas,monospace`;
     const w = ctx.measureText(f.text).width, ox = f.coin ? -f.size * .35 : 0;
-    ctx.fillStyle = '#000'; ctx.fillText(f.text, f.x + ox + 2, y + 2);
+    ctx.lineJoin = 'round'; ctx.lineWidth = Math.max(3, f.size * .26); ctx.strokeStyle = '#000';
+    ctx.fillStyle = '#000'; ctx.fillText(f.text, f.x + ox + 2, y + 2); ctx.strokeText(f.text, f.x + ox, y);
     ctx.fillStyle = f.color; ctx.fillText(f.text, f.x + ox, y);
     if (f.coin) { const cx = f.x + ox + w / 2 + f.size * .45; ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(cx + 1.5, y + 1.5, f.size * .36, 0, 7); ctx.fill(); ctx.fillStyle = '#ffd23f'; ctx.beginPath(); ctx.arc(cx, y, f.size * .36, 0, 7); ctx.fill(); ctx.fillStyle = '#fff6b0'; ctx.fillRect(cx - f.size * .15, y - f.size * .18, f.size * .12, f.size * .12); }
   }
@@ -1825,11 +1902,11 @@ function draw() {
     for (let r = Math.max(HELL.step, Math.ceil(r0 / HELL.step) * HELL.step); r <= r1; r += HELL.step) {
       const m = Math.min(HELL.maxMult, 1 + r / HELL.step), got = game.depth >= r;
       ctx.fillStyle = got ? 'rgba(255,154,61,.55)' : 'rgba(255,90,40,.3)'; ctx.fillRect(CELL, r * CELL - 1, CELL * (COLS - 2), 2);
-      ctx.fillStyle = got ? '#ffb02a' : '#ff9a3daa'; ctx.fillText('×' + m, CELL / 2, r * CELL + 4);
+      ctx.lineJoin = 'round'; ctx.lineWidth = 3; ctx.strokeStyle = '#000c'; ctx.strokeText('×' + m, CELL / 2, r * CELL + 4); ctx.fillStyle = got ? '#ffb02a' : '#ffa060'; ctx.fillText('×' + m, CELL / 2, r * CELL + 4);
     }
   } else {
-    ctx.font = '700 10px ui-monospace,monospace'; ctx.textAlign = 'center'; ctx.fillStyle = '#ffffff66';
-    for (let r = Math.max(5, Math.ceil(r0 / 5) * 5); r <= r1; r += 5) ctx.fillText(r + 'м', CELL / 2, r * CELL + CELL / 2);
+    ctx.font = '800 11px ui-monospace,monospace'; ctx.textAlign = 'center'; ctx.lineJoin = 'round'; ctx.lineWidth = 3; ctx.strokeStyle = '#000b';
+    for (let r = Math.max(5, Math.ceil(r0 / 5) * 5); r <= r1; r += 5) { ctx.strokeText(r + 'м', CELL / 2, r * CELL + CELL / 2); ctx.fillStyle = '#ffffffd8'; ctx.fillText(r + 'м', CELL / 2, r * CELL + CELL / 2); }
   }
 }
 function drawPick(x, y, a) {
@@ -2012,6 +2089,7 @@ const TRAILS = {
   rainbow: { n: 'Радуга', rb: 1, vil: 0 },
   sand: { n: 'Песчаная буря', c: ['#e8d29a', '#d8b878', '#c9a25e', '#fff0c0'], vil: 1 },
   snow: { n: 'Снежинки', c: ['#ffffff', '#dff6ff', '#a8e4ff'], down: 1, vil: 2 },
+  magma: { n: 'Магма', c: ['#ff4a00', '#ff9a1a', '#ffd23f', '#7a1a00'], down: 1, vil: 3 },
   fire: { n: 'Пламя', c: ['#ff3d00', '#ff8a00', '#ffd23f'], up: 1, ach: 'hell500' },
   emerald: { n: 'Изумрудный', c: ['#17dd62', '#b5ffd0', '#0a9b3f'], ach: 'em50' },
   love: { n: 'Сердечки', c: ['#ff6b9a', '#ff9ac0', '#ff3d7a'], up: 1, ach: 'run2' },
@@ -2106,11 +2184,12 @@ const ACH = [
   { id: 'vil0', i: '🌳', n: 'Равнины', d: 'Достроить деревню «Равнины»', v: () => vilComplete(0) ? 1 : 0, g: 1, r: 0 },
   { id: 'vil1', i: '🏜', n: 'Пустыня', d: 'Достроить деревню «Пустыня»', v: () => vilComplete(1) ? 1 : 0, g: 1, r: 0 },
   { id: 'vil2', i: '❄', n: 'Снега', d: 'Достроить деревню «Снега»', v: () => vilComplete(2) ? 1 : 0, g: 1, r: 0 },
+  { id: 'vil3', i: '🔥', n: 'Незер', d: 'Достроить деревню «Незер»', v: () => vilComplete(3) ? 1 : 0, g: 1, r: 0 },
   { id: 'run2', i: '📈', n: 'Удвоил', d: 'Закончить забег с ×2 или больше', v: s => s.runBestX || 0, g: 2, r: 0 },
   { id: 'runbust', i: '💀', n: 'Слил миллион', d: 'Слить забег, начатый с 1 000 000', v: s => s.runBigBust || 0, g: 1, r: 0 },
 ];
 // награда «следом»
-const ACH_TRAIL = { vil0: 'rainbow', vil1: 'sand', vil2: 'snow', hell500: 'fire', em50: 'emerald', run2: 'love', runbust: 'void' };
+const ACH_TRAIL = { vil0: 'rainbow', vil1: 'sand', vil2: 'snow', vil3: 'magma', hell500: 'fire', em50: 'emerald', run2: 'love', runbust: 'void' };
 function checkAch() {
   const s = meta.stats; let any = false;
   for (const a of ACH) {
@@ -2232,7 +2311,7 @@ const INTRO_NEW = [
 ];
 const INTRO_UPD = [
   ['🚀', 'Кирка 2.0', 'Большое обновление! Теперь у монет есть цель: <b>🏘 деревня</b>, <b>🏦 банк</b>, <b>🎁 подарки</b> и задания, <b>👤 профиль</b> с рангами, 33 достижениями и следами за киркой.'],
-  ['🏘', 'Деревня', 'Строй деревню из блоков, как в Майнкрафте: дом, кузница, ферма… Три деревни — Равнины, Пустыня и Снега, 45 стадий. Здания вырастают на глазах, по дорожкам ходят жители.'],
+  ['🏘', 'Деревня', 'Строй деревню из блоков, как в Майнкрафте: дом, кузница, ферма… Четыре деревни — Равнины, Пустыня, Снега и Незер, 60 стадий. Здания вырастают на глазах, по дорожкам ходят жители.'],
   ['🎁', 'Подарки и банк', 'Каждый день — подарок (серия 7 дней) и 3 задания. 🏦 Банк: отложи монеты на чёрный день, они растут на 1% в день. Бесплатные +1000 теперь — спасательный круг, когда монеты кончились.'],
   ['😈', 'Важно про Чит', 'Чит-версия теперь — <b>отдельный демо-кошелёк</b> (10 000 монет). Твой прежний баланс остался в Обычной версии. Деревня, банк, задания и достижения работают на монеты Обычной.'],
 ];
@@ -2324,6 +2403,13 @@ function vTextures() {
     if (y === 19 && (x === 3 || x === 4 || x === 7 || x === 8)) return '#3a2a1a';
     return null;
   }, 12, 20);
+  const NR = ['#4f1717', '#5e1d1d', '#6b2222', '#772727', '#843030', '#90393a'], CRIM = ['#8a1010', '#9a1414', '#a81a18', '#b4201c', '#c2281f'], WARP = ['#0f5a52', '#14675e', '#18756a', '#1d8274', '#239080'];
+  const nrPx = (x, y) => { const h = H(x, y, 70); return h < .06 ? '#3e1010' : h > .955 ? '#a04848' : pv(NR, cn(x, y, 71), 1.9); };
+  const nyPx = (x, y, P, s) => { const h = H(x, y, s + 100); return h < .07 ? sh(P[0], .75) : h > .95 ? sh(P[4], 1.18) : pv(P, cn(x, y, s), 1.6); };
+  const fung = (cap, dk, dot, s1, s2) => mk((x, y) => {
+    if (y >= 4 && y <= 8 && Math.abs(x - 7.5) <= 6 - Math.max(0, 6 - y) * 1.2) return (x * 3 + y * 5) % 7 === 0 ? dot : y === 8 ? dk : cap;
+    if ((x === 7 || x === 8) && y > 8 && y < 15) return x === 7 ? s1 : s2; if (y === 15 && x >= 6 && x <= 9) return sh(s2, .7); return null;
+  });
   VTX = {
     grass: mk((x, y) => pv(GR, cn(x, y, 1), 1.7)),
     grassSide: mk((x, y) => { const d = drip(x, 5, 3); return y < d ? (y === d - 1 ? '#4a8429' : pv(GR, cn(x, y, 9), 1.5)) : dirtPx(x, y, 4); }),
@@ -2427,6 +2513,36 @@ function vTextures() {
     sfenceSpr: mk((x, y) => { const P = ['#4a321b', '#5a3e23', '#3d2a16', '#24170a']; if (x >= 6 && x <= 9) return x === 6 ? P[1] : x === 9 ? P[2] : P[0]; if ((y >= 3 && y <= 5) || (y >= 9 && y <= 11)) return y === 3 || y === 9 ? P[1] : y === 5 || y === 11 ? P[3] : P[0]; return null; }),
     deadbush: mk((x, y) => ((y > 6 && (x === 7 || x === 8)) || (y > 3 && y < 9 && Math.abs(x - 7.5) === Math.round((9 - y) * .9) + .5) || (y === 4 && (x === 3 || x === 12))) ? (y > 10 ? '#6e4520' : '#8a5a2a') : null),
     cane: mk((x, y) => ((x === 3 || x === 4 || x === 8 || x === 9 || x === 12 || x === 13) ? (y % 5 === 0 ? '#5f8a3a' : x % 2 ? '#9ad866' : '#7cbf4e') : (y % 6 === 2 && (x === 5 || x === 10)) ? '#6fb04a' : null)),
+    // ---- Незер ----
+    netherrack: mk((x, y) => nrPx(x, y)),
+    nylium: mk((x, y) => nyPx(x, y, CRIM, 72)), nyliumSide: mk((x, y) => { const d = drip(x, 74, 3); return y < d ? (y === d - 1 ? '#5e0a0a' : nyPx(x, y, CRIM, 75)) : nrPx(x, y); }),
+    wnylium: mk((x, y) => nyPx(x, y, WARP, 76)), wnyliumSide: mk((x, y) => { const d = drip(x, 77, 3); return y < d ? (y === d - 1 ? '#0a4440' : nyPx(x, y, WARP, 78)) : nrPx(x, y); }),
+    nbricks: mk((x, y) => {
+      const row = y >> 2, r = y & 3; if (r === 3) return H(x, y, 80) < .5 ? '#160a0c' : '#1e0d10';
+      const xo = (x + (row % 2 ? 0 : 4)) % 16; if (xo % 8 === 7) return '#1a0b0e';
+      let c = ['#3a1a20', '#43202a', '#341619', '#4a2430'][(row + (xo >> 3)) % 4]; if (r === 0) c = sh(c, 1.2); if (r === 2) c = sh(c, .84); return sh(c, .92 + H(x, y, 81) * .16);
+    }),
+    blackstone: stones(12, 82, ['#2a2530', '#332d38', '#3b3440', '#241f29', '#2f2834'], ['#141118', '#19151d'], .9),
+    gblack: stones(12, 86, ['#2a2530', '#e0a818', '#332d38', '#3b3440', '#f5cf3a', '#241f29'], ['#141118', '#19151d'], .9),
+    bbricks: mk((x, y) => {
+      const c = y >> 3, r = y & 7, xo = (x + (c ? 8 : 0)) % 16; if (r === 7 || xo === 15) return H(x, y, 83) < .5 ? '#121015' : '#17141b';
+      let k = (cn(x, y, 84) - .5) * .2; if (r === 0 || xo === 0) k += .18; if (r === 6 || xo === 14) k -= .15; if (H(x, y, 85) < .04) k -= .25;
+      return sh(['#3a3440', '#34303a', '#3d3743', '#36313c'][c * 2 + (x >= 8 ? 1 : 0)], 1 + k);
+    }),
+    magma: (() => { const V = vor(9, 87); return mk((x, y) => { const c = V(x, y); if (c.e < 1) return c.e < .45 ? '#ffb02a' : H(x, y, 88) < .5 ? '#ff7a10' : '#e0520c'; return pv(['#3a1408', '#4a1a0a', '#5a200c', '#6a2810'], cn(x, y, 89), 1.4); }); })(),
+    obsidian: mk((x, y) => { const h = H(x, y, 90); if (h < .05) return '#4a2f7a'; if (h > .965) return '#6a4aa0'; return pv(['#0d0a14', '#140f1f', '#1d1430', '#24193a', '#2b1f45'], cn(x, y, 91), 1.7); }),
+    portal: mk((x, y) => { const v = Math.sin(x * .7 + Math.sin(y * .5) * 2.2) + Math.cos(y * .8 - x * .4); return [v > 1.2 ? '#e0a8ff' : v > .4 ? '#a24bf0' : v > -.6 ? '#7a22d6' : '#5a12aa', 210]; }),
+    cstem: bark(['#4a1422', '#5a1a2a', '#6b2032', '#7c263b', '#8a2c44'], '#2e0a14', 92), cstemTop: ltop('#9a4050', '#7a2a3a', '#4a1422'),
+    wstem: bark(['#1f4a4a', '#245a58', '#2a6866', '#307472', '#3a3048'], '#22182e', 93), wstemTop: ltop('#3a9a90', '#2a7470', '#22182e'),
+    nwart: leaf(['#5a0808', '#6a0a0a', '#7a1010', '#8a1414', '#9a1c1c', '#a82424'], 94, 0),
+    wwart: leaf(['#0a5550', '#0f6b6a', '#148080', '#169090', '#1aa0a0', '#22b0aa'], 95, 0),
+    shroom: stones(9, 96, ['#ffb04a', '#ff9a3a', '#ffc86a', '#f08a2a', '#ffd890'], ['#b0501a', '#963f12'], .8),
+    basalt: mk((x, y) => (y + x * 5) % 13 === 0 ? '#2e2e34' : pv(['#3a3a40', '#45454b', '#4f4f56', '#5a5a62', '#62626a'], H(x, 0, 97) * .6 + H(x, y >> 2, 98) * .4, 1.5)),
+    basaltTop: ltop('#6a6a72', '#55555c', '#3a3a40'),
+    cfungus: fung('#b81c1c', '#7a1010', '#ffb04a', '#c06a3a', '#9a4a2a'),
+    wfungus: fung('#14807a', '#0a5550', '#ff8a2a', '#d0702a', '#a8521c'),
+    croots: mk((x, y) => ((y > 5 && (x === 3 || x === 11) && y > 7) || (x === 7 && y > 4) || (y > 9 && (x === 5 || x === 9 || x === 13))) ? (y > 12 ? '#6a0c0c' : (x + y) % 3 ? '#b01818' : '#d02a20') : null),
+    vnether: villager('#4a1420', '#2a0a12', (x, y) => y === 16 && x >= 2 && x <= 9 ? '#e0b030' : null),
     vplains: villager('#6b4a2a', '#5a3d22', (x, y) => y === 16 && x >= 2 && x <= 9 ? '#2e2216' : null),
     vdesert: villager('#c9a25e', '#a7834a', (x, y) => y === 10 && x >= 3 && x <= 8 ? '#b5452a' : null),
     vsnow: villager('#e8eff5', '#7fa8d8', (x, y) => y === 10 && x >= 2 && x <= 9 ? '#3b5fa8' : null),
@@ -2441,7 +2557,11 @@ function vTextures() {
     jlog: [X.logTop, X.jlog], snow: [X.snowb, X.snowSide], snowb: [X.snowb, X.snowb], packed: [X.packed, X.packed], ice: [X.ice, X.ice, 1], blueice: [X.blueice, X.blueice],
     cactus: [X.cactusTop, X.cactus], slog: [X.slogTop, X.slog], sleaves: [X.sleaves, X.sleaves, 1], glow: [X.glow, X.glow],
     wheat: { spr: X.wheat }, sprout: { spr: X.sprout }, poppy: { spr: X.poppy, s: .7 }, dandelion: { spr: X.dandelion, s: .7 }, anvil: { spr: X.anvil }, lantern: { spr: X.lantern, s: .6 },
-    fence: { fence: X.planks }, sfence: { fence: X.splanks }, sbricks: [X.sbricks, X.sbricks], deadbush: { spr: X.deadbush, s: .75 }, cane: { spr: X.cane },
+    fence: { fence: X.planks }, sfence: { fence: X.splanks }, nfence: { fence: X.nbricks },
+    netherrack: [X.netherrack, X.netherrack], nylium: [X.nylium, X.nyliumSide], wnylium: [X.wnylium, X.wnyliumSide], nbricks: [X.nbricks, X.nbricks],
+    blackstone: [X.blackstone, X.blackstone], gblack: [X.gblack, X.gblack], bbricks: [X.bbricks, X.bbricks], magma: [X.magma, X.magma], obsidian: [X.obsidian, X.obsidian],
+    portal: [X.portal, X.portal, 1], cstem: [X.cstemTop, X.cstem], wstem: [X.wstemTop, X.wstem], nwart: [X.nwart, X.nwart], wwart: [X.wwart, X.wwart], shroom: [X.shroom, X.shroom],
+    basalt: [X.basaltTop, X.basalt], cfungus: { spr: X.cfungus, s: .75 }, wfungus: { spr: X.wfungus, s: .75 }, croots: { spr: X.croots, s: .7 }, sbricks: [X.sbricks, X.sbricks], deadbush: { spr: X.deadbush, s: .75 }, cane: { spr: X.cane },
   };
 }
 const vOpaque = t => t && VB[t] && Array.isArray(VB[t]) && !VB[t][2];
@@ -2536,6 +2656,40 @@ const VILLAGES = [
         ['Фонари', 1000000, o => o.push([-1, -1, 2, 'lantern'], [6, -1, 2, 'lantern'], [-1, 5, 2, 'lantern'], [6, 5, 2, 'lantern'], [2, 5, 0, 'packed'], [3, 5, 0, 'packed'])],
       ] },
     ] },
+  { id: 'nether', n: 'Незер', i: '🔥', ground: 'netherrack', sub: 'netherrack', deep: 'blackstone', vil: 'vnether', sky: ['#1a0405', '#8a2a10'], reward: 'magma',
+    decor: o => {
+      for (let x = 0; x < VN; x++) o.push([x, 7, 0, 'bbricks']);
+      vbox(o, 6, 2, 0, 7, 4, 0, 'lava'); o.push([6, 1, 0, 'magma'], [7, 5, 0, 'magma'], [0, 0, 0, 'magma'], [12, 5, 0, 'magma'], [6, 13, 0, 'magma'], [0, 11, 0, 'magma']);
+      vbox(o, 13, 5, 1, 13, 5, 3, 'basalt'); vbox(o, 0, 13, 1, 0, 13, 2, 'basalt'); o.push([0, 5, 1, 'basalt']);
+      o.push([0, 1, 0, 'nylium'], [0, 2, 0, 'nylium'], [1, 0, 0, 'nylium'], [12, 6, 0, 'wnylium'], [13, 6, 0, 'wnylium'], [7, 12, 0, 'wnylium'], [7, 13, 0, 'wnylium']);
+      o.push([0, 2, 1, 'croots'], [6, 6, 1, 'cfungus'], [0, 9, 1, 'croots'], [13, 0, 1, 'croots'], [7, 12, 1, 'wfungus'], [12, 6, 1, 'wfungus']);
+    },
+    smoke: [], embers: 1,
+    b: [
+      { id: 'bastion', n: 'Бастион', i: '🏯', ox: 1, oy: 1, st: [
+        ['Фундамент', 1000000, o => { vbox(o, 0, 0, 1, 4, 4, 1, 'blackstone'); o.push([2, 5, 0, 'bbricks']); }],
+        ['Стены', 3000000, o => { vRing(o, 0, 0, 4, 4, 2, 4, 'bbricks', (x, y, z) => x === 2 && y === 4 && z < 4); for (const [x, y] of [[0, 0], [4, 0], [0, 4], [4, 4]]) vbox(o, x, y, 2, x, y, 4, 'gblack'); }],
+        ['Зубцы и ворота', 7000000, o => { vbox(o, 0, 0, 5, 4, 4, 5, 'blackstone'); vRing(o, 0, 0, 4, 4, 6, 6, 'bbricks', (x, y) => (x + y) % 2 !== 0); o.push([2, 4, 4, 'goldb'], [2, 5, 1, 'lantern']); }],
+        ['Сокровищница', 15000000, o => { vbox(o, 1, 1, 6, 3, 3, 6, 'goldb'); o.push([2, 2, 7, 'goldb'], [1, 1, 7, 'gblack'], [3, 3, 7, 'gblack'], [2, 2, 8, 'lantern'], [1, 4, 4, 'gblack'], [3, 4, 4, 'gblack']); }],
+      ] },
+      { id: 'nportal', n: 'Портал', i: '🌀', ox: 8, oy: 1, st: [
+        ['Рамка из обсидиана', 800000, o => { vbox(o, 0, 0, 0, 5, 2, 0, 'blackstone'); for (let x = 1; x <= 4; x++) o.push([x, 1, 1, 'obsidian'], [x, 1, 5, 'obsidian']); for (let z = 2; z <= 4; z++) o.push([1, 1, z, 'obsidian'], [4, 1, z, 'obsidian']); }],
+        ['Зажечь портал', 2500000, o => vbox(o, 2, 1, 2, 3, 1, 4, 'portal')],
+        ['Руины вокруг', 6000000, o => o.push([0, 0, 1, 'gblack'], [0, 0, 2, 'bbricks'], [5, 2, 1, 'gblack'], [5, 0, 1, 'magma'], [0, 2, 1, 'obsidian'], [5, 1, 1, 'obsidian'], [5, 1, 2, 'obsidian'], [1, 2, 1, 'goldb'], [0, 1, 1, 'lantern'], [4, 2, 1, 'lantern'])],
+      ] },
+      { id: 'fortress', n: 'Крепость', i: '🏰', ox: 1, oy: 8, st: [
+        ['Основание', 1000000, o => vbox(o, 0, 0, 1, 3, 3, 1, 'nbricks')],
+        ['Стены', 3000000, o => { vRing(o, 0, 0, 3, 3, 2, 5, 'nbricks', (x, y, z) => x === 1 && y === 3 && z < 4); o.push([3, 1, 4, 'nfence'], [3, 2, 4, 'nfence'], [2, 3, 4, 'nfence']); }],
+        ['Мост', 6000000, o => { vbox(o, 4, 1, 5, 6, 2, 5, 'nbricks'); vbox(o, 6, 1, 1, 6, 2, 4, 'nbricks'); for (let x = 4; x <= 6; x++) o.push([x, 2, 6, 'nfence']); o.push([6, 1, 6, 'lantern']); }],
+        ['Венец', 10000000, o => { vbox(o, 0, 0, 6, 3, 3, 6, 'nbricks'); vRing(o, 0, 0, 3, 3, 7, 7, 'nbricks', (x, y) => (x + y) % 2 !== 0); o.push([1, 1, 7, 'shroom'], [2, 2, 7, 'magma'], [1, 2, 7, 'lantern'], [2, 1, 7, 'lantern']); }],
+      ] },
+      { id: 'grove', n: 'Грибной лес', i: '🍄', ox: 8, oy: 8, st: [
+        ['Нилий', 600000, o => { vbox(o, 0, 0, 0, 5, 5, 0, 'nylium'); vbox(o, 3, 3, 0, 5, 5, 0, 'wnylium'); o.push([2, 3, 0, 'wnylium'], [3, 2, 0, 'wnylium']); }],
+        ['Грибы и корни', 1500000, o => o.push([0, 4, 1, 'croots'], [2, 5, 1, 'cfungus'], [0, 0, 1, 'cfungus'], [4, 0, 1, 'croots'], [5, 3, 1, 'wfungus'], [3, 5, 1, 'wfungus'], [2, 2, 1, 'croots'], [5, 5, 1, 'wfungus'])],
+        ['Багровый гриб', 3800000, o => { vbox(o, 1, 1, 1, 1, 1, 5, 'cstem'); for (let dx = -2; dx <= 2; dx++) for (let dy = -2; dy <= 2; dy++) { const a = Math.abs(dx) + Math.abs(dy), m = Math.max(Math.abs(dx), Math.abs(dy)); if (a <= 2) o.push([1 + dx, 1 + dy, 6, 'nwart']); if (m === 2 && a < 4) o.push([1 + dx, 1 + dy, 5, 'nwart']); } o.push([1, 1, 7, 'nwart'], [3, 1, 5, 'shroom'], [1, -1, 5, 'shroom'], [-1, 1, 4, 'nwart'], [1, 3, 4, 'nwart']); }],
+        ['Искажённый гриб', 6000000, o => { vbox(o, 4, 4, 1, 4, 4, 4, 'wstem'); for (let dx = -2; dx <= 1; dx++) for (let dy = -2; dy <= 1; dy++) { const a = Math.abs(dx) + Math.abs(dy), m = Math.max(Math.abs(dx), Math.abs(dy)); if (m <= 1) o.push([4 + dx, 4 + dy, 5, 'wwart']); if (a <= 1) o.push([4 + dx, 4 + dy, 6, 'wwart']); if (m === 2 && a < 4) o.push([4 + dx, 4 + dy, 4, 'wwart']); } o.push([5, 3, 5, 'shroom'], [2, 4, 4, 'shroom']); }],
+      ] },
+    ] },
 ];
 const vKey = (V, b) => V.id + '.' + b.id;
 const vilLv = (V, b) => Math.min(b.st.length, meta.vil.lv[vKey(V, b)] || 0);
@@ -2551,12 +2705,12 @@ const vBorn = new Map(), vSmoke = [], vConf = []; let vPeople = [];
 function vBuild() {
   const vi = meta.vil.cur, V = VILLAGES[vi], map = new Map();
   const put = (x, y, z, t) => { if (x < -2 || y < -2 || x > VN + 1 || y > VN + 1) return; const k = x + ',' + y + ',' + z; if (t === 'air') map.delete(k); else map.set(k, { x, y, z, t }); };
-  for (let x = 0; x < VN; x++) for (let y = 0; y < VN; y++) { put(x, y, 0, V.ground); put(x, y, -1, V.sub); put(x, y, -2, 'stone'); }
+  for (let x = 0; x < VN; x++) for (let y = 0; y < VN; y++) { put(x, y, 0, V.ground); put(x, y, -1, V.sub); put(x, y, -2, V.deep || 'stone'); }
   const dec = []; V.decor(dec); for (const q of dec) put(...q);
   if (vilUnlocked(vi)) for (const b of V.b) { const L = vilLv(V, b); for (let s = 0; s < L; s++) { const o = []; b.st[s][2](o); for (const [x, y, z, t] of o) put(b.ox + x, b.oy + y, z, t); } }
   vScene = [...map.values()];
   // жители: по одному на каждое здание, построенное хотя бы на 2 стадии
-  const occ = new Set(vScene.map(q => q.x + ',' + q.y + ',' + q.z)), groundOk = new Set(vScene.filter(q => q.z === 0 && vOpaque(q.t)).map(q => q.x + ',' + q.y));
+  const occ = new Set(vScene.map(q => q.x + ',' + q.y + ',' + q.z)), groundOk = new Set(vScene.filter(q => q.z === 0 && vOpaque(q.t) && q.t !== 'lava' && q.t !== 'magma').map(q => q.x + ',' + q.y));
   vScene.walk = (x, y) => x >= 0 && y >= 0 && x < VN && y < VN && groundOk.has(x + ',' + y) && !occ.has(x + ',' + y + ',1') && !occ.has(x + ',' + y + ',2');
   const want = vilUnlocked(vi) ? Math.min(4, V.b.filter(b => vilLv(V, b) >= 2).length) : 0;
   vPeople = vPeople.filter(p => p.v === vi && vScene.walk(Math.round(p.tx), Math.round(p.ty))).slice(0, want);
@@ -2690,6 +2844,8 @@ function vDraw(now) {
     const [rx, ry] = vR4(p.x - .5, p.y - .5), [sx, sy] = vP(rx + .5, ry + .5, p.z), sz = p.s * vtw; g.fillStyle = `rgba(225,225,230,${p.a * .7})`; g.fillRect(sx - sz / 2, sy - sz / 2, sz, sz); }
   // снег в снежной деревне
   if (V.id === 'snow') { g.fillStyle = 'rgba(255,255,255,.85)'; for (let i = 0; i < 40; i++) { const x = (i * 83.7 + Math.sin(now / 900 + i) * 14) % vW, y = (now / (30 + i % 7 * 6) + i * 47) % vH; g.fillRect(x, y, 2, 2); } }
+  // искры в Незере летят вверх
+  if (V.embers) for (let i = 0; i < 36; i++) { const x = (i * 97.3 + Math.sin(now / 700 + i * 1.7) * 12) % vW, y = vH - ((now / (22 + i % 5 * 8) + i * 53) % (vH + 10)); g.fillStyle = i % 3 ? 'rgba(255,150,40,.85)' : 'rgba(255,220,110,.9)'; g.fillRect(x, y, i % 4 ? 2 : 3, i % 4 ? 2 : 3); }
   // салют при достройке
   for (let i = vConf.length - 1; i >= 0; i--) { const c = vConf[i]; c.t += dt; c.vy += 260 * dt; c.x += c.vx * dt; c.y += c.vy * dt; if (c.t > c.life) { vConf.splice(i, 1); continue; } g.globalAlpha = 1 - c.t / c.life; g.fillStyle = c.c; g.fillRect(c.x, c.y, 4, 4); }
   g.globalAlpha = 1;
@@ -2703,7 +2859,7 @@ let vBuyArmed = { id: '', until: 0 };
 function renderVil() {
   if (sheetId !== 'vil') return;
   const vi = meta.vil.cur, V = VILLAGES[vi], unl = vilUnlocked(vi), done = vilDone(vi), total = vilTotal(vi), mb = mainBal(), bank = meta.bank.amt;
-  $('vTabs').innerHTML = VILLAGES.map((q, i) => `<button class="btn vtab${i === vi ? ' on' : ''}" data-v="${i}">${vilUnlocked(i) ? q.i : '🔒'} ${q.n}<small>${vilDone(i)}/${vilTotal(i)}</small></button>`).join('') + '<button class="btn vtab" disabled>🔥 Незер<small>скоро</small></button>';
+  $('vTabs').innerHTML = VILLAGES.map((q, i) => `<button class="btn vtab${i === vi ? ' on' : ''}" data-v="${i}">${vilUnlocked(i) ? q.i : '🔒'} ${q.n}<small>${vilDone(i)}/${vilTotal(i)}</small></button>`).join('');
   $('vProgT').textContent = `${V.i} ${V.n}: построено ${done} / ${total}`; $('vProgP').textContent = Math.round(100 * done / total) + '%';
   $('vProgB').style.width = (100 * done / total) + '%';
   $('vMoney').innerHTML = `Для стройки: баланс <b>${fmt(mb)}</b>${COIN}` + (bank > 0 ? ` + банк <b>${fmt(bank)}</b>${COIN}` : '') + (fair && !runActive() ? '' : ' <span style="color:#ffcf6a">(монеты Обычной версии)</span>');
@@ -2715,7 +2871,7 @@ function renderVil() {
       <div class="vst">${L ? b.st[L - 1][0] : 'пустой участок'}${nx ? ' → <b>' + nx[0] + '</b>' : ' · достроено'}</div></div>${btn}</div>`;
   }).join('');
   const T = TRAILS[V.reward];
-  $('vReward').innerHTML = vilComplete(vi) ? `🎉 ${V.n} достроены! Награда получена: след «${T.n}»${vi + 1 < VILLAGES.length ? ` · открыта деревня «${VILLAGES[vi + 1].n}»` : ''}` :
+  $('vReward').innerHTML = vilComplete(vi) ? `🎉 Деревня «${V.n}» достроена! Награда получена: след «${T.n}»${vi + 1 < VILLAGES.length ? ` · открыта деревня «${VILLAGES[vi + 1].n}»` : ''}` :
     `🎁 За всю деревню: след за киркой «${T.n}»${vi + 1 < VILLAGES.length ? ` и новая деревня «${VILLAGES[vi + 1].n}»` : ''} · осталось ${fmt(V.b.reduce((a, b) => a + b.st.slice(vilLv(V, b)).reduce((s, q) => s + q[1], 0), 0))}${COIN}`;
   if (!unl) $('vReward').innerHTML = `🔒 Откроется, когда достроишь «${VILLAGES[vi - 1].n}». Вся деревня стоит ${fmt(vilPrice(vi))}${COIN}.`;
 }
@@ -2764,17 +2920,44 @@ $('mPay').onclick = e => { e.currentTarget.blur(); openSheet('pay'); };
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => closeSheet());
 window.addEventListener('popstate', () => closeSheet(true)); // кнопка «назад» сворачивает окно
 // Подстройка раскладки: решение принимается по «базовой» высоте поля (без классов), поэтому не дёргается туда-обратно.
+// Шахта должна занимать не меньше половины видимой области (без статус-бара и полоски «домой»).
+// Не помещается — ужимаем интерфейс: body.cmp, потом body.cmp2. В «режиме копания» не пересчитываем.
+function safeInsets() { const p = $('safeProbe'), cs = p ? getComputedStyle(p) : null; return cs ? [parseFloat(cs.paddingTop) || 0, parseFloat(cs.paddingBottom) || 0] : [0, 0]; }
 function fitLayout() {
-  const B = document.body, st = $('stage'); if (!st) return;
+  const B = document.body, st = $('stage'), app = $('app'); if (!st || !app || B.classList.contains('dig')) return;
   B.classList.remove('cmp', 'cmp2'); if (window.innerWidth >= 900) return;
-  const want = Math.min(330, st.clientWidth * .8);
+  const [sT, sB] = safeInsets(), avail = app.clientHeight - sT - sB;
+  const want = Math.max(Math.min(330, st.clientWidth * .8), avail * .5);
   if (st.getBoundingClientRect().height >= want) return;
   B.classList.add('cmp'); if (st.getBoundingClientRect().height < want - 10) B.classList.add('cmp2');
 }
 let fitRaf = 0; const fitSoon = () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitLayout); };
 window.addEventListener('resize', fitSoon); window.addEventListener('orientationchange', fitSoon); if (window.visualViewport) visualViewport.addEventListener('resize', fitSoon);
 if (window.ResizeObserver) { const ro = new ResizeObserver(fitSoon); for (const el of document.querySelectorAll('.topbar,.controls,.histrow')) ro.observe(el); }
-fitLayout(); setTimeout(fitLayout, 300);
+fitLayout(); setTimeout(fitLayout, 300); setTimeout(fitLayout, 1000);
+// iOS иногда отдаёт правильные размеры не сразу и меняет их при возврате в приложение
+window.addEventListener('pageshow', () => { fitSoon(); setTimeout(() => { fitLayout(); resize(); }, 350); });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) setTimeout(() => { fitLayout(); resize(); }, 250); });
+// диагностика: 5 быстрых нажатий на логотип «КИРКА» — табличка с размерами экрана (для скриншота, если что-то не так)
+(() => { let n = 0, t = 0; $('logoBox').addEventListener('click', () => { const now = Date.now(); n = now - t < 700 ? n + 1 : 1; t = now; if (n >= 5) { n = 0; showDiag(); } }); })();
+function showDiag() {
+  const probe = h => { const d = document.createElement('div'); d.style.cssText = 'position:fixed;top:0;left:0;width:1px;visibility:hidden;height:' + h; document.body.appendChild(d); const v = Math.round(d.getBoundingClientRect().height); d.remove(); return v; };
+  const [sT, sB] = safeInsets(), app = $('app'), st = $('stage'), avail = app.clientHeight - sT - sB;
+  const sa = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
+  const L = [
+    'КИРКА · диагностика экрана', 'сборка: ' + BUILD, '',
+    'запуск: ' + (sa ? 'с иконки (приложение)' : 'в браузере'),
+    'экран: ' + screen.width + '×' + screen.height + ' · DPR ' + (window.devicePixelRatio || 1),
+    'окно (innerW×H): ' + innerWidth + '×' + innerHeight,
+    'visualViewport: ' + (window.visualViewport ? Math.round(visualViewport.width) + '×' + Math.round(visualViewport.height) : '—'),
+    'clientHeight: ' + document.documentElement.clientHeight,
+    '100vh = ' + probe('100vh') + ' · 100dvh = ' + probe('100dvh') + ' · 100% = ' + probe('100%'),
+    'вырез сверху: ' + sT + ' · снизу: ' + sB,
+    'коробка игры: ' + Math.round(app.getBoundingClientRect().height) + ' (видимая часть ' + Math.round(avail) + ')',
+    'шахта: ' + Math.round(st.getBoundingClientRect().height) + ' = ' + Math.round(100 * st.getBoundingClientRect().height / Math.max(1, avail)) + '% видимой части',
+    'классы: ' + (document.body.className || '—'), '', navigator.userAgent, '', '(нажми, чтобы закрыть)'];
+  const d = document.createElement('div'); d.id = 'diag'; d.innerHTML = '<pre></pre>'; d.firstChild.textContent = L.join('\n'); d.onclick = () => d.remove(); document.body.appendChild(d);
+}
 if (window.ResizeObserver) new ResizeObserver(() => resize()).observe($('stage')); // поле меняет размер, когда появляются/прячутся кнопки забега
 $('runAmt').addEventListener('keydown', e => { if (e.key === 'Enter') runGo(); });
 document.querySelectorAll('[data-ra]').forEach(b => b.onclick = () => { $('runAmt').value = b.dataset.ra; $('runErr').textContent = ''; markRunAmt(); });
@@ -2857,7 +3040,7 @@ requestAnimationFrame(frame);
 // ---- iPhone / веб-приложение (добавлено make-iphone.py) ----
 // Офлайн-режим: после первого запуска игра открывается и без интернета.
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost'))
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => { }));
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(r => r.update()).catch(() => { }));
 // Подсказка в Safari: как поставить игру на экран «Домой» (в установленном приложении не показывается).
 (function () {
   const ios = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
