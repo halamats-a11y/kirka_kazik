@@ -787,7 +787,7 @@ const REPAIR_HEAL = 50;   // верстак: +50 прочности (не выш
 const MODES = {
   low: {
     id: 'low', name: 'Низкая', desc: 'Частые выигрыши, небольшие суммы',
-    hpMul: 1, luckMult: 2, maxedBonus: 1, fairMul: 0.74,
+    hpMul: 1, luckMult: 2, maxedBonus: 1, fairMul: 0.78, // было 0.74 (v11: чуть щедрее)
     wear: [[2, 45], [3, 33], [5, 15], [8, 5], [20, 2]],
     values: { grass: 0.03, dirt: 0.03, stone: 0.08, deepslate: 0.11, coal: 0.17, iron: 0.28, lapis: 0.4, redstone: 0.4,
       gold: 0.55, diamond: 1.1, emerald: 2.5, obsidian: 0.45, magma: 0.05 },
@@ -802,7 +802,7 @@ const MODES = {
   },
   high: {
     id: 'high', name: 'Высокая', desc: 'Редкие, но крупные заносы',
-    hpMul: 1, luckMult: 3, maxedBonus: 3, fairMul: 0.77,
+    hpMul: 1, luckMult: 3, maxedBonus: 3, fairMul: 0.79, // было 0.77 (v11: чуть щедрее)
     wear: [[2, 40], [3, 30], [5, 15], [8, 8], [12, 5], [25, 2]],
     values: { grass: 0.02, dirt: 0.02, stone: 0.05, deepslate: 0.08, coal: 0.13, iron: 0.28, lapis: 0.45, redstone: 0.45,
       gold: 0.9, diamond: 2.8, emerald: 14, obsidian: 0.4, magma: 0.05 },
@@ -1613,7 +1613,7 @@ function showLearnHint(txt) {
   const kill = () => { h.remove(); removeEventListener('pointerdown', kill, true); };
   addEventListener('pointerdown', kill, true); setTimeout(kill, 8000);
 }
-const BUILD = '2026-10-28 · правки ревьюера';
+const BUILD = '2026-10-29 · баланс щедрее';
 function play() {
   ac();
   if (tut) { if (tut.step === 'play') tutPlayRound(); return; } // во время обучения — только учебный раунд
