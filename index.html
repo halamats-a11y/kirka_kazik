@@ -368,6 +368,7 @@
   .introcard p{margin:0;color:#cfcfe0;font-size:14px;line-height:1.55}
   .idots{display:flex;gap:6px;justify-content:center;margin:14px 0 12px}.idots i{width:8px;height:8px;border-radius:50%;background:#444}.idots i.on{background:var(--gold)}
   #intro{z-index:80}
+  #news,#newsLater{z-index:80}
 
   /* ===== контраст: текст не должен сливаться с фоном ===== */
   .ladder span{opacity:.5}
@@ -488,6 +489,94 @@
   .lcard.done .lrw{color:var(--green)} .lcard.done .lrw .coin{display:none}
   .lcard .lgo{flex:none;padding:9px 10px;font-size:13px}
   .lcard:not(.done) .lgo{background:linear-gradient(#ffcf3a,#e09a00);color:#2a1a00;text-shadow:none}
+  /* ---- косметика ---- */
+  .pet{position:absolute;left:4px;bottom:4px;width:72px;height:72px;image-rendering:pixelated;cursor:pointer;z-index:2;-webkit-tap-highlight-color:transparent}
+  body.cmp .pet,body.cmp2 .pet{width:48px;height:48px}
+  .stage::after{content:'';position:absolute;inset:0;border-radius:9px;pointer-events:none;box-shadow:inset 0 0 0 2px var(--thc,transparent),inset 0 0 18px var(--thg,transparent)}
+  .ctabs{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:8px}
+  .ctab{padding:6px 1px 5px;font-size:18px;line-height:1.1;min-width:0}
+  .ctab small{display:block;font-size:9.5px;color:var(--muted);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ctab.on{border-color:#c38bff;background:linear-gradient(#2e1f44,#16161c)} .ctab.on small{color:#e2c8ff}
+  .cwal{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;color:var(--muted);font-weight:800}
+  .cwal b{color:var(--gold)} .cwal .csh b{color:#d6b0ff}
+  .cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px;margin-top:8px}
+  .citem{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;background:#16161c;border:2px solid #2a2a34;border-radius:10px;padding:8px 5px 6px;cursor:pointer;min-width:0}
+  .citem.on{border-color:#3ddc63;background:linear-gradient(#1f3a26,#16161c)}
+  .citem.locked .ci{filter:saturate(.35) brightness(.75)}
+  .citem .ci{height:46px;display:flex;align-items:center;justify-content:center;font-size:30px;line-height:1}
+  .citem .ci img{width:44px;height:44px;image-rendering:pixelated}
+  .citem b{font-size:12.5px;line-height:1.15}
+  .citem small{font-size:10px;color:var(--muted);line-height:1.2;min-height:24px}
+  .citem .cbtn{width:100%;padding:5px 2px;font-size:12px;margin-top:auto;display:flex;align-items:center;justify-content:center;gap:3px}
+  .citem span.cbtn{color:#7dff9a;font-weight:900}
+  .citem span.cbtn.lock{color:#8a8aa0}
+  .citem .cbtn.buy{background:linear-gradient(#ffcf3a,#e09a00);color:#2a1a00;text-shadow:none}
+  .citem .cbtn.buy.armed{background:linear-gradient(#ff8a1a,#c2281a);color:#fff;animation:pulse .6s infinite}
+  .cseas{position:absolute;right:4px;top:3px;font-style:normal;font-size:13px}
+  .ctrail{display:block;width:56px;height:14px;border-radius:7px;border:2px solid #000}
+  .csw{display:flex;align-items:center;justify-content:center;width:56px;height:42px;border-radius:8px;border:2px solid #000;font-size:20px}
+  .cprev{display:block;width:100%;border:3px solid #000;border-radius:10px;box-shadow:0 0 0 2px #2c2c38;background:#000;margin-top:8px}
+  .cpicks{display:flex;justify-content:space-between;gap:4px;background:#0e0e14;border:2px solid #2a2a34;border-radius:10px;padding:8px;margin-top:8px}
+  .cpicks img{width:15%;max-width:52px;aspect-ratio:1;image-rendering:pixelated}
+  .cseason{background:linear-gradient(90deg,#3a1a06,#1a0a14);border:2px solid #ff8a1a;border-radius:10px;padding:8px 10px;font-size:12.5px;line-height:1.4;margin-top:8px}
+  .cpet{display:flex;gap:12px;align-items:center;margin-top:8px}
+  .cpet canvas{width:132px;height:132px;image-rendering:pixelated;flex:none;background:radial-gradient(circle at 50% 70%,#2a2a38,#121218 70%);border:2px solid #2a2a34;border-radius:12px;cursor:pointer}
+  .cpet .cpi{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+  .cpet input{width:100%;font:inherit;font-weight:900;font-size:16px;background:#0e0e14;color:var(--text);border:2px solid #2a2a34;border-radius:8px;padding:6px 8px}
+  .cfeed{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .cfeed .btn{font-size:12px;padding:7px 3px}
+  .cchk{display:flex;align-items:center;gap:6px;margin-top:6px}
+  .ptitle{display:inline-block;font-style:normal;font-size:12px;font-weight:900;color:#e2c8ff;background:#2e1f44;border:1px solid #5a3a8a;border-radius:6px;padding:1px 6px;margin-top:3px}
+  .balance.fr{padding:0 6px;border-radius:8px}
+  .balance.cfr{font-size:15px!important}
+  .fr-gold{box-shadow:0 0 0 2px #ffd23f,0 0 10px #ffd23f66}
+  .fr-dia{box-shadow:0 0 0 2px #5ff5e8,0 0 12px #5ff5e888}
+  .fr-fire{box-shadow:0 0 0 2px #ff6a1a,0 0 14px #ff3d00aa;animation:frfire 1.2s infinite alternate}
+  .fr-neon{box-shadow:0 0 0 2px #ff3dcc,0 0 12px #ff3dcc,inset 0 0 8px #18f0ff88}
+  .fr-rainbow{animation:frrb 3s linear infinite}
+  @keyframes frfire{to{box-shadow:0 0 0 2px #ffd23f,0 0 20px #ff6a1aaa}}
+  @keyframes frrb{0%,100%{box-shadow:0 0 0 2px #ff3b3b,0 0 12px #ff3b3b88}25%{box-shadow:0 0 0 2px #ffd23f,0 0 12px #ffd23f88}50%{box-shadow:0 0 0 2px #3ddc63,0 0 12px #3ddc6388}75%{box-shadow:0 0 0 2px #4fc3ff,0 0 12px #4fc3ff88}}
+  /* ---- режим разработчика ---- */
+  .devcard{border-style:dashed;opacity:.9}
+  .devin{display:flex;gap:6px;margin-top:8px}
+  .devin input{flex:1;min-width:0;font:inherit;font-weight:900;font-size:18px;letter-spacing:4px;text-align:center;background:#0e0e14;color:var(--text);border:2px solid #2a2a34;border-radius:8px;padding:6px}
+  .devgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+  .devgrid .btn{font-size:13px;padding:9px 4px}
+  .devwide{width:100%;margin-top:6px;padding:8px;font-size:13px}
+  .devtabs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:8px}
+  .devtabs button{font:inherit;font-size:17px;background:#16161e;color:var(--text);border:2px solid #2a2a34;border-radius:8px;padding:5px 0 3px;cursor:pointer}
+  .devtabs button small{display:block;font-size:9.5px;font-weight:700;color:var(--mut,#9a9ab0);margin-top:1px}
+  .devtabs button.on{border-color:#ffd23f;background:#2a2410}
+  .devpane{margin-top:8px}
+  .devsnap{margin-top:8px;padding:8px 10px;border-radius:8px;background:#0e0e14;border:1px solid #2a2a34;font-size:13px;line-height:1.5}
+  .devranks{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}
+  .devranks .btn{font-size:20px;padding:6px 2px}
+  .devranks .btn small{display:block;font-size:9.5px;line-height:1.15;margin-top:2px;white-space:normal}
+  .devranks .btn.on{border-color:#ffd23f}
+  .devach{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+  .devach button{font:inherit;font-size:11px;font-weight:700;padding:4px 6px;border-radius:6px;border:1px solid #2a2a34;background:#14141a;color:#77778a;cursor:pointer;filter:grayscale(1)}
+  .devach button.on{color:#ffe9a0;border-color:#8a6d1a;background:#2a2410;filter:none}
+  .devvil{display:grid;grid-template-columns:1fr auto auto auto;gap:5px;align-items:center;margin-top:7px}
+  .devvil .dvn small{display:block;font-size:11px;color:#9a9ab0}
+  .devvil .btn{font-size:12px;padding:7px 8px}
+  .devvil .btn:disabled,.devgrid .btn:disabled{opacity:.35}
+  .deverr{margin-top:8px;max-height:220px;overflow:auto;background:#0e0e14;border:1px solid #2a2a34;border-radius:8px;padding:6px 8px;font-size:11.5px;line-height:1.4;word-break:break-word}
+  .deverr>div+div{border-top:1px dashed #2a2a34;margin-top:5px;padding-top:5px}
+  .deverr b{color:#ff9a8a}
+  .deverr small{display:block;color:#77778a}
+  .deverr .dok{color:#7fe08a;padding:4px 0}
+  #news .card{position:relative}
+  .newsx{position:sticky;top:0;float:right;margin:-8px -6px -30px 0;width:34px;height:34px;border-radius:50%;border:2px solid #3a3a46;background:#16161e;color:#cfcfe0;font:inherit;font-size:16px;font-weight:900;cursor:pointer;z-index:2;line-height:1}
+  .newsx:active{transform:scale(.92)}
+  .nlcard{width:min(320px,100%)!important}
+  .nlpath{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;font-weight:900;font-size:14px}
+  .nlpath span{background:#16161e;border:2px solid #ffd23f;border-radius:8px;padding:6px 10px;color:#ffe9a0}
+  .nlpath i{font-style:normal;color:#ffd23f}
+  .newsglow{animation:learnGlow 1s ease-in-out 5;border-color:#ffd23f!important}
+  .newssub{color:#ffd23f;font-size:13px;font-weight:700;margin-top:-2px}
+  .newslist{list-style:none;margin:6px 0 14px;padding:0;text-align:left}
+  .newslist li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-top:1px dashed #2a2a34;color:#cfcfe0;font-size:14px;line-height:1.45}
+  .newslist li span{font-size:20px;line-height:1.2;flex:none;width:26px;text-align:center}
 </style>
 </head>
 <body>
@@ -514,6 +603,7 @@
     <div class="toast" id="toast"></div>
     <div class="tut-tag" id="tutTag"><b id="tutTagT">🎓 УЧЕБНЫЙ РАУНД · бесплатно</b></div>
     <button class="mute" id="mute" title="Звук">🔊</button>
+    <canvas class="pet" id="petCv" width="24" height="24" title="Питомец"></canvas>
   </div>
 
   <div class="card controls">
@@ -553,7 +643,7 @@
     <button class="btn" id="mProf"><span class="i">👤</span>Профиль<small id="mProfSub"></small></button>
     <button class="btn" id="mRuns"><span class="i">🏁</span>Забеги<small id="mRunsSub"></small></button>
     <button class="btn" id="mMode"><span class="i">⚙</span>Режим<small id="mModeSub"></small></button>
-    <button class="btn" id="mPay"><span class="i">📋</span>Выплаты<small id="mPaySub"></small></button>
+    <button class="btn" id="mCos"><span class="i">🎨</span>Косметика<small id="mCosSub"></small></button>
   </div>
 </div>
 
@@ -599,7 +689,7 @@
       <button class="opt cheat" data-fair="0"><div class="h">😈 Чит<span class="chk"></span></div>
         <ul><li>Щедрая демка: RTP 100–130%</li><li>Трещин нет</li><li>🎁 +1000 монет — без ограничений</li><li>Свой <b>демо-кошелёк</b>: деревня, банк, задания и достижения тут не копятся</li></ul></button>
       <button class="opt fair" data-fair="1"><div class="h">🎰 Обычная<span class="chk"></span></div>
-        <ul><li>Как в казино: RTP ≈ 70–100% в зависимости от игры</li><li>Прочность честная, но изношенная кирка может треснуть (−10…30% прочности)</li><li>Основной кошелёк: 🏘 деревня, 🏦 банк, ранги, задания и достижения</li><li>🎁 Ежедневный подарок, задания, спасательный круг</li></ul></button>
+        <ul><li>Как в казино: RTP ≈ 70–100% в зависимости от игры</li><li>Прочность честная, но изношенная кирка может треснуть (−10…30 ❤)</li><li>Основной кошелёк: 🏘 деревня, 🏦 банк, ранги, задания и достижения</li><li>🎁 Ежедневный подарок, задания, спасательный круг</li></ul></button>
     </div>
     <div class="secttl" style="margin-top:12px">Волатильность</div>
     <div id="modeOpts">
@@ -609,6 +699,7 @@
         <ul><li>Редкие, но крупные заносы</li><li>Баланс скачет сильнее</li><li>Бонуска: медиана ~×51, зато чаще ×500+</li></ul></button>
     </div>
     <div class="note" id="freeNote" style="margin-top:4px"></div>
+    <button class="opt" id="mPayIn" style="margin-top:12px"><div class="h">📋 Таблица выплат</div><ul><li>Сколько платит каждый блок при твоей ставке</li></ul></button>
   </div>
   <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
 </div></div>
@@ -619,6 +710,18 @@
   <div class="sh-body">
     <div class="note">Сколько даёт блок при ставке <b id="payBet" style="color:var(--gold)">100</b> · <span id="payMode"></span></div>
     <div class="card"><table id="payTable" class="paytbl"></table></div>
+  </div>
+  <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
+</div></div>
+
+<!-- ===== Окно «Косметика» ===== -->
+<div class="sheet" id="sh-cos"><div class="sh-in">
+  <div class="sh-head"><h1>🎨 Косметика</h1><button class="btn sh-x" data-close title="Закрыть">✕</button></div>
+  <div class="sh-body">
+    <div class="cwal"><span>Баланс: <b id="cWal">0</b><i class="coin"></i></span><span class="csh">✨ Осколки: <b id="cShard">0</b></span></div>
+    <div class="ctabs" id="cTabs"></div>
+    <div id="cBody"></div>
+    <div class="note" style="margin-top:10px">Косметика только для красоты: на выплаты и шансы не влияет. Покупается монетами Обычной версии. ✨ Осколки иногда выпадают из алмазов, изумрудов, сундуков и порталов (в Обычной и забегах).</div>
   </div>
   <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
 </div></div>
@@ -664,11 +767,13 @@
     <div class="card" id="pRank"></div>
     <div class="card"><div class="label">Статистика</div><div id="pStats" style="margin-top:6px"></div></div>
     <div class="card"><div class="label" id="pAchT">Достижения</div><div id="pAch"></div></div>
-    <div class="card"><div class="label">✨ Следы за киркой</div><div class="note" style="margin-top:4px">Только для красоты — видно, пока кирка летит.</div><div id="pTrails"></div></div>
+    <div class="card"><div class="label">🎨 Косметика</div><div class="note" style="margin-top:4px">Скины кирки, следы, эффекты, темы шахты, питомец и титулы — в отдельном окне.</div><button class="btn" id="pCos" style="width:100%;margin-top:8px;padding:10px">🎨 Открыть косметику</button></div>
     <div class="card"><div class="label">🎓 Обучение и правила</div><div class="note" style="margin-top:4px">Все правила в одном месте — или обучения с подсветкой (шахта, кнопки, деревня, бонуска) с наградой за каждое.</div><div class="mrow" style="margin-top:8px"><button class="btn" id="pHelp">❓ Как играть</button><button class="btn" id="pTut">🎓 Обучения</button></div></div>
     <div class="card"><div class="label">💾 Сохранение</div><div class="note" style="margin-top:4px">Перенеси прогресс на другое устройство или спрячь копию в заметки.</div>
       <div class="mrow" style="margin-top:8px"><button class="btn" id="pExport">📤 Код сохранения</button><button class="btn" id="pImport">📥 Загрузить</button></div>
       <textarea class="savebox" id="pSaveTxt" style="display:none" spellcheck="false"></textarea><div class="note" id="pSaveMsg"></div></div>
+    <div class="card" id="pNewsCard" style="display:none"><div class="label">📰 Новости</div><div class="note" style="margin-top:4px">Что поменялось в последнем обновлении.</div><button class="btn" id="pNews" style="width:100%;margin-top:8px;padding:10px">📰 Что нового</button></div>
+    <div class="card devcard"><button class="btn" id="pDev" style="width:100%;padding:10px">🛠 Режим разработчика</button><div id="pDevBox"></div></div>
   </div>
   <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
 </div></div>
@@ -716,9 +821,26 @@
   <div class="tut-blk" id="tutB0"></div><div class="tut-blk" id="tutB1"></div><div class="tut-blk" id="tutB2"></div><div class="tut-blk" id="tutB3"></div><div class="tut-blk" id="tutB4"></div>
   <div class="tut-bub" id="tutBub"><div id="tutBody"></div><div class="tut-row"><button class="btn tut-skip" id="tutSkip">Пропустить</button><button class="btn tut-next" id="tutNext">Дальше ▶</button></div></div>
   <div class="tut-fin" id="tutFin" style="display:none">👆</div></div>
+<div class="modal" id="news"><div class="card introcard"><button class="newsx" id="newsX" aria-label="Закрыть">✕</button><div id="newsBody"></div><button class="btn runstart" id="newsOk" style="width:100%">Понятно 👍</button></div></div>
+<div class="modal" id="newsLater"><div class="card introcard nlcard"><div class="iemo" style="font-size:40px">📰</div><h2 style="font-size:18px">Прочитаешь позже</h2><p>Новость никуда не денется. Открой <b>👤 Профиль</b> — кнопка в меню внизу экрана — и нажми <b>«📰 Новости»</b>.</p><div class="nlpath"><span>👤 Профиль</span><i>→</i><span>📰 Новости</span></div><button class="btn runstart" id="newsLaterOk" style="width:100%;margin-top:12px">Ок 👌</button></div></div>
 <div class="modal" id="intro"><div class="card introcard"><div id="introBody"></div><div class="mrow"><button class="btn" id="introSkip">Пропустить</button><button class="btn runstart" id="introNext" style="margin-top:0">Дальше ▶</button></div></div></div>
 
 <script>
+// ---------- журнал ошибок (ловим с самой первой строки; смотреть — в режиме разработчика, вкладка 🐞) ----------
+var ERRK = 'kirka_errlog', ERRL = null, errT = 0;
+function errLog() { if (!ERRL) { try { ERRL = JSON.parse(localStorage.getItem(ERRK) || '[]'); } catch (e) { ERRL = []; } if (!Array.isArray(ERRL)) ERRL = []; } return ERRL; }
+function errFlush() { errT = 0; try { localStorage.setItem(ERRK, JSON.stringify(errLog().slice(0, 30))); } catch (e) { } }
+function errPush(m, src, st) {
+  try {
+    m = String(m || 'ошибка').slice(0, 300); src = String(src || ''); let b = ''; try { b = BUILD; } catch (e) { }
+    const L = errLog();
+    if (L[0] && L[0].m === m && L[0].s === src) { L[0].n = (L[0].n || 1) + 1; L[0].t = Date.now(); }
+    else { L.unshift({ t: Date.now(), m, s: src, st: String(st || '').slice(0, 600), b, n: 1 }); L.length = Math.min(L.length, 30); }
+    if (!errT) errT = setTimeout(errFlush, 800); // ошибка в цикле отрисовки летит 60 раз в секунду — пишем в память не чаще раза в 0,8 с
+  } catch (e) { }
+}
+window.addEventListener('error', e => { if (e && typeof e.message === 'string') errPush(e.message, String(e.filename || '').split('/').pop() + ':' + e.lineno + ':' + e.colno, e.error && e.error.stack); });
+window.addEventListener('unhandledrejection', e => { const r = e && e.reason; errPush('Promise: ' + (r && r.message ? r.message : r), '', r && r.stack); });
 // ENGINE START
 const CELL = 40, COLS = 9, GRAV = 1150, RAD = 14, REST = 0.45, MAXV = 1100, PASS = 0.85;
 let RNG = Math.random;
@@ -776,10 +898,10 @@ const HELL = { startTier: 1, step: 3, maxMult: 30, maxTime: 120, cheatMul: 1.12,
 const PORTAL_W = 0.035;   // вес портала при генерации обычной шахты (с 6 м)
 // ===== ОБЫЧНАЯ ВЕРСИЯ =====
 // Прочность всегда показывается честно, кирка ломается ТОЛЬКО на 0.
-// Риск создают «трещины»: удар может снять CRACK_MIN–CRACK_MAX от макс. прочности.
+// Риск создают «трещины»: удар может снять CRACK_MIN–CRACK_MAX ❤ (одинаково на любой кирке, не процент).
 // Шанс трещины растёт с износом: CRACK_BASE + CRACK_WORN × (1 − прочность/макс)^CRACK_POW, поэтому дожимать до конца опасно.
 // Выплаты в обычной версии умножаются на FAIR_VALUE_MUL × fairMul режима.
-const CRACK_POW = 1, CRACK_BASE = 0, CRACK_WORN = 0.08, CRACK_MIN = 0.1, CRACK_MAX = 0.3, FAIR_VALUE_MUL = 1;
+const CRACK_POW = 1, CRACK_BASE = 0, CRACK_WORN = 0.08, CRACK_MIN = 10, CRACK_MAX = 30, FAIR_VALUE_MUL = 1;
 const UPGRADE_HEAL = 25;  // наковальня: сразу +25 прочности (максимум растёт до прочности нового тира)
 const REPAIR_HEAL = 50;   // верстак: +50 прочности (не выше максимума)
 // ===== РЕЖИМЫ ВОЛАТИЛЬНОСТИ =====
@@ -1009,7 +1131,7 @@ class Game {
     cl.rev = 1;
     // износ случайный: обычно 1, иногда 2–3 (поэтому точно «дотянуть до 1 ❤» не выйдет)
     let cost = B.hpCost || pickWeighted(this.cfg.wear), crack = false;
-    if (this.fair && !this.bonus && RNG() < this.crackChance()) { cost = Math.round(this.maxHp * rand(CRACK_MIN, CRACK_MAX)); crack = true; }
+    if (this.fair && !this.bonus && RNG() < this.crackChance()) { cost = Math.round(rand(CRACK_MIN, CRACK_MAX)); crack = true; }
     this.hp -= cost;
     cl.hp -= TIERS[this.tier].dmg; cl.hitT = this.time;
     this.emit('hit', { r, c, t: cl.t, cost, imp, crack });
@@ -1294,33 +1416,77 @@ function buildTextures() {
   // кирки
   TEX.pick = TIERS.map(t => pickTex(t.id));
 }
-function pickTex(id) {
-  const C = { wood: ['#4a3315', '#9a7442', '#c49a5c'], stone: ['#333', '#7f7f7f', '#b0b0b0'], iron: ['#3d3d3d', '#d0d0d0', '#ffffff'],
-    gold: ['#6b4d00', '#f5cf3a', '#fff6a0'], diamond: ['#0d4f4a', '#33d6c8', '#c5fff8'], netherite: ['#120d10', '#4a3f45', '#80717a'] }[id];
-  const H = ['#3b2510', '#6b4a26', '#8f6638'];
-  const g = []; for (let y = 0; y < 16; y++) g.push(new Array(16).fill(0));
+// Кирка 16×16 процедурно. Скин задаёт форму и ручку, а «железо» (голова) всегда в цветах уровня —
+// уровень кирки читается при любом скине. Без скина — прежняя классическая кирка пиксель в пиксель.
+const PICK_C = { wood: ['#4a3315', '#9a7442', '#c49a5c'], stone: ['#333', '#7f7f7f', '#b0b0b0'], iron: ['#3d3d3d', '#d0d0d0', '#ffffff'],
+  gold: ['#6b4d00', '#f5cf3a', '#fff6a0'], diamond: ['#0d4f4a', '#33d6c8', '#c5fff8'], netherite: ['#120d10', '#4a3f45', '#80717a'] };
+const PICK_H = ['#3b2510', '#6b4a26', '#8f6638'];
+const segD = (u, v, a, b) => { const dx = b[0] - a[0], dy = b[1] - a[1], t = Math.max(0, Math.min(1, ((u - a[0]) * dx + (v - a[1]) * dy) / (dx * dx + dy * dy))); return Math.hypot(u - a[0] - dx * t, v - a[1] - dy * t); };
+function pickTex(id, skin) {
+  const C = PICK_C[id], S = (skin && typeof SKINS !== 'undefined' && SKINS[skin]) || {};
+  let g = []; const U = [], V = [];
+  for (let y = 0; y < 16; y++) { g.push(new Array(16).fill(0)); U.push([]); V.push([]); }
   const A = [2, 14], B = [10.6, 5.4];
-  const dl = Math.hypot(B[0] - A[0], B[1] - A[1]), d = [(B[0] - A[0]) / dl, (B[1] - A[1]) / dl];
+  const dl = Math.hypot(B[0] - A[0], B[1] - A[1]), d = [(B[0] - A[0]) / dl, (B[1] - A[1]) / dl], nn = [-d[1], d[0]];
   const RR = 7, Cx = B[0] - d[0] * RR, Cy = B[1] - d[1] * RR, ang0 = Math.atan2(d[1], d[0]), span = 62 * Math.PI / 180;
+  const sh = S.shape || 'arc', hr = S.thick || .85, h0 = S.hStart || 0, h1 = S.hEnd != null ? S.hEnd : dl;
+  const ZIG = [[0, 0], [4.2, 1.7], [5.5, -1.3], [10.5, .2]];
   for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
-    const px = x + .5, py = y + .5;
+    const px = x + .5, py = y + .5, u = (px - A[0]) * d[0] + (py - A[1]) * d[1], v = (px - A[0]) * nn[0] + (py - A[1]) * nn[1];
+    U[y][x] = u; V[y][x] = v;
     // ручка
-    let t = ((px - A[0]) * d[0] + (py - A[1]) * d[1]) / dl; t = Math.max(0, Math.min(1, t));
-    const hx = A[0] + (B[0] - A[0]) * t, hy = A[1] + (B[1] - A[1]) * t;
-    if (Math.hypot(px - hx, py - hy) < 0.85) g[y][x] = 1;
+    if (!S.noHandle) {
+      if (S.zig) { let m = 9; for (let i = 0; i < ZIG.length - 1; i++) m = Math.min(m, segD(u, v, ZIG[i], ZIG[i + 1])); if (m < .85) g[y][x] = 1; }
+      else { const tu = Math.max(h0, Math.min(h1, u)); if (Math.hypot(u - tu, v) < hr) g[y][x] = 1; }
+    }
     // голова
-    const r = Math.hypot(px - Cx, py - Cy); let da = Math.atan2(py - Cy, px - Cx) - ang0;
-    while (da > Math.PI) da -= 2 * Math.PI; while (da < -Math.PI) da += 2 * Math.PI;
-    const th = 1.25 * (1 - Math.pow(Math.abs(da) / span, 3) * 0.55);
-    if (Math.abs(da) < span && Math.abs(r - RR) < th) g[y][x] = r < RR ? 3 : 2;
+    let h = 0;
+    if (sh === 'arc') {
+      const r = Math.hypot(px - Cx, py - Cy); let da = Math.atan2(py - Cy, px - Cx) - ang0;
+      while (da > Math.PI) da -= 2 * Math.PI; while (da < -Math.PI) da += 2 * Math.PI;
+      const th = 1.25 * (1 - Math.pow(Math.abs(da) / span, 3) * 0.55);
+      if (Math.abs(da) < span && Math.abs(r - RR) < th) h = r < RR ? 3 : 2;
+    } else if (sh === 'hammer') {
+      if (u >= 9.3 && u <= 13.4 && Math.abs(v) <= 3.5) h = u >= 12.5 ? 3 : Math.abs(v) >= 2.7 ? 4 : 2;
+    } else if (sh === 'axe') {
+      const e = -4.7 + .3 * (u - 10.3) * (u - 10.3);
+      if (u >= 7.9 && u <= 12.7 && v <= .55 && v >= e) h = v < e + 1.1 ? 3 : 2;
+    } else if (sh === 'axe2') {
+      const e = 4.5 - .3 * (u - 10.3) * (u - 10.3), av = Math.abs(v);
+      if (u >= 7.9 && u <= 12.7 && av <= e) h = av > e - 1.1 ? 3 : av < .9 ? 4 : 2;
+    } else if (sh === 'spoon') {
+      if (Math.pow((u - 10.5) / 2.9, 2) + Math.pow(v / 2.25, 2) < 1) h = (Math.pow(u - 11.1, 2) / 1.4 + Math.pow(v + .7, 2) / .55 < 1) ? 3 : 2;
+    } else if (sh === 'wrench') {
+      const dc = Math.hypot(u - 10.6, v);
+      if (dc < 3.05 && !(Math.abs(v) < 1 && u > 10.2)) h = v < -1.5 ? 3 : 2;
+    } else if (sh === 'fish') {
+      const e = Math.pow((u - 7.3) / 5.4, 2) + Math.pow(v / 2.6, 2);
+      if (e < 1) h = v > 1 ? 3 : v < -1.6 ? 4 : 2;
+      else if (u >= .2 && u < 2.5 && Math.abs(v) < (2.5 - u) * 1.3 + .45) h = 2;
+      else if (u > 5.2 && u < 8.2 && v < -2.3 && v > -3.5 + (u - 5.2) * .35) h = 4;
+    }
+    if (h) g[y][x] = h;
+    if (S.pix) { const c = S.pix(u, v, x, y); if (c) g[y][x] = c; }
   }
+  if (S.retro) { const o = g; g = o.map((row, y) => row.map((_, x) => o[Math.min(15, y - y % 2 + 1)][x - x % 2])); }
+  const out = S.out || '#000000cc';
+  const hand = (x, y) => {
+    if (S.tierHand) return (x + y) % 3 === 0 ? C[2] : C[1];
+    if (S.handF) return S.handF(x, y, U[y][x], V[y][x]);
+    if (S.hand) return S.hand[2] && (x * 7 + y * 3) % 11 === 0 ? S.hand[2] : S.hand[(x + y) % 3 === 0 ? 1 : 0];
+    if (S.sketch) return (x + y) % 2 ? '#f2eee2' : '#cfc8b4';
+    if (S.retro) return (x >> 1) % 2 ? '#8a5a2a' : '#6b4a26';
+    return PICK_H[1 + ((x + y) % 3 === 0 ? 1 : 0)];
+  };
   const c = mkCanvas(16, 16), ctx = c.getContext('2d');
   for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) {
     let v = g[y][x], col = null;
-    if (!v) { let nb = false; for (const [ax, ay] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const yy = y + ay, xx = x + ax; if (yy >= 0 && yy < 16 && xx >= 0 && xx < 16 && g[yy][xx]) nb = true; } if (nb) col = g[y][x] === 0 ? '#000000cc' : null; }
-    else if (v === 1) col = H[1 + ((x + y) % 3 === 0 ? 1 : 0)];
-    else if (v === 2) col = C[1];
+    if (!v) { let nb = false; for (const [ax, ay] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const yy = y + ay, xx = x + ax; if (yy >= 0 && yy < 16 && xx >= 0 && xx < 16 && g[yy][xx]) nb = true; } if (nb) col = out; }
+    else if (typeof v === 'string') col = v;
+    else if (v === 1) col = hand(x, y);
+    else if (v === 2) col = S.sketch && (x + y) % 2 ? '#f2eee2' : C[1];
     else if (v === 3) col = C[2];
+    else if (v === 4) col = C[0];
     if (col) { ctx.fillStyle = col; ctx.fillRect(x, y, 1, 1); }
   }
   return c;
@@ -1452,7 +1618,7 @@ function renderHelp() {
     sec('hp', '❤ Прочность кирки', `<p>Каждый удар отнимает прочность: мягкие блоки (земля) почти не тратят её, крепкие (глубинный сланец, обсидиан) — больше. Полоска прочности всегда честно показывает, сколько осталось.</p>
       <p>Кирки бывают разные — чем лучше, тем больше прочности и сильнее удар:</p>${tiers}
       <p style="margin-top:8px">В начале каждого раунда кирка — деревянная. Улучшить её прямо в раунде можно наковальней.</p>
-      <p>🎰 <b>В Обычной версии</b> изношенная кирка может <b>треснуть</b> — потерять разом 10–30% прочности. Чем меньше осталось, тем выше шанс; он написан на полоске («трещина 2.4%»). В Чите трещин нет.</p>`),
+      <p>🎰 <b>В Обычной версии</b> изношенная кирка может <b>треснуть</b> — потерять разом 10–30 ❤ (на любой кирке). Чем меньше осталось, тем выше шанс; он написан на полоске («трещина 2.4%»). В Чите трещин нет.</p>`),
     sec('blk', '💎 Руда и особые блоки', `<p>Чем реже руда, тем дороже: ${ores}<br>Земля и камень платят копейки. Точные суммы при твоей ставке — в таблице выплат.</p>
       ${row(ICON.tnt, `<b>${BLOCKS.tnt.name}</b> — взрывается и разносит блоки вокруг (5×5). За всю руду в зоне — монеты.`)}
       ${row(ICON.crafting, `<b>${BLOCKS.crafting.name}</b> — чинит кирку: +${REPAIR_HEAL} ❤ (не выше максимума).`)}
@@ -1473,7 +1639,9 @@ function renderHelp() {
       ${row('🏦', `<b>Банк</b>: положи монеты — +${BANK_RATE * 100}% в день (проценты идут с первых ${fmtShort(BANK_CAP)}). В шахте их не потеряешь.`)}
       ${row('🏘', `<b>Деревня</b>: строй здания — они копят монеты, а ты собираешь урожай вручную. Способ заработать, даже когда на балансе пусто.`)}
       ${row('🏁', `<b>Забеги</b>: отдельный кошелёк с выбранной суммой — проверь, сколько сможешь из неё накопать. Без подарков и чита, график — в истории.`)}
-      ${row('🏅', `<b>Достижения</b> и ✨ <b>следы за киркой</b> — в Профиле.`)}`),
+      ${row('🏅', `<b>Достижения</b> — в Профиле.`)}
+      ${row('🎨', `<b>Косметика</b>: скины кирки (цвет железа всегда по уровню), следы, эффекты поломки и забора, звуки, темы шахты, питомец с шапками, титулы и рамки. Только для красоты. ✨ Осколки иногда выпадают из алмазов, изумрудов, сундуков и порталов.`)}
+      ${row('📋', `<b>Таблица выплат</b> — в окне ⚙ Режим.`)}`),
   ].join('') + `<button class="btn" id="hTut" style="width:100%;padding:12px;flex:none">🎓 Обучения с подсветкой (с наградой)</button>`;
   $('helpBody').querySelectorAll('details').forEach(d => d.ontoggle = () => { helpOpen[d.dataset.h] = d.open; });
   $('hPay').onclick = e => { e.currentTarget.blur(); openSheet('pay'); };
@@ -1540,14 +1708,13 @@ function updatePanel() {
   }
   setProp($('runStart'), 'runStartDis', 'disabled', playing);
   // нижнее меню (во время раунда заблокировано)
-  for (const id of ['mVil', 'mBank', 'mRuns', 'mProf', 'mMode', 'mPay']) setProp($(id), id + 'Dis', 'disabled', playing);
+  for (const id of ['mVil', 'mBank', 'mRuns', 'mProf', 'mMode', 'mCos']) setProp($(id), id + 'Dis', 'disabled', playing);
   if (!vilBadge) vilUi();
-  setText('mProfSub', rank().n);
   setText('mBankSub', isMain() ? fmtShort(meta.bank.amt) + ' · +1%' : '🔒 ' + (ra ? 'забег' : 'чит'));
   setProp($('mRuns'), 'mRunsCls', 'className', 'btn' + (run ? ' hot' : ''));
   setText('mRunsSub', ra ? `идёт · р.${run.rounds}` : run ? '⏸ на паузе' : runs.length ? `${runs.length} шт.` : 'новый');
   setText('mModeSub', ra ? `🔒 ${MODES[mode].name}` : `${fair ? 'Обычная' : 'Чит'} · ${MODES[mode].name}`);
-  setText('mPaySub', `при ${fmtShort(bet || 0)}`);
+  cosPanel();
   // окно «Режим»: карточки версии и волатильности
   const lockMode = playing || ra, modeKey = `${fair}|${mode}|${lockMode}`;
   if (_cache.get('modeKey') !== modeKey) {
@@ -1588,7 +1755,10 @@ function updatePanel() {
 let lastPanel = 0;
 
 function toast(html, color = '#fff') { const d = document.createElement('div'); d.innerHTML = html; d.style.color = color; $('toast').appendChild(d); setTimeout(() => d.remove(), 2300); while ($('toast').children.length > 3) $('toast').firstChild.remove(); }
+let ovSeq = 0;
 function overlay(title, big, sub, color) {
+  const id = ++ovSeq;
+  if (ovDelay > 0) { const d = ovDelay; ovDelay = 0; setTimeout(() => { if (id === ovSeq && phase === 'done') overlay(title, big, sub, color); }, d * 1000); return; } // красивая поломка — табличка чуть позже
   $('ovTitle').textContent = title; $('ovTitle').style.color = color; $('ovBig').innerHTML = big; $('ovBig').style.color = color; $('ovSub').textContent = sub;
   $('overlay').classList.add('show'); ovTimer = 3.2;
 }
@@ -1613,7 +1783,7 @@ function showLearnHint(txt) {
   const kill = () => { h.remove(); removeEventListener('pointerdown', kill, true); };
   addEventListener('pointerdown', kill, true); setTimeout(kill, 8000);
 }
-const BUILD = '2026-10-29 · баланс щедрее';
+const BUILD = '2026-10-30 · новости: крестик и подсказка';
 function play() {
   ac();
   if (tut) { if (tut.step === 'play') tutPlayRound(); return; } // во время обучения — только учебный раунд
@@ -1787,7 +1957,8 @@ function openSheet(id) {
   if (id === 'learn') renderLearn();
   sheetId = id; const el = $('sh-' + id); el.querySelector('.sh-body').scrollTop = 0; el.classList.add('show');
   if (id === 'vil') openVil();
-  if (id === 'prof') { $('pSaveMsg').textContent = ''; renderProfile(); }
+  if (id === 'prof') { $('pSaveMsg').textContent = ''; devAsk = false; renderProfile(); renderDev(); }
+  if (id === 'cos') { meta.cos.seen = 1; saveMeta(); cosRender(); }
   if (id === 'gift') renderGifts();
   if (id === 'bank') { bankAccrue(); if (meta.bank.pend >= 1) gtoast(`📈 Проценты банка: +${fmt(meta.bank.pend)}${COIN}`, '#7fd0ff'); meta.bank.pend = 0; saveMeta(); $('bkErr').textContent = ''; renderBank(); }
   try { if (!(window.history.state && window.history.state.sheet)) window.history.pushState({ sheet: id }, ''); } catch (e) { }
@@ -1964,6 +2135,7 @@ function handleEvents() {
   const tutR = !!(tut && tut.round);
   for (const e of game.events) {
     if (!tutR) metaEv(e); // учебный раунд не идёт в статистику, задания и достижения
+    cosEv(e, tutR);
     switch (e.type) {
       case 'hit': { const [x, y] = cc(e.r, e.c); spawnParts(x + (game.p.x - x) * .6, y + (game.p.y - y) * .6, TEX.pal[e.t], 4, 150, 4); SFX.hit(e.t); shake = Math.max(shake, 1.5);
         if (e.crack) { floatText(game.p.x, game.p.y - 24, `ТРЕЩИНА −${e.cost}`, '#ff3b3b', 17); toast(`💔 Трещина! −${e.cost} прочности`, '#ff6b6b'); SFX.crack(); shake = Math.max(shake, 9); vibe(90); }
@@ -1984,11 +2156,11 @@ function handleEvents() {
         if (e.kind === 'luck') { floatText(e.x, e.y, 'УДАЧА ×' + game.cfg.luckMult, '#c38bff', 18); toast(`Зачарование: ×${game.cfg.luckMult} на ${LUCK_BLOCKS} блоков`, '#c38bff'); SFX.luck(); spawnParts(e.x, e.y, ['#c38bff', '#fff', '#7a4fff'], 26, 260, 4); }
         break; }
       case 'reveal': if (game.val(e.t) >= 1) SFX.reveal(e.t); break;
-      case 'broke': { spawnParts(e.x, e.y, TEX.pal.stone.concat(['#6b4a26', '#8f6638']), 30, 320, 6); SFX.broke(); shake = 12; vibe([80, 40, 160]); endRound(0, e.crack ? 'crack' : true); break; }
+      case 'broke': { if (!cosBreak(e)) spawnParts(e.x, e.y, TEX.pal.stone.concat(['#6b4a26', '#8f6638']), 30, 320, 6); SFX.broke(); shake = 12; vibe([80, 40, 160]); endRound(0, e.crack ? 'crack' : true); break; }
       case 'portal': { spawnParts(e.x, e.y, ['#e2a6ff', '#a24dff', '#7a1fd6', '#fff'], 60, 420, 6); parts.push({ x: e.x, y: e.y, flash: 1, t: 0, life: .5 }); enterPortal(e.win); break; }
       case 'mult': { floatText(e.x, e.y - 30, `×${e.m}`, '#ff9a3d', 22); if (e.m % 5 === 0 || e.m <= 3) toast(`🔥 Множитель ×${e.m}`, '#ff9a3d'); SFX.mult(); shake = Math.max(shake, 4); break; }
       case 'bonusEnd': { spawnParts(e.x, e.y, ['#ffd23f', '#ff8a00', '#ff3d00', '#fff'], 50, 380, 6); endBonus(e.win, e.maxed); break; }
-      case 'cashout': { spawnParts(e.x, e.y, ['#ffd23f', '#fff6a0', '#fff'], 40, 350, 5); SFX.cash(); endRound(e.win, false); break; }
+      case 'cashout': { spawnParts(e.x, e.y, ['#ffd23f', '#fff6a0', '#fff'], 40, 350, 5); cosCash(e); SFX.cash(); endRound(e.win, false); break; }
     }
   }
   if (coinSfx) SFX.coin(coinSfx);
@@ -2017,6 +2189,7 @@ function draw() {
     const fx = CELL * 2.5, fy = -CELL * 5;
     for (let yy = 0; yy < 5; yy++) for (let xx = 0; xx < 4; xx++) if (yy === 0 || yy === 4 || xx === 0 || xx === 3) ctx.drawImage(TEX.obsidian, fx + xx * CELL, fy + yy * CELL, CELL + .5, CELL + .5);
     ctx.globalAlpha = .75 + .2 * Math.sin(renderT * 4); ctx.drawImage(TEX.portal, 2, 2, 12, 12, fx + CELL, fy + CELL, CELL * 2, CELL * 3); ctx.globalAlpha = 1;
+  } else if (camY < 0 && thCur()) { thCur().sky(ctx, camY - 20, CELL * COLS);
   } else if (camY < 0) {
     const g = ctx.createLinearGradient(0, camY, 0, 0); g.addColorStop(0, '#5aa0ff'); g.addColorStop(1, '#a8d4ff');
     ctx.fillStyle = g; ctx.fillRect(-20, camY - 20, CELL * COLS + 40, -camY + 20);
@@ -2027,12 +2200,13 @@ function draw() {
     ctx.fillStyle = '#fff7b0'; ctx.fillRect(CELL * COLS - 90, -260, 44, 44);
   }
   const r0 = Math.max(0, Math.floor(camY / CELL) - 1), r1 = Math.ceil((camY + viewH) / CELL) + 1;
-  const t = game.time;
+  const t = game.time, TC = thCur(), TA = TC && TC.air; thL = [];
   for (let r = r0; r <= r1; r++) {
     const row = game.row(r);
     for (let c = 0; c < COLS; c++) {
       const cl = row[c], x = c * CELL, y = r * CELL;
-      if (cl.t === 'air') { ctx.drawImage(layerTex(r, 'air', false), x, y, CELL + .5, CELL + .5); continue; }
+      if (cl.t === 'air') { ctx.drawImage(layerTex(r, 'air', false), x, y, CELL + .5, CELL + .5);
+        if (TA) { const ra = game.rows[r - 1], rb = game.rows[r + 1]; TA(ctx, x, y, r, c, !!(ra && ra[c].t !== 'air'), !rb || rb[c].t !== 'air'); } continue; }
       if (!cl.rev) { ctx.drawImage(layerTex(r, cl.t, true), x, y, CELL + .5, CELL + .5); continue; }
       const age = t - cl.revT;
       if (age >= 0 && age < .3 && phase !== 'idle') {
@@ -2051,17 +2225,20 @@ function draw() {
   }
   // темнота на глубине
   const p = game.p;
-  const depthK = game.bonus ? .55 : Math.min(.82, Math.max(0, (p.y / CELL - 2) / 25) * .82);
+  let depthK = game.bonus ? .55 : Math.min(.82, Math.max(0, (p.y / CELL - 2) / 25) * .82), dr0 = 2.2, dr1 = 6, drgb = game.bonus ? '30,0,0' : '0,0,0';
+  if (TC && TC.dark) [depthK, dr0, dr1, drgb] = TC.dark(depthK);
   if (depthK > 0.01 && phase !== 'idle') {
-    const g = ctx.createRadialGradient(p.x, p.y, CELL * 2.2, p.x, p.y, CELL * 6);
-    g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, game.bonus ? `rgba(30,0,0,${depthK})` : `rgba(0,0,0,${depthK})`);
+    const g = ctx.createRadialGradient(p.x, p.y, CELL * dr0, p.x, p.y, CELL * dr1);
+    g.addColorStop(0, `rgba(${drgb},0)`); g.addColorStop(1, `rgba(${drgb},${depthK})`);
     ctx.fillStyle = g; ctx.fillRect(-20, camY - 20, CELL * COLS + 40, viewH + 40);
   }
+  thLights(ctx);
+  if (TC && TC.amb) TC.amb(ctx, 0, camY, CELL * COLS, viewH);
   // след и кирка
   const showPick = phase === 'idle' || phase === 'play' || (phase === 'done' && !game.over);
   if (phase === 'play') {
     trail.push({ x: p.x, y: p.y, a: p.a }); if (trail.length > 7) trail.shift();
-    trail.forEach((q, i) => { ctx.globalAlpha = (i / trail.length) * .22; drawPick(q.x, q.y, q.a); });
+    trail.forEach((q, i) => { ctx.globalAlpha = (i / trail.length) * .22; drawPick(q.x, q.y, q.a, true); });
     ctx.globalAlpha = 1;
   }
   if (showPick) {
@@ -2075,6 +2252,7 @@ function draw() {
     ctx.globalAlpha = Math.max(0, 1 - q.t / q.life); ctx.fillStyle = q.c; ctx.fillRect(q.x - q.s / 2, q.y - q.s / 2, q.s, q.s);
   }
   ctx.globalAlpha = 1;
+  cosDrawFx(ctx);
   // всплывающий текст
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   for (const f of floats) {
@@ -2103,8 +2281,10 @@ function draw() {
     for (let r = Math.max(5, Math.ceil(r0 / 5) * 5); r <= r1; r += 5) { ctx.strokeText(r + 'м', CELL / 2, r * CELL + CELL / 2); ctx.fillStyle = '#ffffffd8'; ctx.fillText(r + 'м', CELL / 2, r * CELL + CELL / 2); }
   }
 }
-function drawPick(x, y, a) {
-  ctx.save(); ctx.translate(x, y); ctx.rotate(a); ctx.drawImage(TEX.pick[game.tier], -22, -22, 44, 44); ctx.restore();
+function drawPick(x, y, a, ghost) {
+  ctx.save(); ctx.translate(x, y); ctx.rotate(a);
+  const gl = !ghost && cosGlow(); if (gl) { ctx.shadowColor = gl; ctx.shadowBlur = (7 + 3 * Math.sin(renderT * 4)) * DPR; }
+  ctx.drawImage(TEX.pick[game.tier], -22, -22, 44, 44); ctx.restore();
 }
 
 // ---------- цикл ----------
@@ -2133,6 +2313,7 @@ function frame(now) {
   for (let i = parts.length - 1; i >= 0; i--) { const q = parts[i]; q.t += dt; if (!q.flash) { if (!q.ng) q.vy += 900 * dt; q.x += q.vx * dt; q.y += q.vy * dt; } if (q.t > q.life) parts.splice(i, 1); }
   for (let i = floats.length - 1; i >= 0; i--) { floats[i].t += dt; if (floats[i].t > floats[i].life) floats.splice(i, 1); }
   if (ovTimer > 0) { ovTimer -= dt; if (ovTimer <= 0) $('overlay').classList.remove('show'); }
+  cosFrame(dt);
   if (now - lastPanel > 60) { updatePanel(); lastPanel = now; }
   draw();
   requestAnimationFrame(frame);
@@ -2303,10 +2484,10 @@ function emitTrail(x, y, n = 2) {
 }
 function trailAction(id) {
   const T = TRAILS[id]; if (!T || busy()) return;
-  if (meta.owned.includes(id)) { meta.trail = id; saveMeta(); gtoast(`✨ След: ${T.n}`, '#d6b0ff'); renderProfile(); return; }
+  if (meta.owned.includes(id)) { meta.trail = id; saveMeta(); gtoast(`✨ След: ${T.n}`, '#d6b0ff'); renderProfile(); cosRender(); return; }
   if (!T.price) return;
   if (mainBal() < T.price) { gtoast('Не хватает монет на балансе Обычной версии', '#ff8a8a'); return; }
-  addMain(-T.price); meta.owned.push(id); meta.trail = id; saveMeta(); sfxAch(); gtoast(`✨ Куплен след «${T.n}»`, '#d6b0ff', true); renderProfile(); updatePanel();
+  addMain(-T.price); meta.owned.push(id); meta.trail = id; saveMeta(); sfxAch(); gtoast(`✨ Куплен след «${T.n}»`, '#d6b0ff', true); renderProfile(); cosRender(); updatePanel();
 }
 
 // ---------- статистика (только честная игра) ----------
@@ -2454,7 +2635,7 @@ function renderProfile() {
   metaTick();
   const ri = rankIdx(), R = RANKS[ri], nx = RANKS[ri + 1], s = meta.stats;
   const prog = nx ? Math.max(0, Math.min(1, (meta.peak - R.w) / (nx.w - R.w))) : 1;
-  $('pRank').innerHTML = `<div class="rankcard"><div class="ri">${R.i}</div><div class="rn"><b>${R.n}</b><span>ранг ${ri + 1} из ${RANKS.length}</span></div><div class="rb"><span>макс. ставка</span><b>${R.bet === Infinity ? '∞' : fmtShort(R.bet)}</b></div></div>
+  $('pRank').innerHTML = `<div class="rankcard"><div class="ri">${R.i}</div><div class="rn"><b>${R.n}</b><span>ранг ${ri + 1} из ${RANKS.length}</span>${cosTitle() ? `<em class="ptitle">${cosTitle().i} ${cosTitle().n}</em>` : ''}</div><div class="rb"><span>макс. ставка</span><b>${R.bet === Infinity ? '∞' : fmtShort(R.bet)}</b></div></div>
     <div class="bar"><i style="width:${(prog * 100).toFixed(1)}%"></i></div>
     <div class="note" style="margin-top:6px">Состояние сейчас <b>${fmt(wealth())}</b>${COIN} (баланс + банк + деревня), рекорд ${fmt(meta.peak)}.${nx ? ` До ранга «${nx.n}» ${nx.i} — рекорд ${fmtShort(nx.w)}.` : ' Это высший ранг!'} Ранг поднимает лимит ставки в Обычной версии и умножает подарки и задания (сейчас ×${R.k}).</div>
     <div class="ladder">${RANKS.map((q, i) => `<span class="${i <= ri ? 'on' : ''}" title="${q.n}: от ${fmt(q.w)}">${q.i}</span>`).join('')}</div>`;
@@ -2470,12 +2651,6 @@ function renderProfile() {
     const pct = Math.min(100, 100 * v / a.g), tr = ACH_TRAIL[a.id];
     const rew = (a.r ? `+${fmtShort(a.r)}` : '') + (tr ? `${a.r ? ' · ' : ''}✨${TRAILS[tr].n}` : '');
     return `<div class="ach${done ? ' done' : ''}"><div class="ai">${a.i}</div><div class="at"><b>${a.n}</b><span>${a.d}</span>${done ? '' : `<div class="bar sm"><i style="width:${pct.toFixed(1)}%"></i></div>`}</div><div class="ar">${done ? '✓' : rew}</div></div>`;
-  }).join('');
-  $('pTrails').innerHTML = Object.keys(TRAILS).map(id => {
-    const T = TRAILS[id], own = meta.owned.includes(id), on = meta.trail === id;
-    const sw = T.rb ? 'linear-gradient(90deg,#ff3b3b,#ffd23f,#3ddc63,#4fc3ff,#c38bff)' : T.c ? `linear-gradient(90deg,${T.c.join(',')})` : 'linear-gradient(90deg,#666,#bbb)';
-    const btn = on ? '<span class="tchk">выбран</span>' : own ? `<button class="btn tbtn" data-tr="${id}">выбрать</button>` : T.price ? `<button class="btn tbtn buy" data-tr="${id}">${fmtShort(T.price)}</button>` : '<span class="tlock">🔒</span>';
-    return `<div class="trail${on ? ' on' : ''}${own ? '' : ' locked'}"><i style="background:${sw}"></i><div class="tt"><b>${T.n}</b><span>${own ? (T.d || 'открыт') : trailHow(id)}</span></div>${btn}</div>`;
   }).join('');
 }
 function exportSave() {
@@ -2568,7 +2743,7 @@ const TUT = {
   hp: { holes: () => [rEl($('hudHp'))], ptrs: () => [rEl($('hudHp'))], next: 'Понятно ▶',
     t: 'Прочность кирки ❤', d: 'Каждый удар её тратит — твёрдые блоки больше. Дойдёт до нуля — кирка <b>сломается</b>, и всё накопанное за раунд <b>сгорит</b>. Справа на полоске — <b>шанс трещины</b>: он растёт, когда кирка изнашивается.' },
   crack: { holes: () => [rEl($('hudHp')), tutPt()], ptrs: () => [rEl($('hudHp')), tutPt()],
-    t: '💔 Трещина!', d: () => `Кирка треснула и разом потеряла <b>${tut.crackCost} ❤</b>. Так бывает в Обычной версии: чем сильнее кирка изношена, тем выше шанс трещины (10–30% прочности за раз). Шанс написан на полоске — сейчас <b>${(game.crackChance() * 100).toFixed(1)}%</b>. Поэтому «дотянуть до 1 ❤» не выйдет — <b>забирай с запасом</b>.` },
+    t: '💔 Трещина!', d: () => `Кирка треснула и разом потеряла <b>${tut.crackCost} ❤</b>. Так бывает в Обычной версии: чем сильнее кирка изношена, тем выше шанс трещины (10–30 ❤ за раз на любой кирке). Шанс написан на полоске — сейчас <b>${(game.crackChance() * 100).toFixed(1)}%</b>. Поэтому «дотянуть до 1 ❤» не выйдет — <b>забирай с запасом</b>.` },
   lit: { holes: () => [rPad(tutPt(), CELL * SC * 1.9)], ptrs: () => [tutPt()],
     t: () => `${blkImg('tnt')}Динамит!`, d: 'Кирка летит в динамит: от удара он <b>загорится</b> и через полсекунды рванёт — разнесёт блоки в зоне 5×5 (она подсвечена). Руда в зоне взрыва — тоже монеты. Кирку взрыв не ранит.' },
   repair: { holes: () => [tutPt(), rEl($('hudHp'))], ptrs: () => [tutPt(), rEl($('hudHp'))],
@@ -2603,9 +2778,9 @@ const TUT = {
   uHist: { holes: () => [rEl($('hist'))], ptrs: () => [rEl($('hist'))], need: () => !!rEl($('hist')),
     t: '📜 История', d: 'Последние ставки: зелёные — забрал (×множитель), красные ✖ — сгорело, 🔥 — бонуска.' },
   uMenuA: { holes: () => [rEl($('mVil')), rEl($('mBank')), rEl($('mProf'))], ptrs: () => [rEl($('mVil')), rEl($('mBank')), rEl($('mProf'))],
-    t: '☰ Меню', d: '🏘 <b>Деревня</b> — строй и собирай доход. 🏦 <b>Банк</b> — +1% в день, монеты там не сгорят. 👤 <b>Профиль</b> — ранг, статистика, достижения, следы, сохранение и справка «Как играть».' },
-  uMenuB: { holes: () => [rEl($('mRuns')), rEl($('mMode')), rEl($('mPay'))], ptrs: () => [rEl($('mRuns')), rEl($('mMode')), rEl($('mPay'))],
-    t: '☰ Меню', d: '🏁 <b>Забеги</b> — испытание с отдельным кошельком. ⚙ <b>Режим</b> — Обычная / Чит и волатильность. 📋 <b>Выплаты</b> — сколько платит каждый блок при твоей ставке.' },
+    t: '☰ Меню', d: '🏘 <b>Деревня</b> — строй и собирай доход. 🏦 <b>Банк</b> — +1% в день, монеты там не сгорят. 👤 <b>Профиль</b> — ранг, статистика, достижения, сохранение и справка «Как играть».' },
+  uMenuB: { holes: () => [rEl($('mRuns')), rEl($('mMode')), rEl($('mCos'))], ptrs: () => [rEl($('mRuns')), rEl($('mMode')), rEl($('mCos'))],
+    t: '☰ Меню', d: '🏁 <b>Забеги</b> — испытание с отдельным кошельком. ⚙ <b>Режим</b> — Обычная / Чит, волатильность и таблица выплат. 🎨 <b>Косметика</b> — скины кирки, эффекты, темы шахты и питомец.' },
   // ---------- деревня (окно деревни открыто) ----------
   vTabs: { holes: () => [rEl($('vTabs'))], ptrs: () => [rEl($('vTabs'))], scroll: () => $('vTabs'), area: 1,
     t: '🏘 Четыре деревни', d: 'Равнины → Пустыня → Снега → Незер. Следующая открывается, когда достроишь предыдущую. Каждая дороже и доходнее.' },
@@ -2958,7 +3133,26 @@ function vTextures() {
     if (y >= 4 && y <= 8 && Math.abs(x - 7.5) <= 6 - Math.max(0, 6 - y) * 1.2) return (x * 3 + y * 5) % 7 === 0 ? dot : y === 8 ? dk : cap;
     if ((x === 7 || x === 8) && y > 8 && y < 15) return x === 7 ? s1 : s2; if (y === 15 && x >= 6 && x <= 9) return sh(s2, .7); return null;
   });
+  // дверь из еловых досок 16×32: доски, три железные полосы, ручка-кольцо справа
+  const doorPx = (x, Y) => {
+    const n = H(x, Y, 120), band = Y === 4 || Y === 15 || Y === 27 ? 1 : Y === 5 || Y === 16 || Y === 28 ? 2 : 0;
+    if (band === 1) return x === 15 ? '#2b1d0f' : (x % 4 === 1 && x < 15) ? '#5c5c64' : n < .5 ? '#3d3d44' : '#44444b';
+    if (band === 2) return x === 15 ? '#26190d' : n < .5 ? '#2a2a2e' : '#242428';
+    if (x >= 12 && x <= 14 && Y >= 18 && Y <= 20) {
+      if (x === 13 && Y === 19) return '#2a1b0d';
+      return Y === 18 || x === 12 ? (x === 14 && Y === 18 ? '#8a8a90' : '#9c9ca2') : '#5e5e64';
+    }
+    if (x === 15 && Y >= 19 && Y <= 21) return '#1f1409';
+    if (x === 0) return n < .5 ? '#2e1f10' : '#352413';
+    if (x === 15) return n < .5 ? '#2a1c0e' : '#2f1f10';
+    if (x === 7) return n < .5 ? '#2c1d10' : '#352412';
+    if (x === 11) return n < .5 ? '#3c2a17' : '#43301a';
+    const K = [0, 1.14, .9, .97, 1.1, .84, .95, 0, 1.08, .82, .98, 0, 1.12, .86, .97][x];
+    const g = H(x, Y >> 1, 121) < .12 ? .86 : 1, e = Y === 6 || Y === 17 || Y === 29 ? .9 : Y === 3 || Y === 14 || Y === 26 ? .94 : 1;
+    return sh('#5a3e24', K * g * e * (.93 + H(x, Y, 122) * .14));
+  };
   VTX = {
+    doorT: mk((x, y) => doorPx(x, y)), doorB: mk((x, y) => doorPx(x, y + 16)),
     grass: mk((x, y) => pv(GR, cn(x, y, 1), 1.7)),
     grassSide: mk((x, y) => { const d = drip(x, 5, 3); return y < d ? (y === d - 1 ? '#4a8429' : pv(GR, cn(x, y, 9), 1.5)) : dirtPx(x, y, 4); }),
     dirt: mk((x, y) => dirtPx(x, y, 3)),
@@ -3111,6 +3305,7 @@ function vTextures() {
     blackstone: [X.blackstone, X.blackstone], gblack: [X.gblack, X.gblack], bbricks: [X.bbricks, X.bbricks], magma: [X.magma, X.magma], obsidian: [X.obsidian, X.obsidian],
     portal: [X.portal, X.portal, 1], cstem: [X.cstemTop, X.cstem], wstem: [X.wstemTop, X.wstem], nwart: [X.nwart, X.nwart], wwart: [X.wwart, X.wwart], shroom: [X.shroom, X.shroom],
     basalt: [X.basaltTop, X.basalt], cfungus: { spr: X.cfungus, s: .75 }, wfungus: { spr: X.wfungus, s: .75 }, croots: { spr: X.croots, s: .7 }, sbricks: [X.sbricks, X.sbricks], deadbush: { spr: X.deadbush, s: .75 }, cane: { spr: X.cane },
+    doorB: { door: X.doorB }, doorT: { door: X.doorT },
   };
 }
 const vOpaque = t => t && VB[t] && Array.isArray(VB[t]) && !VB[t][2];
@@ -3128,7 +3323,7 @@ const VILLAGES = [
       { id: 'house', n: 'Дом', i: '🏠', ox: 1, oy: 1, st: [
         ['Фундамент', 300, o => { vbox(o, 0, 0, 1, 4, 3, 1, 'cobble'); for (let y = 4; y < 7; y++) o.push([2, y, 0, 'gravel']); }],
         ['Стены', 1200, o => { vRing(o, 0, 0, 4, 3, 2, 4, 'planks', (x, y, z) => x === 2 && y === 3 && z < 4); for (const [x, y] of [[0, 0], [4, 0], [0, 3], [4, 3]]) vbox(o, x, y, 2, x, y, 4, 'log'); }],
-        ['Окна и дверь', 3000, o => o.push([1, 3, 3, 'glass'], [3, 3, 3, 'glass'], [4, 1, 3, 'glass'], [4, 2, 3, 'glass'], [2, 3, 2, 'dark'], [2, 3, 3, 'dark'], [2, 4, 3, 'lantern'])],
+        ['Окна и дверь', 3000, o => o.push([1, 3, 3, 'glass'], [3, 3, 3, 'glass'], [4, 1, 3, 'glass'], [4, 2, 3, 'glass'], [2, 3, 2, 'doorB'], [2, 3, 3, 'doorT'], [1, 4, 3, 'lantern'])],
         ['Крыша', 7000, o => { for (let k = 0; k < 3; k++) { for (let x = -1; x <= 5; x++) o.push([x, k - 1, 5 + k, 'dark'], [x, 4 - k, 5 + k, 'dark']); for (let y = k; y <= 3 - k; y++) o.push([0, y, 5 + k, 'planks'], [4, y, 5 + k, 'planks']); } }],
         ['Уют', 15000, o => { vbox(o, 3, 1, 6, 3, 1, 8, 'bricks'); o.push([0, 4, 1, 'poppy'], [1, 4, 1, 'dandelion'], [3, 4, 1, 'poppy'], [4, 4, 1, 'dandelion'], [5, 2, 1, 'poppy'], [5, 0, 1, 'hay'], [5, 0, 2, 'hay'], [5, 1, 1, 'hay']); }],
       ] },
@@ -3242,7 +3437,7 @@ const VILLAGES = [
 ];
 // Что делают здания, пока склад не полон: [эффект, x, y, z, с какой стадии, цвет]. Координаты — как у блоков деревни.
 const VFX = {
-  'plains.house': [['smoke', 4.5, 2.5, 9.2, 5], ['glint', 3.5, 5.5, 3.6, 3, '#ffe9a0']],
+  'plains.house': [['smoke', 4.5, 2.5, 9.2, 5], ['glint', 2.5, 5.5, 3.6, 3, '#ffe9a0']],
   'plains.forge': [['smoke', 9.5, 2.5, 9.2, 4], ['spark', 10.5, 3.5, 2.9, 4], ['spark', 10, 1.4, 2.6, 2]],
   'plains.well': [['splash', 2.5, 10.5, 1.3, 1]],
   'plains.farm': [['spore', 10, 9.5, 1.5, 2, '#b6f07a']],
@@ -3408,14 +3603,15 @@ function vPrep(now) {
   for (const q of vScene) {
     const [x, y] = vR4(q.x, q.y), bk = vi + ':' + q.x + ',' + q.y + ',' + q.z, bt = vBorn.get(bk);
     let fz = 0; if (bt) { if (now < bt) continue; const k = Math.min(1, (now - bt) / 380); fz = (1 - k) * (1 - k) * 9; if (k >= 1) vBorn.delete(bk); }
-    items.push({ x, y, z: q.z, t: q.t, fz });
+    const it0 = { x, y, z: q.z, t: q.t, fz }; if (VB[q.t] && VB[q.t].door) { const [ax, ay] = vR4(q.x + 1, q.y + 1), [bx, by] = vR4(q.x + 1, q.y + 2); it0.nd = [bx - ax, by - ay]; }
+    items.push(it0);
     const b = VB[q.t]; if (!fz && Array.isArray(b)) grid[vgk(x, y, q.z)] = !b[2] ? 1 : (q.t === 'leaves' || q.t === 'sleaves') ? 2 : 3;
   }
   const fences = new Set(); for (const it of items) if (!it.fz && VB[it.t] && VB[it.t].fence) fences.add(vgk(it.x, it.y, it.z));
   const at = (x, y, z) => (x < -4 || y < -4 || z < -4 || x >= VG - 4 || y >= VG - 4 || z >= 60) ? 0 : grid[vgk(x, y, z)];
   const op = (x, y, z) => at(x, y, z) === 1, so = (x, y, z) => { const v = at(x, y, z); return v === 1 || v === 2 ? 1 : 0; };
   for (const it of items) {
-    const b = VB[it.t]; if (!b || b.spr) continue; const { x, y, z } = it;
+    const b = VB[it.t]; if (!b || b.spr || b.door) continue; const { x, y, z } = it;
     if (b.fence) { const c = (dx, dy) => fences.has(vgk(x + dx, y + dy, z)) || op(x + dx, y + dy, z); it.fc = (c(1, 0) ? 1 : 0) | (c(-1, 0) ? 2 : 0) | (c(0, 1) ? 4 : 0) | (c(0, -1) ? 8 : 0); continue; }
     const [top, side] = b;
     if (it.fz) { it.f = [vFace(side, 1, 0), vFace(side, 2, 0), vFace(top, 0, 0)]; continue; }
@@ -3446,6 +3642,12 @@ function vFence(g, T, x, y, z, m) {
   B(P, P, 0, Q, Q, 1);
   if (m & 1) for (const [z0, z1] of rails) B(Q, a, z0, 1, b, z1);
   if (m & 4) for (const [z0, z1] of rails) B(a, Q, z0, b, 1, z1);
+}
+// Дверь — тонкая створка 3/16 блока, утоплена в проём стены.
+function vDoor(g, T, x, y, z, nd) {
+  const t1 = .86, t0 = t1 - .1875, [nx, ny] = nd || [0, 1], B = (...v) => vBox(g, T, x, y, z, ...v);
+  if (ny > 0) B(0, t0, 0, 1, t1, 1); else if (ny < 0) B(0, 1 - t1, 0, 1, 1 - t0, 1);
+  else if (nx > 0) B(t0, 0, 0, t1, 1, 1); else B(1 - t1, 0, 0, 1 - t0, 1, 1);
 }
 function vDraw(now) {
   const cv = $('vcv'), g = cv.getContext('2d'), dt = Math.min(.05, (now - (vLast || now)) / 1000); vLast = now;
@@ -3483,6 +3685,7 @@ function vDraw(now) {
     }
     const bt = VB[it.t]; if (!bt) continue; const z = it.z + it.fz;
     if (bt.fence) { vFence(g, bt.fence, it.x, it.y, z, it.fc || 0); continue; }
+    if (bt.door) { vDoor(g, bt.door, it.x, it.y, z, it.nd); continue; }
     if (bt.spr) { const s = bt.s || .9, [cx, cy] = vP(it.x + .5, it.y + .5, z), w = vtw * s * .75; g.setTransform(vDpr * w / 16, 0, 0, vDpr * w / 16, vDpr * (cx - w / 2), vDpr * (cy - w - vtw / 8)); g.drawImage(it.t === 'wheat' && vGrow < 1 ? (vGrow < .34 ? VTX.sprout : vGrow < .67 ? VTX.wheatMid : VTX.wheat) : bt.spr, 0, 0, 16, 16); continue; }
     const F = it.f; if (!F) continue;
     if (F[0]) { const [e, f] = vP(it.x, it.y + 1, z + 1); face(F[0], vtw / 2, vtw / 4, 0, h, e, f); }
@@ -3546,14 +3749,14 @@ function renderVil() {
   $('vProgB').style.width = (100 * done / total) + '%';
   $('vMoney').innerHTML = `Для стройки: баланс <b>${fmt(mb)}</b>${COIN}` + (bank > 0 ? ` + банк <b>${fmt(bank)}</b>${COIN}` : '') + (fair && !runActive() ? '' : ' <span style="color:#ffcf6a">(монеты Обычной версии)</span>');
   // ближайшая цель — самая дешёвая следующая стадия, на которую пока не хватает
-  let goal = null; if (unl) for (const b of V.b) { const n2 = b.st[vilLv(V, b)]; if (n2 && mb + bank < n2[1] && (!goal || n2[1] < goal.p)) goal = { id: b.id, p: n2[1], n: b.n, s: n2[0] }; }
-  if (goal) $('vMoney').innerHTML += `<div class="vgoaltop">🎯 Ближайшая цель: <b>${goal.n} → ${goal.s}</b> — ещё <b>${fmt(Math.ceil(goal.p - mb - bank))}</b>${COIN}</div>`;
+  let goal = null; if (unl) for (const b of V.b) { const n2 = b.st[vilLv(V, b)]; if (n2 && mb + bank < n2[1] && (!goal || n2[1] < goal.p)) goal = { id: b.id, p: n2[1], n: b.n }; }
+  if (goal) $('vMoney').innerHTML += `<div class="vgoaltop">🎯 Ближайшая цель: <b>${goal.n}</b> — ещё <b>${fmt(Math.ceil(goal.p - mb - bank))}</b>${COIN}</div>`;
   $('vCards').innerHTML = V.b.map(b => {
     const L = vilLv(V, b), nx = b.st[L], can = unl && nx && mb + bank >= nx[1] && !busy(), fromBank = nx ? Math.max(0, nx[1] - mb) : 0, armed = vBuyArmed.id === b.id && performance.now() < vBuyArmed.until;
     const btn = !nx ? '<button class="btn vbuy" disabled>✓ Готово</button>'
       : `<button class="btn vbuy${armed ? ' armed' : ''}" data-b="${b.id}" ${can ? '' : 'disabled'}>${armed ? 'Точно?' : 'Построить'}<small>${fmt(nx[1])}${COIN}${can && fromBank > 0 ? ' · банк' : ''}</small></button>`;
     return `<div class="vcard${goal && goal.id === b.id ? ' goal' : ''}"><div class="vi">${b.i}</div><div class="vn"><b>${b.n}</b><div class="vdots">${b.st.map((_, i) => `<span class="${i < L ? 'on' : ''}"></span>`).join('')}</div>
-      <div class="vst">${L ? b.st[L - 1][0] : 'пустой участок'}${nx ? ' → <b>' + nx[0] + '</b>' : ' · достроено'}</div>${nx && unl && mb + bank < nx[1] ? `<div class="vgoal">ещё <b>${fmt(Math.ceil(nx[1] - mb - bank))}</b>${COIN} до «${nx[0]}»</div><div class="vgbar"><i style="width:${Math.min(100, 100 * (mb + bank) / nx[1]).toFixed(1)}%"></i></div>` : ''}<div class="vinc1" id="vs-${b.id}"></div></div>${btn}</div>`;
+      <div class="vst">${L ? b.st[L - 1][0] : 'пустой участок'}${nx ? '' : ' · достроено'}</div>${nx && unl && mb + bank < nx[1] ? `<div class="vgoal">ещё <b>${fmt(Math.ceil(nx[1] - mb - bank))}</b>${COIN}</div><div class="vgbar"><i style="width:${Math.min(100, 100 * (mb + bank) / nx[1]).toFixed(1)}%"></i></div>` : ''}<div class="vinc1" id="vs-${b.id}"></div></div>${btn}</div>`;
   }).join('');
   const T = TRAILS[V.reward];
   $('vReward').innerHTML = vilComplete(vi) ? `🎉 Деревня «${V.n}» достроена! Награда получена: след «${T.n}»${vi + 1 < VILLAGES.length ? ` · открыта деревня «${VILLAGES[vi + 1].n}»` : ''}` :
@@ -3583,12 +3786,1024 @@ function vilBuy(bid) {
 }
 function openVil() { vTextures(); vResize(); vBuild(); renderVil(); if (!vLoop) { vLoop = true; vLast = 0; requestAnimationFrame(vFrame); } }
 
+// ====================== КОСМЕТИКА: скины кирки, эффекты, шахты, питомец, понты ======================
+// Только для красоты: на выплаты, RTP и генерацию шахты не влияет. Случайность здесь — Math.random в интерфейсе,
+// ГСЧ движка не трогаем (обучение и сиды остаются прежними). Покупки — монетами основного кошелька (как следы)
+// или ✨ осколками, которые изредка выпадают из алмазов, изумрудов, сундуков и порталов в честной игре.
+const hsh = (x, y) => { let h = Math.imul(x | 0, 374761393) + Math.imul(y | 0, 668265263) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
+const SEASONS = {
+  hw: { n: 'Хэллоуин', i: '🎃', from: [10, 20], to: [11, 10], back: '20 октября', title: 'pumpkin' },
+  ny: { n: 'Новый год', i: '🎄', from: [12, 15], to: [1, 15], back: '15 декабря', title: 'frost' },
+};
+function seasonOn(id) {
+  const S = SEASONS[id]; if (!S) return false; const d = new Date(), v = (d.getMonth() + 1) * 100 + d.getDate(), a = S.from[0] * 100 + S.from[1], b = S.to[0] * 100 + S.to[1];
+  return a <= b ? v >= a && v <= b : v >= a || v <= b;
+}
+const seasonEnd = id => { const S = SEASONS[id]; return `${S.to[1]} ${['', 'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'][S.to[0]]}`; };
+
+// ---------- каталог ----------
+const SKINS = {
+  classic: { n: 'Классика', free: 1, d: 'деревянная ручка' },
+  pink: { n: 'Розовая', price: 3000, hand: ['#ff8cc0', '#ff5aa0', '#ffc2de'] },
+  sketch: { n: 'Набросок', price: 5000, sketch: 1, out: '#2a2a2a' },
+  matte: { n: 'Матовая', price: 8000, hand: ['#1d1d23', '#2c2c35'] },
+  neon: { n: 'Неон', price: 20000, hand: ['#101018', '#1c1c2c'], out: '#18f0ff', glow: '#18f0ff' },
+  bone: { n: 'Костяная', season: 'hw', price: 10000, hand: ['#efe6cf', '#d6c8a2'], pix: (u, v) => (Math.hypot(u + .2, v - .95) < 1.05 || Math.hypot(u + .2, v + .95) < 1.05) ? '#efe6cf' : 0 },
+  pumpkin: { n: 'Тыквенная', season: 'hw', price: 15000, hand: ['#3f7a2a', '#5a9a34'], fx: 'pumpkin',
+    pix: (u, v) => { const r = Math.hypot(u - .1, v); if (r < 2.05) return (r < .75 && v < .3) ? '#ffe23a' : (Math.abs(v) < .45 ? '#c85a00' : '#ff8a1a'); if (Math.hypot(u - 5.8, v + 1.25) < .8) return '#7ac043'; return 0; } },
+  candy: { n: 'Леденец', season: 'ny', price: 15000, handF: (x, y, u) => Math.floor(u * .95) % 2 ? '#f02838' : '#ffffff' },
+  baguette: { n: 'Багет', price: 30000, thick: 1.4, hStart: -.7, handF: (x, y, u, v) => (((u + 9) % 3) > 1.2 && ((u + 9) % 3) < 2 && v < .5) ? '#f6d690' : ((x + y) % 3 ? '#d99a45' : '#c3802f') },
+  retro: { n: '8-бит', ach: 'r100', retro: 1 },
+  axe: { n: 'Топор', price: 50000, shape: 'axe', hEnd: 12.6 },
+  hammer: { n: 'Молот', ach: 'tnt50', shape: 'hammer', hEnd: 10 },
+  fish: { n: 'Рыба', price: 75000, shape: 'fish', noHandle: 1, pix: (u, v) => (Math.abs(u - 10.3) < .55 && Math.abs(v + .75) < .55) ? '#111111' : 0 },
+  spoon: { n: 'Ложка', price: 150000, shape: 'spoon', hEnd: 8.4, tierHand: 1 },
+  wrench: { n: 'Гаечный ключ', ach: 'chest50', shape: 'wrench', hEnd: 8.2, thick: 1, tierHand: 1 },
+  axe2: { n: 'Секира', rank: 3, shape: 'axe2', hEnd: 12.6 },
+  crystal: { n: 'Кристалл', shards: 5, hand: ['#bdf6ff', '#7fdcf5', '#e8fdff'], glow: '#7fe8ff', fx: 'crystal' },
+  lightning: { n: 'Молния', shards: 10, zig: 1, hand: ['#ffe23a', '#ffb000', '#fff6a0'], glow: '#ffe23a', fx: 'spark' },
+  fire: { n: 'Пламя', price: 300000, handF: (x, y) => hsh(x, y) < .28 ? '#ff6a1a' : ((x + y) % 2 ? '#2a1610' : '#40221a'), glow: '#ff6a1a', fx: 'fire' },
+  star: { n: 'Звёздная', price: 1e6, handF: (x, y) => hsh(x + 3, y) < .22 ? '#fff6a0' : '#2a1258', glow: '#a77bff', fx: 'stars' },
+  royal: { n: 'Королевская', rank: 5, hand: ['#f5cf3a', '#d9a817', '#fff2a0'], glow: '#ffd23f',
+    pix: (u, v) => Math.abs(v) < .75 && Math.abs(u - 3.4) < .6 ? '#e0303a' : Math.abs(v) < .75 && Math.abs(u - 6.8) < .6 ? '#3a7aff' : 0 },
+  dragon: { n: 'Драконья', rank: 7, glow: '#ff3d00', fx: 'ember', handF: (x, y, u, v) => ((Math.floor(u * 1.25) + (v > 0 ? 1 : 0)) % 2 ? '#6a0d18' : '#9a1a24'),
+    pix: (u, v) => (u > 1.4 && u < 9.4 && ((u + 9) % 2.4) < 1 && v < -.85 && v > -1.95) ? '#ffb02a' : 0 },
+};
+const BFX = { // эффект поломки кирки
+  classic: { n: 'Обломки', i: '💥', free: 1 },
+  pixels: { n: 'Рассыпается', i: '🧩', price: 3000 },
+  confetti: { n: 'Конфетти', i: '🎉', price: 8000 },
+  ghost: { n: 'Призрак', i: '👻', season: 'hw', price: 10000 },
+  chicken: { n: 'Курица', i: '🐔', price: 25000 },
+  ice: { n: 'Лёд', i: '🧊', price: 50000 },
+  ash: { n: 'Пепел', i: '🔥', ach: 'broke50' },
+  hole: { n: 'Чёрная дыра', i: '🌀', price: 250000 },
+};
+const CFX = { // эффект при «Забрать»
+  classic: { n: 'Искры', i: '✨', free: 1 },
+  coins: { n: 'Монетный дождь', i: '🪙', price: 10000 },
+  stars: { n: 'Звездопад', i: '⭐', price: 20000 },
+  fireworks: { n: 'Салют', i: '🎆', price: 40000 },
+};
+const SNDS = { // звук ударов
+  classic: { n: 'Кирка', i: '🔨', free: 1 },
+  bit: { n: '8-бит', i: '👾', price: 5000 },
+  bubble: { n: 'Пузыри', i: '🫧', price: 7500 },
+  xylo: { n: 'Ксилофон', i: '🎵', price: 10000 },
+};
+const THEMES = {
+  classic: { n: 'Классика', free: 1, i: '☀️', sw: 'linear-gradient(#5aa0ff,#a8d4ff 60%,#6b4a26 60%)' },
+  night: { n: 'Ночная', price: 25000, i: '🌙', fr: '#6a7aff', sw: 'linear-gradient(#03061a,#18224a 60%,#3a2a1a 60%)' },
+  sand: { n: 'Песчаник', vil: 1, i: '🏜️', fr: '#e8b860', sw: 'linear-gradient(#ffb85a,#ffe7b0 60%,#c9a25e 60%)' },
+  ice: { n: 'Ледяная пещера', vil: 2, i: '❄️', fr: '#9fdcff', sw: 'linear-gradient(#a8dcff,#eaf8ff 60%,#5a7a9a 60%)' },
+  candy: { n: 'Конфетная', price: 60000, i: '🍬', fr: '#ff8ac8', sw: 'linear-gradient(#ff9ccf,#ffe3f2 60%,#a05a7a 60%)' },
+  neon: { n: 'Неон', price: 100000, i: '🌃', fr: '#18f0ff', sw: 'linear-gradient(#05010f,#2a0a4a 60%,#0a0418 60%)' },
+  crystal: { n: 'Кристальный грот', shards: 8, i: '💠', fr: '#c38bff', sw: 'linear-gradient(#1a0832,#4a2280 60%,#2a1a40 60%)' },
+  halloween: { n: 'Хэллоуин', season: 'hw', price: 20000, i: '🎃', fr: '#ff8a1a', sw: 'linear-gradient(#12061e,#6a2a0a 60%,#2a1408 60%)' },
+  newyear: { n: 'Новогодняя', season: 'ny', price: 20000, i: '🎄', fr: '#ff3b3b', sw: 'linear-gradient(#08183a,#2a4a8a 60%,#3a4a5a 60%)' },
+};
+const PETK = '#1c1416';
+const PETS = {
+  mole: { n: 'Кротик', free: 1, eye: [5, 9, 7], mouth: [7, 11], hat: [8, 3], pal: { k: PETK, b: '#5e4e56', d: '#45373e', l: '#7a6a72', p: '#ff9ab0' },
+    map: ['................', '................', '................', '.....kkkkkk.....', '....kbbbbbbk....', '...kbbbbbbbbk...', '..kbbbbbbbbbbk..', '..kbbbbbbbbbbk..', '..kbbbbbbbbbbk..', '..kbbbbppbbbbk..',
+      '.kdbbbbppbbbbdk.', '.kpdbbbbbbbbdpk.', '.kppdbllllbdppk.', '..kkdbllllbdkk..', '...kddddddddk...', '....kkkkkkkk....'] },
+  cat: { n: 'Котик', price: 15000, eye: [4, 10, 7], mouth: [7, 10], hat: [8, 4], pal: { k: PETK, b: '#f0a040', d: '#c87820', l: '#ffe2b8', p: '#ff9ab0' },
+    map: ['................', '..kk........kk..', '..kbk......kbk..', '..kbpk....kpbk..', '..kbbbkkkkbbbk..', '.kbbbbbbbbbbbbk.', '.kbbdbbbbbbdbbk.', '.kbbbbbbbbbbbbk.', '.kbbbbbbbbbbbbk.', '.kblllbppblllbk.',
+      '..kbllllllllbk..', '...kkbbbbbbkk...', '...kbbllllbbk...', '...kbbllllbbk...', '...kbkbbbbkbk...', '...kkk.kk.kkk...'] },
+  dog: { n: 'Пёсик', price: 15000, eye: [5, 9, 6], mouth: [7, 11], hat: [8, 2], pal: { k: PETK, b: '#c8a070', d: '#8a6038', l: '#f4e6d0', n: '#2a1a14' },
+    map: ['................', '................', '....kkkkkkkk....', '...kbbbbbbbbk...', '..kdbbbbbbbbdk..', '.kddbbbbbbbbddk.', '.kddbbbbbbbbddk.', '.kddbbbbbbbbddk.', '.kdkbbbbbbbbkdk.', '..k.kbllllbk.k..',
+      '....kllnnllk....', '....kllllllk....', '...kbbbbbbbbk...', '...kbbllllbbk...', '...kbbbbbbbbk...', '...kkk.kk.kkk...'] },
+  fox: { n: 'Лисёнок', price: 40000, eye: [4, 10, 7], mouth: [7, 10], hat: [8, 4], pal: { k: PETK, b: '#ff7a1a', d: '#c85000', l: '#ffffff', n: '#1a1010' },
+    map: ['................', '..k..........k..', '..kk........kk..', '..kbk......kbk..', '..kbbkkkkkkbbk..', '.kbbbbbbbbbbbbk.', '.kbbbbbbbbbbbbk.', '.kbbbbbbbbbbbbk.', 'kbllbbbbbbbbllbk', '.kllllbnnbllllk.',
+      '..kllllllllllk..', '...kkkllllkkk...', '...kbbbllbbbk...', '...kbbbllbbbkk..', '...kbbbbbbbbkdk.', '...kkk.kk.kkkk..'] },
+  axolotl: { n: 'Аксолотль', price: 75000, eye: [4, 10, 7], mouth: [7, 9], hat: [8, 3], pal: { k: PETK, b: '#ff9ac8', d: '#e06aa0', l: '#ffd6ea', g: '#ff4f8a' },
+    map: ['................', '................', '................', '.g..kkkkkkkk..g.', '.gg.kbbbbbbk.gg.', '..gkbbbbbbbbkg..', '.ggkbbbbbbbbkgg.', '..kbbbbbbbbbbk..', '.gkbbbbbbbbbbkg.', '..kbbbbbbbbbbk..',
+      '..kbbllllllbbk..', '...kkbbbbbbkk...', '...kbllllllbk...', '..kdbllllllbdk..', '..kkbbbbbbbbkk..', '...kk.kkkk.kk...'] },
+};
+const HATS = {
+  none: { n: 'Без шапки', free: 1 },
+  bow: { n: 'Бантик', price: 1000, dx: 4, m: ['kk..kk', 'krkkrk', 'krddrk', 'krkkrk', 'kk..kk'], ay: 3, pal: { r: '#ff3d6a', d: '#b0103a' } },
+  miner: { n: 'Каска', price: 1500, m: ['..kkkkkk..', '.kyyllyyk.', '.kyyyyyyk.', 'kooooooook'], pal: { y: '#ffd23f', l: '#fffbe0', o: '#c99a00' } },
+  bucket: { n: 'Ведро', price: 2500, m: ['..kkkkkk..', '..ksSssk..', '.kssSsssk.', '.ksssSssk.', 'kkkkkkkkkk'], pal: { s: '#9aa4ae', S: '#e0e8f0' } },
+  party: { n: 'Колпак', price: 3000, m: ['...w...', '...k...', '..kpk..', '..kyk..', '.kpppk.', '.kyyyk.', 'kpppppk'], pal: { w: '#ffffff', p: '#ff5aa0', y: '#ffd23f' } },
+  ushanka: { n: 'Ушанка', price: 5000, ay: 3, m: ['...kkkkkk...', '..kffffffk..', '.kfggggggfk.', 'kffffffffffk', 'kfk......kfk', 'kfk......kfk', 'kk........kk'], pal: { f: '#8a5e3a', g: '#6a4426' } },
+  glasses: { n: 'Очки', price: 8000, eyes: 1 },
+  tophat: { n: 'Цилиндр', price: 20000, m: ['.kkkkkk.', '.kddddk.', '.kddddk.', '.krrrrk.', 'kkkkkkkk'], pal: { d: '#26262c', r: '#c0203a' } },
+  pumpkin: { n: 'Тыква', season: 'hw', price: 5000, m: ['....gg....', '..kkgkkk..', '.kooooook.', 'kooOooOook', 'kooOooOook', '.kkkkkkkk.'], pal: { o: '#ff8a1a', O: '#c85a00', g: '#3a8a2a' } },
+  santa: { n: 'Колпак Деда Мороза', season: 'ny', price: 5000, m: ['.....kkww.', '....krrkw.', '...krrrk..', '..krrrrrk.', '.kwwwwwwwk', 'kwwwwwwwwk'], pal: { r: '#e0202a', w: '#ffffff' } },
+  halo: { n: 'Нимб', shards: 6, halo: 1 },
+  crown: { n: 'Корона', price: 1e6, m: ['y...y...y', 'yy.yyy.yy', 'yyyyyyyyy', 'yrYybyYry', 'kkkkkkkkk'], pal: { y: '#ffd23f', Y: '#c99a00', r: '#ff3d3d', b: '#4fc3ff' } },
+};
+const TITLES = {
+  none: { n: 'Без титула', free: 1 },
+  boom: { n: 'Подрывник', i: '💥', ach: 'tnt50' },
+  lucky: { n: 'Везунчик', i: '🍀', ach: 'x100' },
+  edge: { n: 'На волоске', i: '😰', ach: 'close' },
+  pain: { n: 'Через боль', i: '🩹', ach: 'crack' },
+  chest: { n: 'Кладоискатель', i: '🧰', ach: 'chest50' },
+  hell: { n: 'Гость из ада', i: '😈', ach: 'portal1' },
+  dia: { n: 'Алмазный', i: '💎', ach: 'dia100' },
+  build: { n: 'Строитель', i: '🧱', ach: 'vil0' },
+  banker: { n: 'Банкир', i: '🏦', ach: 'bank1m' },
+  rich: { n: 'Миллионер', i: '💰', ach: 'rich' },
+  pumpkin: { n: 'Повелитель тыкв', i: '🎃', set: 'hw' },
+  frost: { n: 'Дед Мороз', i: '🎅', set: 'ny' },
+  legend: { n: 'Легенда шахты', i: '🐉', rank: 7 },
+};
+const FRAMES = {
+  none: { n: 'Без рамки', free: 1 },
+  gold: { n: 'Золотая', rank: 3 },
+  dia: { n: 'Алмазная', rank: 4 },
+  fire: { n: 'Огненная', ach: 'hell500' },
+  neon: { n: 'Неоновая', price: 200000 },
+  rainbow: { n: 'Радужная', price: 2e6 },
+};
+const COS = { skin: SKINS, fx: BFX, cfx: CFX, snd: SNDS, theme: THEMES, pet: PETS, hat: HATS, title: TITLES, frame: FRAMES };
+const COS_SETS = { hw: ['skin:pumpkin', 'skin:bone', 'fx:ghost', 'theme:halloween', 'hat:pumpkin'], ny: ['skin:candy', 'theme:newyear', 'hat:santa'] };
+const SHARD_P = { diamond: .35, emerald: .5, hdiamond: .01, hemerald: .03 }; // ≈ 1 осколок за 30 раундов
+
+// ---------- сохранение (поле meta.cos, попадает в код сохранения вместе с pk_meta) ----------
+function cosDefaults() { return { skin: 'classic', fx: 'classic', cfx: 'classic', snd: 'classic', theme: 'classic', title: 'none', frame: 'none', own: [], shards: 0, sets: {}, seen: 0,
+  pet: { kind: 'mole', name: '', sat: 100, t: Date.now(), hat: 'none', seen: Date.now(), hide: 0 } }; }
+{ const d = cosDefaults(), o = meta.cos || {}; meta.cos = Object.assign(d, o); meta.cos.pet = Object.assign(cosDefaults().pet, o.pet || {});
+  if (!Array.isArray(meta.cos.own)) meta.cos.own = []; if (!meta.cos.sets || typeof meta.cos.sets !== 'object') meta.cos.sets = {};
+  const sel = { skin: 'classic', fx: 'classic', cfx: 'classic', snd: 'classic', theme: 'classic', title: 'none', frame: 'none' };
+  for (const k in sel) if (!COS[k][meta.cos[k]]) meta.cos[k] = sel[k];
+  if (!PETS[meta.cos.pet.kind]) meta.cos.pet.kind = 'mole'; if (!HATS[meta.cos.pet.hat]) meta.cos.pet.hat = 'none'; }
+
+function cosOwn(cat, id) {
+  const it = COS[cat] && COS[cat][id]; if (!it) return false;
+  if (it.free || meta.cos.own.includes(cat + ':' + id)) return true;
+  if (it.ach && meta.ach[it.ach]) return true;
+  if (it.rank != null && rankIdx() >= it.rank) return true;
+  if (it.vil != null && typeof vilComplete === 'function' && vilComplete(it.vil)) return true;
+  if (it.set && meta.cos.sets[it.set]) return true;
+  return false;
+}
+function cosHow(cat, id) {
+  const it = COS[cat][id];
+  if (it.season && !seasonOn(it.season)) return `${SEASONS[it.season].i} вернётся ${SEASONS[it.season].back}`;
+  if (it.price) return `${fmtShort(it.price)} монет${it.season ? ` · до ${seasonEnd(it.season)}` : ''}`;
+  if (it.shards) return `✨ ${it.shards} осколков`;
+  if (it.ach) { const a = ACH.find(x => x.id === it.ach); return `достижение «${a ? a.n : it.ach}»`; }
+  if (it.rank != null) return `ранг «${RANKS[it.rank].n}» ${RANKS[it.rank].i}`;
+  if (it.vil != null) return `достроить «${VILLAGES[it.vil].n}»`;
+  if (it.set) return `собрать набор «${SEASONS[it.set].n}»`;
+  return '';
+}
+const cosBuyable = (cat, id) => { const it = COS[cat][id]; return !!(it.price || it.shards) && (!it.season || seasonOn(it.season)); };
+function cosCheckSets(silent) {
+  for (const s in COS_SETS) {
+    if (meta.cos.sets[s]) continue;
+    if (COS_SETS[s].every(k => { const [c, i] = k.split(':'); return cosOwn(c, i); })) {
+      meta.cos.sets[s] = Date.now(); const T = TITLES[SEASONS[s].title];
+      if (!silent) { gtoast(`${SEASONS[s].i} Набор «${SEASONS[s].n}» собран! Титул <b>«${T.n}»</b>`, '#ffb02a', true); sfxAch(); }
+    }
+  }
+}
+
+// ---------- текстуры кирки со скином ----------
+let pickIconCache = {};
+function pickIcon(skin, tier) { const k = skin + '|' + tier; return pickIconCache[k] || (pickIconCache[k] = iconURL(pickTex(TIERS[tier].id, skin))); }
+function applySkin() {
+  TEX.pick = TIERS.map(t => pickTex(t.id, meta.cos.skin));
+  PICKICON = TEX.pick.map(t => iconURL(t));
+  $('logo').src = PICKICON[4]; _cache.delete('hudTierSrc');
+}
+function cosGlow() { const S = SKINS[meta.cos.skin]; return S && S.glow; }
+function skinFx(x, y, a, rate) {
+  const S = SKINS[meta.cos.skin] || {}, k = S.fx, P = (n, o) => { for (let i = 0; i < n; i++) parts.push(Object.assign({ x: x + (Math.random() - .5) * 26, y: y + (Math.random() - .5) * 26, vx: 0, vy: 0, life: .4, t: 0, ng: 1, s: 2.5 }, o())); };
+  const n = r => Math.random() < r * rate ? 1 : 0;
+  if (k === 'fire') P(n(1.4), () => ({ vx: (Math.random() - .5) * 30, vy: -70 - Math.random() * 70, c: ['#ff3d00', '#ff8a00', '#ffd23f'][Math.floor(Math.random() * 3)], s: 3 + Math.random() * 2, life: .35 }));
+  if (k === 'ember') P(n(.8), () => ({ vx: (Math.random() - .5) * 60, vy: -30 - Math.random() * 40, c: Math.random() < .5 ? '#ff5a1a' : '#ffb02a', life: .5 }));
+  if (k === 'stars' || k === 'crystal') P(n(.45), () => ({ c: k === 'stars' ? (Math.random() < .5 ? '#fff6a0' : '#d6c2ff') : (Math.random() < .5 ? '#bff8ff' : '#ffffff'), s: 2 + Math.random() * 2.5, life: .45 }));
+  if (k === 'spark') P(n(.5), () => ({ vx: (Math.random() - .5) * 320, vy: (Math.random() - .5) * 320, c: '#fff6a0', life: .12, s: 2.5 }));
+  if (k === 'pumpkin') P(n(.12), () => ({ vy: -25, c: '#ff8a1a', life: .5 }));
+  // кирка «растёт» вместе с уровнем: на алмазной поблёскивает, незеритовая — дымится тёмным
+  if (game.tier === 4) P(n(.22), () => ({ c: Math.random() < .5 ? '#ffffff' : '#9ffff4', s: 2 + Math.random() * 1.5, life: .35 }));
+  if (game.tier >= 5) P(n(.3), () => ({ vy: -20 - Math.random() * 20, c: Math.random() < .5 ? '#3a2a40' : '#7a4fb0', s: 2.5 + Math.random() * 2, life: .6 }));
+}
+
+// ---------- звук ударов ----------
+const PENTA = [523, 587, 659, 784, 880, 1047, 1175, 1319];
+const SND_HIT = {
+  bit: t => { const soft = t === 'dirt' || t === 'grass'; tone(soft ? 196 : PENTA[Math.floor(Math.random() * 4)] / 2, .05, 'square', .045, soft ? -40 : 0); },
+  bubble: t => { const f = 300 + Math.random() * 300; tone(f, .09, 'sine', .08, f * 1.2); },
+  xylo: t => { const v = game.val(t) || 0, i = Math.max(0, Math.min(7, Math.floor(Math.log2(1 + v * 40)))); tone(PENTA[i], .22, 'sine', .09); tone(PENTA[i] * 2, .08, 'sine', .03); },
+};
+{ const hit0 = SFX.hit; SFX.hit = t => { const f = SND_HIT[meta.cos.snd]; if (f) f(t); else hit0(t); }; }
+
+// ---------- спрайты и эффекты поломки / забора ----------
+function mkSprite(rows, pal, outline) {
+  const o = outline ? 1 : 0, W = rows[0].length, Hh = rows.length, c = mkCanvas(W + 2 * o, Hh + 2 * o), g = c.getContext('2d');
+  const at = (x, y) => y >= 0 && y < Hh && x >= 0 && x < W && rows[y][x] !== '.';
+  for (let y = -o; y < Hh + o; y++) for (let x = -o; x < W + o; x++) {
+    let col = null; if (at(x, y)) col = pal[rows[y][x]] || null; else if (outline && (at(x + 1, y) || at(x - 1, y) || at(x, y + 1) || at(x, y - 1))) col = outline;
+    if (col) { g.fillStyle = col; g.fillRect(x + o, y + o, 1, 1); }
+  }
+  return c;
+}
+const GHOST_M = ['...wwww...', '..wwwwww..', '.wwwwwwww.', '.weewweew.', '.weewweew.', '.wwwwwwww.', '.wwweewws.', '.wwwwwwws.', '.wwwwwwss.', '.ww.www.s.', '.w...w....'];
+const CHICK_M = ['......rr..', '.....wwww.', '.....wwkwy', '.....wwwyy', 'w....wwwr.', 'ww..wwwww.', 'wwwwwwwww.', '.wwwwwwww.', '..wwwwww..', '...y..y...', '..yy.yy...'];
+let SPR = null;
+const sprites = () => SPR || (SPR = { ghost: mkSprite(GHOST_M, { w: '#f4f8ff', e: '#1a1a2a', s: '#c8d8f0' }, '#00000066'), chicken: mkSprite(CHICK_M, { w: '#ffffff', r: '#e0202a', k: '#111111', y: '#ffb02a' }, '#1a1418') });
+let fxs = [], ovDelay = 0;
+const fxView = () => ({ x0: 0, y0: camY, w: CELL * COLS, h: H / SC });
+const pxCache = new WeakMap(), tintCache = new WeakMap();
+function texPixels(tex) {
+  let p = pxCache.get(tex); if (p) return p; p = [];
+  const d = tex.getContext('2d').getImageData(0, 0, 16, 16).data;
+  for (let i = 0; i < 256; i++) if (d[i * 4 + 3] > 250) p.push([i % 16, i >> 4, `rgb(${d[i * 4]},${d[i * 4 + 1]},${d[i * 4 + 2]})`]);
+  pxCache.set(tex, p); return p;
+}
+function pickPts(x, y, a, tex) { const ca = Math.cos(a), sa = Math.sin(a); return texPixels(tex).map(([px, py, c]) => { const lx = (px - 7.5) * 2.75, ly = (py - 7.5) * 2.75; return { x: x + lx * ca - ly * sa, y: y + lx * sa + ly * ca, c }; }); }
+function tintTex(tex, col, key) {
+  let m = tintCache.get(tex); if (!m) tintCache.set(tex, m = {}); if (m[key]) return m[key];
+  const c = mkCanvas(16, 16), g = c.getContext('2d'); g.drawImage(tex, 0, 0); g.globalCompositeOperation = 'source-atop'; g.fillStyle = col; g.fillRect(0, 0, 16, 16); return m[key] = c;
+}
+const sq = (g, ps, s = 2.8) => { for (const p of ps) { g.fillStyle = p.c; const z = p.s || s; g.fillRect(p.x - z / 2, p.y - z / 2, z, z); } };
+const fall = (ps, dt, gr = 900) => { for (const p of ps) { p.vy += gr * dt; p.x += p.vx * dt; p.y += p.vy * dt; } };
+function star(g, x, y, r, c) { g.fillStyle = c; g.beginPath(); for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4 - Math.PI / 2, rr = i % 2 ? r * .38 : r; g.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); } g.closePath(); g.fill(); }
+const FXF = {
+  classic(x, y) { // только для превью — в игре классика идёт обычными частицами
+    const C = ['#5a5a5a', '#7f7f7f', '#a0a0a0', '#6b4a26', '#8f6638'];
+    const ps = Array.from({ length: 30 }, () => ({ x, y, vx: (Math.random() - .5) * 640, vy: -Math.random() * 320 - 40, c: C[Math.floor(Math.random() * 5)], s: 3 + Math.random() * 6 }));
+    return { t: 0, upd(dt) { this.t += dt; fall(ps, dt); return this.t < 1.1; }, drw(g) { g.globalAlpha = Math.max(0, 1 - this.t / 1.1); sq(g, ps); g.globalAlpha = 1; } };
+  },
+  pixels(x, y, a, tex) {
+    const ps = pickPts(x, y, a, tex).map(p => Object.assign(p, { vx: (p.x - x) * 4 + (Math.random() - .5) * 90, vy: (p.y - y) * 3 - 120 - Math.random() * 170 }));
+    tone(260, .3, 'square', .04, -160, .1); noise(.2, .2, 2500, .1);
+    return { t: 0, upd(dt) { this.t += dt; if (this.t > .14) fall(ps, dt); return this.t < 1.6; }, drw(g) { g.globalAlpha = Math.min(1, (1.6 - this.t) / .45); sq(g, ps); g.globalAlpha = 1; } };
+  },
+  confetti(x, y) {
+    const C = ['#ff3b3b', '#ffd23f', '#3ddc63', '#4fc3ff', '#c38bff', '#ff8ac0', '#ffffff'];
+    const ps = Array.from({ length: 90 }, () => ({ x, y, vx: (Math.random() - .5) * 560, vy: -160 - Math.random() * 460, c: C[Math.floor(Math.random() * C.length)], sp: 6 + Math.random() * 14, ph: Math.random() * 6, w: 4 + Math.random() * 4 }));
+    noise(.12, .4, 5000); [784, 988, 1175, 1568].forEach((f, i) => tone(f, .1, 'square', .04, 0, .05 + i * .06));
+    return { t: 0, upd(dt) { this.t += dt; for (const p of ps) { p.vy = Math.min(p.vy + 520 * dt, 110); p.vx *= Math.pow(.25, dt); p.x += p.vx * dt + Math.sin(this.t * 5 + p.ph) * 22 * dt; p.y += p.vy * dt; } return this.t < 2.3; },
+      drw(g) {
+        g.globalAlpha = Math.min(1, (2.3 - this.t) / .5);
+        if (this.t < .15) { g.fillStyle = `rgba(255,255,255,${1 - this.t / .15})`; g.beginPath(); g.arc(x, y, 30 * this.t / .15 + 8, 0, 7); g.fill(); }
+        for (const p of ps) { const k = Math.abs(Math.cos(this.t * p.sp + p.ph)); g.fillStyle = p.c; g.fillRect(p.x - p.w * k / 2, p.y - 1.6, Math.max(.8, p.w * k), 3.2); }
+        g.globalAlpha = 1;
+      } };
+  },
+  ghost(x, y, a, tex) {
+    const deb = pickPts(x, y, a, tex).filter((_, i) => i % 3 === 0).map(p => Object.assign(p, { vx: (Math.random() - .5) * 170, vy: -Math.random() * 160 }));
+    tone(620, .9, 'sine', .07, -330); tone(930, .9, 'sine', .03, -500, .05);
+    return { t: 0, upd(dt) { this.t += dt; fall(deb, dt); return this.t < 2.1; },
+      drw(g) {
+        const t = this.t; g.globalAlpha = Math.max(0, 1 - t / .8); sq(g, deb);
+        const s = sprites().ghost; g.globalAlpha = Math.min(1, t / .25) * Math.max(0, 1 - t / 2.1) * .92;
+        g.drawImage(s, x + Math.sin(t * 5) * 8 - s.width * 1.5, y - 75 * t - s.height * 1.5, s.width * 3, s.height * 3); g.globalAlpha = 1;
+      } };
+  },
+  chicken(x, y, a, tex, view) {
+    const dir = x < view.x0 + view.w / 2 ? 1 : -1;
+    const puffs = Array.from({ length: 10 }, () => ({ x: x + (Math.random() - .5) * 30, y: y + (Math.random() - .5) * 26, r: 6 + Math.random() * 8 }));
+    const fe = Array.from({ length: 12 }, () => ({ x, y, vx: (Math.random() - .5) * 220, vy: -90 - Math.random() * 160, ph: Math.random() * 6 }));
+    noise(.3, .3, 900); [[880, 200, .3], [990, -300, .42], [880, 200, .62], [1046, -400, .74]].forEach(([f, s, d]) => tone(f, .08, 'square', .045, s, d));
+    return { t: 0, upd(dt) { this.t += dt; for (const f of fe) { f.vy = Math.min(f.vy + 320 * dt, 45); f.x += (f.vx + Math.sin(this.t * 6 + f.ph) * 40) * dt; f.y += f.vy * dt; f.vx *= Math.pow(.3, dt); } return this.t < 2.1; },
+      drw(g) {
+        const t = this.t;
+        if (t > .15) {
+          const s = sprites().chicken, run = Math.max(0, t - .45), cx = x + dir * run * 170, cy = y - Math.abs(Math.sin(t * 16)) * (run > 0 ? 6 : 0);
+          g.save(); g.translate(cx, cy); if (dir < 0) g.scale(-1, 1);
+          g.globalAlpha = Math.min(1, (t - .15) / .1) * Math.min(1, (2.1 - t) / .3); g.drawImage(s, -s.width * 1.5, -s.height * 1.5, s.width * 3, s.height * 3); g.restore();
+        }
+        g.globalAlpha = Math.max(0, Math.min(1, (2.1 - t) / .4)); g.fillStyle = '#ffffff'; for (const f of fe) g.fillRect(f.x - 2, f.y - 1, 4, 2.5);
+        if (t < .6) { const k = t / .6; g.fillStyle = `rgba(225,225,235,${.9 * (1 - k)})`; for (const p of puffs) { g.beginPath(); g.arc(p.x, p.y - k * 10, p.r * (1 + k), 0, 7); g.fill(); } }
+        g.globalAlpha = 1;
+      } };
+  },
+  ice(x, y, a, tex) {
+    const iced = tintTex(tex, 'rgba(205,242,255,.72)', 'ice'); let ps = null;
+    tone(2400, .5, 'sine', .025, -900);
+    return { t: 0, upd(dt) {
+      this.t += dt;
+      if (this.t > .5 && !ps) { ps = pickPts(x, y, a, tex).map(p => Object.assign(p, { c: ['#e8faff', '#bfe9ff', '#8fd4ff', '#ffffff'][Math.floor(Math.random() * 4)], vx: (p.x - x) * 6 + (Math.random() - .5) * 120, vy: (p.y - y) * 5 - 80 - Math.random() * 170, s: 2.5 + Math.random() * 3 }));
+        [2093, 2637, 3136, 2349].forEach((f, i) => tone(f, .14, 'sine', .05, 0, i * .04)); noise(.22, .3, 6000); }
+      if (ps) fall(ps, dt); return this.t < 1.9; },
+      drw(g) {
+        const t = this.t;
+        if (!ps) { g.save(); g.translate(x, y); g.rotate(a); g.drawImage(tex, -22, -22, 44, 44); g.globalAlpha = Math.min(1, t / .4); g.drawImage(iced, -22, -22, 44, 44); g.restore(); g.globalAlpha = 1;
+          g.fillStyle = '#ffffff'; for (let i = 0; i < 9; i++) if (hsh(i, 9) < t / .5) g.fillRect(x + (hsh(i, 1) - .5) * 36, y + (hsh(i, 2) - .5) * 36, 2.5, 2.5); return; }
+        g.globalAlpha = Math.min(1, (1.9 - t) / .5); sq(g, ps); g.globalAlpha = 1;
+      } };
+  },
+  ash(x, y, a, tex) {
+    const burnt = tintTex(tex, 'rgba(30,18,14,.9)', 'ash'); let ps = null;
+    noise(.5, .2, 700); tone(160, .5, 'sawtooth', .04, -80);
+    return { t: 0, upd(dt) {
+      this.t += dt;
+      if (this.t > .45 && !ps) ps = pickPts(x, y, a, tex).map(p => Object.assign(p, { c: Math.random() < .15 ? '#ff7a1a' : ['#2a2a2a', '#444444', '#5a5a5a', '#777777'][Math.floor(Math.random() * 4)], vx: 20 + Math.random() * 50, vy: -20 - Math.random() * 60, ph: Math.random() * 6, s: 2.8 }));
+      if (ps) for (const p of ps) { p.x += (p.vx + Math.sin(this.t * 4 + p.ph) * 25) * dt; p.y += p.vy * dt; p.s = Math.max(.6, p.s - dt * 1.1); }
+      return this.t < 2.5; },
+      drw(g) {
+        const t = this.t;
+        if (!ps) { g.save(); g.translate(x, y); g.rotate(a); g.drawImage(tex, -22, -22, 44, 44); g.globalAlpha = Math.min(1, t / .4); g.drawImage(burnt, -22, -22, 44, 44); g.restore(); g.globalAlpha = 1;
+          g.fillStyle = '#ff8a1a'; for (let i = 0; i < 6; i++) g.fillRect(x + (Math.random() - .5) * 34, y + (Math.random() - .5) * 34, 2.5, 2.5); return; }
+        g.globalAlpha = Math.min(1, (2.5 - t) / .8); sq(g, ps); g.globalAlpha = 1;
+      } };
+  },
+  hole(x, y, a, tex) {
+    const ps = pickPts(x, y, a, tex).map(p => ({ c: p.c, r: Math.hypot(p.x - x, p.y - y) + 4, th: Math.atan2(p.y - y, p.x - x) }));
+    for (let i = 0; i < 40; i++) ps.push({ c: ['#c38bff', '#7a1fd6', '#ffffff', '#4a2a80'][i % 4], r: 50 + Math.random() * 60, th: Math.random() * 7 });
+    tone(220, 1.3, 'sawtooth', .05, -170); tone(110, 1.3, 'sine', .08, -60);
+    return { t: 0, upd(dt) { this.t += dt; for (const p of ps) { p.th += dt * (3 + 60 / Math.max(4, p.r)); p.r *= Math.pow(.12, dt); } return this.t < 1.65; },
+      drw(g) {
+        const t = this.t, R = t < .25 ? 24 * t / .25 : t < 1.15 ? 24 : Math.max(0, 24 * (1 - (t - 1.15) / .25));
+        if (R > .5) {
+          const gr = g.createRadialGradient(x, y, 0, x, y, R * 1.9); gr.addColorStop(0, '#000'); gr.addColorStop(.5, '#000'); gr.addColorStop(.7, 'rgba(122,31,214,.8)'); gr.addColorStop(1, 'rgba(122,31,214,0)');
+          g.fillStyle = gr; g.beginPath(); g.arc(x, y, R * 1.9, 0, 7); g.fill();
+          g.strokeStyle = 'rgba(226,166,255,.8)'; g.lineWidth = 2; g.setLineDash([6, 8]); g.lineDashOffset = -t * 60; g.beginPath(); g.arc(x, y, R * 1.25, 0, 7); g.stroke(); g.setLineDash([]);
+        }
+        if (t < 1.2) for (const p of ps) { const s = Math.min(3, p.r / 8 + .5); g.fillStyle = p.c; g.fillRect(x + Math.cos(p.th) * p.r - s / 2, y + Math.sin(p.th) * p.r - s / 2, s, s); }
+        if (t > 1.3) { const k = Math.min(1, (t - 1.3) / .35); g.strokeStyle = `rgba(226,166,255,${1 - k})`; g.lineWidth = 3; g.beginPath(); g.arc(x, y, 10 + k * 70, 0, 7); g.stroke(); }
+      } };
+  },
+};
+const CFXF = {
+  classic(x, y) { // только для превью
+    const C = ['#ffd23f', '#fff6a0', '#ffffff'], ps = Array.from({ length: 40 }, () => ({ x, y, vx: (Math.random() - .5) * 700, vy: -Math.random() * 350 - 40, c: C[Math.floor(Math.random() * 3)], s: 2.5 + Math.random() * 5 }));
+    return { t: 0, upd(dt) { this.t += dt; fall(ps, dt); return this.t < 1.1; }, drw(g) { g.globalAlpha = Math.max(0, 1 - this.t / 1.1); sq(g, ps); g.globalAlpha = 1; } };
+  },
+  coins(x, y, view) {
+    const cs = Array.from({ length: 46 }, () => ({ x: view.x0 + Math.random() * view.w, y: view.y0 - 20 - Math.random() * view.h * .6, vy: 60 + Math.random() * 120, sp: 6 + Math.random() * 8, ph: Math.random() * 6, r: 6 + Math.random() * 3 }));
+    for (let i = 0; i < 6; i++) tone(1319 + i * 120, .06, 'square', .03, 0, .1 + i * .11);
+    return { t: 0, upd(dt) { this.t += dt; for (const c of cs) { c.vy += 480 * dt; c.y += c.vy * dt; } return this.t < 2.4; },
+      drw(g) {
+        g.globalAlpha = Math.min(1, (2.4 - this.t) / .4);
+        for (const c of cs) { const k = Math.abs(Math.cos(this.t * c.sp + c.ph)), w = Math.max(1, c.r * k);
+          g.fillStyle = '#7a5a00'; g.beginPath(); g.ellipse(c.x + 1, c.y + 1, w, c.r, 0, 0, 7); g.fill();
+          g.fillStyle = k > .5 ? '#ffd23f' : '#e0a800'; g.beginPath(); g.ellipse(c.x, c.y, w, c.r, 0, 0, 7); g.fill();
+          if (k > .5) { g.fillStyle = '#fff6b0'; g.fillRect(c.x - w * .35, c.y - c.r * .5, w * .3, c.r * .5); } }
+        g.globalAlpha = 1;
+      } };
+  },
+  stars(x, y, view) {
+    const ss = Array.from({ length: 22 }, () => ({ x: view.x0 + Math.random() * view.w * 1.35, y: view.y0 - Math.random() * view.h * .4, v: 280 + Math.random() * 220, d: Math.random() * .8, s: 3 + Math.random() * 3 }));
+    [1568, 1760, 2093, 2349, 2637].forEach((f, i) => tone(f, .25, 'sine', .04, 0, i * .09));
+    return { t: 0, upd(dt) { this.t += dt; for (const s of ss) if (this.t > s.d) { s.x -= s.v * .55 * dt; s.y += s.v * dt; } return this.t < 2.3; },
+      drw(g) {
+        g.globalAlpha = Math.min(1, (2.3 - this.t) / .4);
+        for (const s of ss) { if (this.t < s.d) continue; g.strokeStyle = 'rgba(255,240,160,.45)'; g.lineWidth = s.s * .6; g.beginPath(); g.moveTo(s.x, s.y); g.lineTo(s.x + 16, s.y - 30); g.stroke(); star(g, s.x, s.y, s.s * 1.3, '#fff6a0'); }
+        g.globalAlpha = 1;
+      } };
+  },
+  fireworks(x, y, view) {
+    const rk = [0, .3, .6, .9].map(d => ({ d, x: view.x0 + view.w * (.15 + Math.random() * .7), y: view.y0 + view.h, ty: view.y0 + view.h * (.15 + Math.random() * .3), c: `hsl(${Math.floor(Math.random() * 360)},95%,62%)`, boom: null }));
+    tone(300, .5, 'triangle', .03, 600);
+    return { t: 0, upd(dt) {
+      this.t += dt;
+      for (const r of rk) {
+        if (this.t < r.d) continue;
+        if (!r.boom) { r.y += (r.ty - r.y) * Math.min(1, dt * 6); if (r.y - r.ty < 8) { r.boom = Array.from({ length: 44 }, (_, i) => { const an = i / 44 * 6.283, v = 90 + Math.random() * 120; return { x: r.x, y: r.y, vx: Math.cos(an) * v, vy: Math.sin(an) * v, l: 0 }; }); noise(.3, .35, 2500); tone(160, .2, 'triangle', .06, -80); } }
+        else for (const p of r.boom) { p.vy += 140 * dt; p.vx *= Math.pow(.4, dt); p.vy *= Math.pow(.6, dt); p.x += p.vx * dt; p.y += p.vy * dt; p.l += dt; }
+      }
+      return this.t < 2.6; },
+      drw(g) {
+        for (const r of rk) {
+          if (this.t < r.d) continue;
+          if (!r.boom) { g.fillStyle = '#fff6a0'; g.fillRect(r.x - 2, r.y - 2, 4, 6); g.fillStyle = 'rgba(255,200,120,.5)'; g.fillRect(r.x - 1, r.y + 4, 2, 12); continue; }
+          for (const p of r.boom) { g.globalAlpha = Math.max(0, 1 - p.l / 1.3); g.fillStyle = Math.random() < .15 ? '#fff' : r.c; g.fillRect(p.x - 1.6, p.y - 1.6, 3.2, 3.2); }
+        }
+        g.globalAlpha = 1;
+      } };
+  },
+};
+// вызовы из игры
+function cosBreak(e) { const k = meta.cos.fx; if (k === 'classic' || !FXF[k]) return false; fxs.push(FXF[k](e.x, e.y, game.p.a, TEX.pick[game.tier], fxView())); ovDelay = .95; return true; }
+function cosCash(e) { const k = meta.cos.cfx; if (k !== 'classic' && CFXF[k]) fxs.push(CFXF[k](e.x, e.y, fxView())); }
+function cosDrawFx(g) { for (const f of fxs) f.drw(g); }
+
+// ---------- темы шахты: небо, задняя стенка, свет, частицы, рамка (блоки не меняются) ----------
+let thL = [];
+const md = (a, b) => ((a % b) + b) % b;
+function skyGrad(g, y0, w, a, b) { const gr = g.createLinearGradient(0, y0, 0, 0); gr.addColorStop(0, a); gr.addColorStop(1, b); g.fillStyle = gr; g.fillRect(-20, y0, w + 40, -y0 + 1); }
+function glow(x, y, r, rgb, a = .35) { thL.push([x, y, r, rgb, a]); }
+function snow(g, x0, y0, w, h, n, col) { for (let i = 0; i < n; i++) { const px = x0 + md(hsh(i, 1) * w + Math.sin(renderT * .8 + i) * 14, w), py = y0 + md(hsh(i, 2) * h + renderT * (18 + hsh(i, 3) * 22), h); g.fillStyle = col; const s = 1.5 + hsh(i, 4) * 2; g.fillRect(px, py, s, s); } }
+function twinkle(g, x0, y0, w, h, n, col, sd = 0) { for (let i = 0; i < n; i++) { const a = Math.max(0, Math.sin(renderT * (1.2 + hsh(i, 5 + sd)) + i * 2.3)); if (a < .2) continue; const px = x0 + hsh(i, 11 + sd) * w, py = y0 + hsh(i, 12 + sd) * h, s = 1 + a * 1.6;
+  g.globalAlpha = a; g.fillStyle = col; g.fillRect(px - s, py - .6, s * 2, 1.2); g.fillRect(px - .6, py - s, 1.2, s * 2); } g.globalAlpha = 1; }
+const TH = {
+  night: {
+    sky(g, y0, w) {
+      skyGrad(g, y0, w, '#03061a', '#1c2852');
+      for (let i = 0; i < 46; i++) { const a = .35 + .65 * Math.abs(Math.sin(renderT * (.8 + hsh(i, 5)) + i)); g.fillStyle = `rgba(255,255,240,${a})`; const s = hsh(i, 7) < .2 ? 2.5 : 1.5; g.fillRect(hsh(i, 1) * w, -260 + hsh(i, 2) * 245, s, s); }
+      g.fillStyle = '#f4f1d0'; g.beginPath(); g.arc(w - 72, -215, 20, 0, 7); g.fill(); g.fillStyle = '#0c1434'; g.beginPath(); g.arc(w - 63, -221, 18, 0, 7); g.fill();
+      g.fillStyle = '#0a0f22'; for (let i = 0; i < 6; i++) { const x = i * 70 - 20, hh = 18 + hsh(i, 9) * 22; g.beginPath(); g.moveTo(x, 0); g.lineTo(x + 40, -hh); g.lineTo(x + 80, 0); g.fill(); }
+    },
+    air(g, x, y, r, c, ab, bl, dec) {
+      g.fillStyle = 'rgba(0,0,30,.38)'; g.fillRect(x, y, CELL, CELL);
+      if (dec != null ? dec : (r > 1 && hsh(r, c) < .07)) { const f = Math.sin(renderT * 13 + r) > 0;
+        g.fillStyle = '#5a3a1a'; g.fillRect(x + 18, y + 17, 4, 13); g.fillStyle = f ? '#ffb02a' : '#ff8a1a'; g.fillRect(x + 16, y + 9, 8, 9); g.fillStyle = '#fff3a0'; g.fillRect(x + 18, y + 12, 4, 5);
+        glow(x + 20, y + 13, 78 + (f ? 4 : 0), '255,170,60', .42); }
+    },
+    dark: k => [Math.max(k, .6), 1.7, 5, '0,0,14'],
+    amb(g, x0, y0, w, h) { for (let i = 0; i < 10; i++) { const a = Math.max(0, Math.sin(renderT * 2 + i * 1.7)); g.fillStyle = `rgba(216,255,106,${a * .9})`; g.fillRect(x0 + md(hsh(i, 21) * w + Math.sin(renderT * .5 + i) * 30, w), y0 + md(hsh(i, 22) * h + Math.cos(renderT * .4 + i) * 30, h), 2.5, 2.5); } },
+  },
+  sand: {
+    sky(g, y0, w) {
+      skyGrad(g, y0, w, '#ffb85a', '#ffe7b0');
+      g.fillStyle = 'rgba(255,244,200,.5)'; g.beginPath(); g.arc(w - 80, -205, 46, 0, 7); g.fill(); g.fillStyle = '#fff4c8'; g.beginPath(); g.arc(w - 80, -205, 30, 0, 7); g.fill();
+      g.fillStyle = '#e8b860'; g.beginPath(); g.moveTo(-20, 0); for (let x = -20; x <= w + 20; x += 10) g.lineTo(x, -26 - Math.sin(x / 55) * 12); g.lineTo(w + 20, 0); g.fill();
+      g.fillStyle = '#d9a24a'; g.beginPath(); g.moveTo(-20, 0); for (let x = -20; x <= w + 20; x += 10) g.lineTo(x, -10 - Math.sin(x / 38 + 2) * 7); g.lineTo(w + 20, 0); g.fill();
+      g.fillStyle = '#4f8a3a'; const cx = 64; g.fillRect(cx, -64, 8, 50); g.fillRect(cx - 12, -50, 6, 18); g.fillRect(cx - 12, -36, 14, 5); g.fillRect(cx + 12, -58, 6, 20); g.fillRect(cx + 6, -42, 12, 5);
+    },
+    air(g, x, y) { g.fillStyle = 'rgba(235,185,95,.26)'; g.fillRect(x, y, CELL, CELL); g.fillStyle = 'rgba(255,235,180,.16)'; g.fillRect(x, y + 11, CELL, 2); g.fillRect(x, y + 29, CELL, 2); },
+    dark: k => [k * .85, 2.4, 6.5, '30,15,0'],
+    amb(g, x0, y0, w, h) { for (let i = 0; i < 18; i++) { g.fillStyle = 'rgba(255,225,160,.55)'; g.fillRect(x0 + md(hsh(i, 31) * w + renderT * (60 + hsh(i, 32) * 60), w), y0 + md(hsh(i, 33) * h + Math.sin(renderT + i) * 8, h), 2, 1.5); } },
+  },
+  ice: {
+    sky(g, y0, w) {
+      skyGrad(g, y0, w, '#9fd6ff', '#eaf8ff');
+      const M = [[-30, 90, 120], [70, 130, 150], [200, 100, 130], [300, 140, 120]];
+      for (const [x, hh, ww] of M) { g.fillStyle = '#bcdcf4'; g.beginPath(); g.moveTo(x, 0); g.lineTo(x + ww / 2, -hh); g.lineTo(x + ww, 0); g.fill(); g.fillStyle = '#ffffff'; g.beginPath(); g.moveTo(x + ww / 2 - ww * .14, -hh * .72); g.lineTo(x + ww / 2, -hh); g.lineTo(x + ww / 2 + ww * .14, -hh * .72); g.fill(); }
+    },
+    air(g, x, y, r, c, ab) {
+      g.fillStyle = 'rgba(140,210,255,.26)'; g.fillRect(x, y, CELL, CELL);
+      if (ab) { g.fillStyle = 'rgba(225,246,255,.9)'; for (let i = 0; i < 3; i++) { const ix = x + 6 + i * 12 + hsh(r, c + i) * 4, L = 5 + hsh(c, r + i) * 9; g.beginPath(); g.moveTo(ix, y); g.lineTo(ix + 5, y); g.lineTo(ix + 2.5, y + L); g.fill(); } }
+    },
+    dark: k => [k * .9, 2.2, 6, '0,20,50'],
+    amb(g, x0, y0, w, h) { snow(g, x0, y0, w, h, 30, 'rgba(255,255,255,.85)'); },
+  },
+  candy: {
+    sky(g, y0, w) {
+      skyGrad(g, y0, w, '#ff9ccf', '#ffe3f2');
+      for (let i = 0; i < 4; i++) { const x = md(renderT * 7 + i * 120, w + 160) - 80, y = -235 + (i * 41) % 100; g.fillStyle = '#fff0f8'; g.beginPath(); g.arc(x, y, 14, 0, 7); g.arc(x + 16, y - 6, 17, 0, 7); g.arc(x + 34, y, 13, 0, 7); g.fill(); }
+      for (const [lx, lh] of [[40, 70], [w - 50, 54]]) { g.fillStyle = '#ffffff'; g.fillRect(lx - 2, -lh, 4, lh); for (let k = 4; k > 0; k--) { g.fillStyle = k % 2 ? '#ff4f8a' : '#ffffff'; g.beginPath(); g.arc(lx, -lh, k * 4.5, 0, 7); g.fill(); } }
+    },
+    air(g, x, y, r, c) {
+      g.fillStyle = 'rgba(255,150,210,.25)'; g.fillRect(x, y, CELL, CELL);
+      const C = ['#ff3b6b', '#ffd23f', '#3ddcff', '#9a6bff', '#7aff7a'];
+      for (let i = 0; i < 4; i++) { g.fillStyle = C[Math.floor(hsh(r * 7 + i, c) * 5)]; const sx = x + 4 + hsh(r, c * 5 + i) * 30, sy = y + 4 + hsh(c * 3 + i, r) * 30; if (hsh(i, r + c) < .5) g.fillRect(sx, sy, 5, 2); else g.fillRect(sx, sy, 2, 5); }
+    },
+    dark: k => [k * .5, 2.6, 7, '60,0,40'],
+    amb(g, x0, y0, w, h) { twinkle(g, x0, y0, w, h, 12, '#ffffff', 3); },
+  },
+  neon: {
+    sky(g, y0, w) {
+      skyGrad(g, y0, w, '#05010f', '#2a0a4a');
+      const cx = w / 2, cy = -70, R = 48, gr = g.createLinearGradient(0, cy - R, 0, cy + R); gr.addColorStop(0, '#ffd23f'); gr.addColorStop(1, '#ff3d9a');
+      g.save(); g.beginPath(); g.rect(-20, -400, w + 40, 400 - 34); g.clip(); g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, R, 0, 7); g.fill();
+      g.fillStyle = '#1a0636'; for (let i = 0; i < 5; i++) g.fillRect(cx - R, cy + 6 + i * 8, R * 2, 2 + i * .8); g.restore();
+      g.strokeStyle = 'rgba(255,61,204,.75)'; g.lineWidth = 1.2;
+      for (let i = 0; i < 6; i++) { const yy = -34 + Math.pow(i / 5, 1.8) * 34; g.beginPath(); g.moveTo(-20, yy); g.lineTo(w + 20, yy); g.stroke(); }
+      for (let i = -6; i <= 6; i++) { g.beginPath(); g.moveTo(cx + i * 14, -34); g.lineTo(cx + i * 70, 0); g.stroke(); }
+    },
+    air(g, x, y) { g.fillStyle = 'rgba(6,0,24,.5)'; g.fillRect(x, y, CELL, CELL); g.strokeStyle = 'rgba(24,240,255,.3)'; g.lineWidth = 1; g.strokeRect(x + .5, y + .5, CELL - 1, CELL - 1); },
+    dark: k => [Math.max(k, .35), 2.2, 6, '10,0,30'],
+  },
+  crystal: {
+    sky(g, y0, w) {
+      skyGrad(g, y0, w, '#1a0832', '#4a2280'); twinkle(g, 0, -260, w, 200, 20, '#e6d4ff', 1);
+      const CR = [[30, 60, 22], [80, 90, 28], [250, 70, 24], [310, 110, 30]];
+      for (const [x, hh, ww] of CR) { g.fillStyle = 'rgba(150,100,230,.75)'; g.beginPath(); g.moveTo(x - ww / 2, 0); g.lineTo(x - ww / 2, -hh * .7); g.lineTo(x, -hh); g.lineTo(x + ww / 2, -hh * .7); g.lineTo(x + ww / 2, 0); g.fill(); g.fillStyle = 'rgba(220,200,255,.35)'; g.fillRect(x - 3, -hh * .85, 4, hh * .8); }
+    },
+    air(g, x, y, r, c, ab, bl, dec) {
+      g.fillStyle = 'rgba(150,90,255,.22)'; g.fillRect(x, y, CELL, CELL);
+      if (dec != null ? dec : (bl && hsh(r, c) < .16)) {
+        const C = ['#7fe8ff', '#ff8ae0', '#b28bff'];
+        for (let i = 0; i < 3; i++) { const cx = x + 10 + i * 10, hh = 9 + hsh(r + i, c) * 12; g.fillStyle = C[(r + c + i) % 3]; g.beginPath(); g.moveTo(cx - 4, y + CELL); g.lineTo(cx - 4, y + CELL - hh * .7); g.lineTo(cx, y + CELL - hh); g.lineTo(cx + 4, y + CELL - hh * .7); g.lineTo(cx + 4, y + CELL); g.fill(); g.fillStyle = 'rgba(255,255,255,.55)'; g.fillRect(cx - 2, y + CELL - hh * .8, 1.5, hh * .6); }
+        glow(x + 20, y + CELL - 8, 60, '190,130,255', .38);
+      }
+    },
+    dark: k => [k * .9, 2.2, 6, '20,0,40'],
+    amb(g, x0, y0, w, h) { twinkle(g, x0, y0, w, h, 16, '#e6d4ff', 2); },
+  },
+  halloween: {
+    sky(g, y0, w) {
+      skyGrad(g, y0, w, '#12061e', '#6a2a0a');
+      g.fillStyle = 'rgba(255,179,71,.25)'; g.beginPath(); g.arc(w - 80, -200, 44, 0, 7); g.fill(); g.fillStyle = '#ffb347'; g.beginPath(); g.arc(w - 80, -200, 30, 0, 7); g.fill();
+      g.fillStyle = '#e8962e'; g.beginPath(); g.arc(w - 90, -206, 6, 0, 7); g.arc(w - 72, -192, 4, 0, 7); g.fill();
+      g.strokeStyle = '#140a10'; g.lineCap = 'round'; g.lineWidth = 6; g.beginPath(); g.moveTo(50, 0); g.lineTo(46, -70); g.stroke();
+      g.lineWidth = 3; g.beginPath(); g.moveTo(47, -45); g.lineTo(22, -72); g.moveTo(46, -62); g.lineTo(70, -92); g.moveTo(30, -64); g.lineTo(18, -60); g.moveTo(62, -82); g.lineTo(78, -80); g.stroke(); g.lineCap = 'butt';
+      g.strokeStyle = '#000'; g.lineWidth = 2;
+      for (let i = 0; i < 4; i++) { const bx = md(renderT * (30 + i * 9) + i * 110, w + 80) - 40, by = -230 + i * 28 + Math.sin(renderT * 2 + i) * 8, f = Math.sin(renderT * 14 + i) * 5;
+        g.beginPath(); g.moveTo(bx - 9, by - f); g.lineTo(bx - 3, by); g.lineTo(bx, by - 2); g.lineTo(bx + 3, by); g.lineTo(bx + 9, by - f); g.stroke(); }
+    },
+    air(g, x, y, r, c, ab, bl, dec) {
+      g.fillStyle = 'rgba(90,30,0,.3)'; g.fillRect(x, y, CELL, CELL);
+      if (ab && hsh(r, c + 50) < .12) { g.strokeStyle = 'rgba(255,255,255,.35)'; g.lineWidth = 1; g.beginPath(); for (let i = 0; i < 4; i++) { const an = i * Math.PI / 6; g.moveTo(x, y); g.lineTo(x + Math.cos(an) * 20, y + Math.sin(an) * 20); }
+        for (const rr of [8, 15]) { g.moveTo(x + rr, y); for (let i = 1; i <= 3; i++) { const an = i * Math.PI / 6; g.lineTo(x + Math.cos(an) * rr, y + Math.sin(an) * rr); } } g.stroke(); }
+      if (dec != null ? dec : (bl && hsh(c, r + 7) < .08)) {
+        const px = x + 13, py = y + CELL - 13;
+        g.fillStyle = '#3a8a2a'; g.fillRect(px + 6, py - 4, 3, 4); g.fillStyle = '#ff8a1a'; g.fillRect(px, py, 15, 12); g.fillStyle = '#c85a00'; g.fillRect(px + 4, py, 2, 12); g.fillRect(px + 9, py, 2, 12);
+        const f = .7 + .3 * Math.sin(renderT * 9 + c); g.fillStyle = `rgba(255,230,80,${f})`; g.fillRect(px + 3, py + 3, 3, 2); g.fillRect(px + 9, py + 3, 3, 2); g.fillRect(px + 4, py + 8, 7, 2);
+        glow(px + 7, py + 6, 55, '255,140,30', .45);
+      }
+    },
+    dark: k => [Math.max(k, .45), 2, 5.6, '20,0,10'],
+    amb(g, x0, y0, w, h) { for (let i = 0; i < 8; i++) { const a = Math.max(0, Math.sin(renderT * 1.5 + i * 2)); g.fillStyle = `rgba(255,150,40,${a * .7})`; g.fillRect(x0 + md(hsh(i, 41) * w + Math.sin(renderT * .7 + i) * 20, w), y0 + md(hsh(i, 42) * h - renderT * 12, h), 2, 2); } },
+  },
+  newyear: {
+    sky(g, y0, w) {
+      skyGrad(g, y0, w, '#08183a', '#2a4a8a');
+      const tx = 56; g.fillStyle = '#0f4a2a'; for (let i = 0; i < 3; i++) { g.beginPath(); g.moveTo(tx - 30 + i * 6, -10 - i * 24); g.lineTo(tx, -48 - i * 24); g.lineTo(tx + 30 - i * 6, -10 - i * 24); g.fill(); }
+      g.fillStyle = '#5a3a1a'; g.fillRect(tx - 4, -10, 8, 10); star(g, tx, -104, 7, '#ffd23f');
+      const L = ['#ff3b3b', '#ffd23f', '#3ddc63', '#4fc3ff']; for (let i = 0; i < 12; i++) { if (Math.sin(renderT * 4 + i * 1.3) < -.2) continue; g.fillStyle = L[i % 4]; g.fillRect(tx - 22 + hsh(i, 61) * 44 * (1 - (i % 3) * .25), -16 - (i % 3) * 24 - hsh(i, 62) * 14, 3, 3); }
+      snow(g, -20, -300, w + 40, 300, 30, 'rgba(255,255,255,.85)');
+    },
+    air(g, x, y, r, c, ab, bl, dec) {
+      g.fillStyle = 'rgba(120,170,255,.14)'; g.fillRect(x, y, CELL, CELL);
+      if (dec != null ? dec : (ab && hsh(r, c) < .3)) {
+        const L = ['#ff3b3b', '#ffd23f', '#3ddc63', '#4fc3ff']; g.strokeStyle = '#1a2a1a'; g.lineWidth = 1; g.beginPath(); g.moveTo(x, y + 2); g.quadraticCurveTo(x + 20, y + 16, x + CELL, y + 2); g.stroke();
+        for (let i = 0; i < 4; i++) { const t = (i + .5) / 4, px = x + CELL * t, py = y + 2 + 14 * 2 * t * (1 - t) * 1, on = Math.sin(renderT * 5 + i + c * 2 + r) > -.3; g.fillStyle = on ? L[(i + r + c) % 4] : '#333'; g.fillRect(px - 1.5, py, 3, 4); if (on && i % 2 === 0) glow(px, py + 2, 22, '255,220,150', .25); }
+      }
+    },
+    dark: k => [k * .85, 2.3, 6.2, '0,10,30'],
+    amb(g, x0, y0, w, h) { snow(g, x0, y0, w, h, 26, 'rgba(255,255,255,.85)'); },
+  },
+};
+const thCur = () => (game.bonus && phase !== 'idle') ? null : TH[meta.cos.theme] || null;
+function thLights(g) {
+  if (!thL.length) return; g.globalCompositeOperation = 'lighter';
+  for (const [x, y, r, rgb, a] of thL) { const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, `rgba(${rgb},${a})`); gr.addColorStop(1, `rgba(${rgb},0)`); g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2); }
+  g.globalCompositeOperation = 'source-over'; thL = [];
+}
+
+// ---------- питомец: живёт в углу шахты, реагирует на игру, иногда просит есть, никогда не умирает ----------
+const pet = { emo: '', until: 0, act: 0, acc: 0 };
+const petName = () => meta.cos.pet.name || PETS[meta.cos.pet.kind].n;
+function petEmo(e, s) { pet.emo = e; pet.until = renderT + s; pet.act = renderT; }
+function petSat() { const P = meta.cos.pet, now = Date.now(); P.sat = Math.max(0, Math.min(100, P.sat - Math.max(0, now - P.t) / DAY * 100)); P.t = now; return P.sat; }
+function petMood() {
+  if (pet.emo && renderT < pet.until) return pet.emo;
+  if (game.bonus && (phase === 'play' || phase === 'portal')) return 'dance';
+  if (phase === 'play') return 'normal';
+  const s = meta.cos.pet.sat;
+  if (s < 20) return 'hungry';
+  const h = new Date().getHours();
+  if (h < 6 || renderT - pet.act > 120) return 'sleep';
+  if (s < 45) return 'normal';
+  return 'happy0';
+}
+const petSprC = {}, hatSprC = {};
+const petSpr = k => petSprC[k] || (petSprC[k] = mkSprite(PETS[k].map, PETS[k].pal, null));
+const hatSpr = id => hatSprC[id] || (hatSprC[id] = mkSprite(HATS[id].m, Object.assign({ k: PETK }, HATS[id].pal), null));
+const GLY = { z: ['####', '..#.', '.#..', '####'], heart: ['.#.#.', '#####', '.###.', '..#..'], note: ['..##', '..#.', '###.', '##..'], spark: ['.#.', '###', '.#.'] };
+function glyph(g, m, x, y, c) { g.fillStyle = c; for (let j = 0; j < m.length; j++) for (let i = 0; i < m[j].length; i++) if (m[j][i] === '#') g.fillRect(x + i, y + j, 1, 1); }
+function drawPet(g, ox, oy, kind, hat, emo, t, look) {
+  const S = PETS[kind], H = HATS[hat] || HATS.none; let dx = 0, dy = 0;
+  if (emo === 'excited' || emo === 'love') dy = -Math.round(Math.abs(Math.sin(t * 8)) * 3);
+  else if (emo === 'dance') { dy = -Math.round(Math.abs(Math.sin(t * 6)) * 2); dx = Math.sin(t * 3) > 0 ? 1 : -1; }
+  else if (emo === 'happy') dy = -Math.round(Math.abs(Math.sin(t * 6)) * 1.5);
+  else if (emo === 'scared') dx = Math.floor(t * 30) % 2;
+  g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(ox + 3, oy + 16, 10, 1);
+  const X = ox + dx, Y = oy + dy, P = (x, y, c, w = 1, h = 1) => { g.fillStyle = c; g.fillRect(X + x, Y + y, w, h); };
+  g.drawImage(petSpr(kind), X, Y);
+  const [lx, rx, ey] = S.eye, [mx, my] = S.mouth, K = '#111', blink = (t % 3.3) < .14, lid = S.pal.d || S.pal.b;
+  if (!H.eyes) for (const ex of [lx, rx]) {
+    if (emo === 'sleep' || (blink && (emo === 'normal' || emo === 'happy0' || emo === 'hungry'))) P(ex, ey + 1, K, 2, 1);
+    else if (emo === 'happy' || emo === 'dance') { P(ex, ey, K, 2, 1); P(ex === lx ? ex - 1 : ex + 2, ey + 1, '#ff8aa8'); }
+    else if (emo === 'excited') { P(ex, ey, '#ffd23f', 2, 2); P(ex, ey, '#ffffff'); }
+    else if (emo === 'love') P(ex, ey, '#ff3d6a', 2, 2);
+    else if (emo === 'scared') { P(ex, ey, '#ffffff', 2, 2); P(ex + (look > 0 ? 1 : 0), ey + 1, K); }
+    else if (emo === 'hungry') { P(ex, ey, lid, 2, 1); P(ex, ey + 1, K, 2, 1); }
+    else { P(ex, ey, K, 2, 2); P(ex + (look > 0 ? 1 : 0), ey, '#ffffff'); if (emo === 'sad') P(ex === lx ? ex + 1 : ex, ey - 1, K); }
+  }
+  if (emo === 'sad') P(lx, ey + 2 + Math.floor(t * 3) % 3, '#5ab8ff');
+  const M = '#2a1414';
+  if (emo === 'happy' || emo === 'excited' || emo === 'love' || emo === 'dance') { P(mx, my, M, 2, 1); P(mx, my + 1, '#ff6a8a', 2, 1); }
+  else if (emo === 'happy0') { P(mx - 1, my, M); P(mx, my + 1, M, 2, 1); P(mx + 2, my, M); }
+  else if (emo === 'sad' || emo === 'hungry') { P(mx - 1, my + 1, M); P(mx, my, M, 2, 1); P(mx + 2, my + 1, M); }
+  else if (emo === 'scared') P(mx, my, M, 2, 2);
+  else if (emo === 'sleep') P(mx, my, M, 1, 1);
+  else P(mx, my, M, 2, 1);
+  const [hx, hy] = S.hat;
+  if (H.m) { const s = hatSpr(hat); g.drawImage(s, X + hx - Math.floor(s.width / 2) + (H.dx || 0), Y + hy - (H.ay != null ? H.ay : s.height - 1)); }
+  if (H.eyes) { P(lx - 1, ey, K, 3, 2); P(rx, ey, K, 3, 2); P(lx + 2, ey, K, rx - lx - 2, 1); P(lx - 1, ey, '#6a7a9a'); P(rx, ey, '#6a7a9a'); }
+  if (H.halo) { const yy = hy - 4 + Math.round(Math.sin(t * 2)); P(hx - 2, yy, '#ffe23a', 4, 1); P(hx - 3, yy + 1, '#ffe23a'); P(hx + 2, yy + 1, '#ffe23a'); P(hx - 2, yy + 2, '#ffe23a', 4, 1); }
+  // значки над головой
+  if (emo === 'sleep') { const k = Math.floor(t * 1.5) % 3; g.globalAlpha = 1 - k * .25; glyph(g, GLY.z, ox + 13, oy - 3 - k * 2, '#ffffff'); g.globalAlpha = 1; }
+  if (emo === 'love') glyph(g, GLY.heart, ox + 12, oy - 1 - Math.floor(t * 6) % 5, '#ff3d6a');
+  if (emo === 'dance') glyph(g, GLY.note, ox + (Math.floor(t * 2) % 2 ? 13 : -3), oy - 2, Math.floor(t * 2) % 2 ? '#ffd23f' : '#7ff7ff');
+  if (emo === 'excited') for (let i = 0; i < 2; i++) { const k = Math.floor(t * 5) + i * 7; glyph(g, GLY.spark, ox - 3 + hsh(k, 1) * 19, oy - 3 + hsh(k, 2) * 9, i ? '#ffffff' : '#ffd23f'); }
+  if (emo === 'scared') { P(rx + 3, ey - 1, '#8fd8ff'); P(rx + 3, ey, '#8fd8ff'); }
+  if (emo === 'hungry' && (t % 4) < 2.4) { const bx = ox + 13, by = oy - 6; g.fillStyle = PETK; g.fillRect(bx, by, 8, 7); g.fillStyle = '#fff'; g.fillRect(bx + 1, by + 1, 6, 5); g.fillStyle = '#b5651d'; g.fillRect(bx + 2, by + 2, 3, 3); g.fillStyle = '#e0e0e0'; g.fillRect(bx + 5, by + 3, 1, 1); g.fillStyle = PETK; g.fillRect(bx + 1, by + 7, 1, 1); }
+}
+function petDraw(dt) {
+  const cv = $('petCv'); if (!cv) return;
+  const hide = !!(meta.cos.pet.hide || tut);
+  if (cv.style.display !== (hide ? 'none' : '')) cv.style.display = hide ? 'none' : '';
+  if (hide) return; pet.acc += dt; if (pet.acc < 1 / 24) return; pet.acc = 0;
+  const g = cv.getContext('2d'); g.clearRect(0, 0, 24, 24);
+  const look = phase === 'play' ? (game.p.x > CELL * 1.6 ? 1 : -1) : 1;
+  drawPet(g, 4, 6, meta.cos.pet.kind, meta.cos.pet.hat, petMood(), renderT, look);
+}
+function petPoke() { petEmo('love', 1.4); tone(880, .08, 'sine', .05, 200); tone(1175, .1, 'sine', .04, 0, .08); }
+function petFeed(kind) {
+  if (busy()) return; petSat(); const P = meta.cos.pet, price = kind === 'meal' ? 100 : 50;
+  if (P.sat >= 97) { gtoast(`🐾 ${petName()} сыт и доволен`, '#ffd23f'); petEmo('happy', 1.5); return; }
+  if (mainBal() < price) { gtoast('Не хватает монет на балансе Обычной версии', '#ff8a8a'); return; }
+  addMain(-price); P.sat = kind === 'meal' ? 100 : Math.min(100, P.sat + 40); P.warned = 0; saveMeta();
+  petEmo('happy', 3); [659, 784, 1047].forEach((f, i) => tone(f, .09, 'square', .04, 0, i * .07));
+  gtoast(`${kind === 'meal' ? '🍖' : '🍪'} ${petName()}: ням!`, '#ffd23f'); cosRender(); updatePanel();
+}
+
+// ---------- события игры → питомец, осколки ----------
+function cosEv(e, tutR) {
+  pet.act = renderT;
+  switch (e.type) {
+    case 'hit': if (e.crack) petEmo('scared', 1.6); break;
+    case 'explode': petEmo('scared', 1.2); break;
+    case 'coins': if (game.val(e.t) >= 1) petEmo('excited', 1.5); break;
+    case 'special': if (e.kind !== 'repair') petEmo('excited', 1.5); if (e.kind === 'chest') cosShard(.2, e.x, e.y, tutR); break;
+    case 'break': { const p = SHARD_P[e.t]; if (p) { const [x, y] = cc(e.r, e.c); cosShard(p, x, y, tutR); } break; }
+    case 'portal': petEmo('excited', 2.2); if (!tutR && counting()) { meta.cos.shards += 3; floatText(e.x, e.y - 30, '+3 ✨', '#e2c8ff', 18); gtoast('✨ Портал принёс 3 осколка', '#d6b0ff'); saveMeta(); } break;
+    case 'broke': petEmo('sad', 4); break;
+    case 'cashout': { const x = e.win / Math.max(1e-9, game.bet); petEmo(x >= 2 ? 'excited' : x >= 1 ? 'happy' : 'normal', x >= 2 ? 2.5 : 1.8); break; }
+    case 'bonusEnd': petEmo('excited', 3); break;
+  }
+}
+function cosShard(p, x, y, tutR) {
+  if (tutR || !counting() || Math.random() >= p) return;
+  meta.cos.shards++; saveMeta(); floatText(x, y - 26, '+1 ✨', '#e2c8ff', 17);
+  gtoast(`✨ Осколок! Всего: ${meta.cos.shards}`, '#d6b0ff'); tone(1568, .12, 'sine', .05); tone(2093, .16, 'sine', .04, 0, .08);
+}
+let thFrame = '';
+function cosFrame(dt) {
+  for (let i = fxs.length - 1; i >= 0; i--) if (!fxs[i].upd(dt)) fxs.splice(i, 1);
+  if (phase === 'play') skinFx(game.p.x, game.p.y, game.p.a, 1);
+  else if (phase === 'idle') skinFx(CELL * COLS / 2, -110 + Math.sin(renderT * 2.5) * 8, 0, .5);
+  petDraw(dt);
+  const T = thCur(), fr = T ? (THEMES[meta.cos.theme].fr || '') : '';
+  if (fr !== thFrame) { thFrame = fr; const st = $('stage'); st.style.setProperty('--thc', fr || 'transparent'); st.style.setProperty('--thg', fr ? fr + '55' : 'transparent'); }
+}
+function cosTick() {
+  const P = meta.cos.pet; petSat(); P.seen = Date.now();
+  if (P.sat < 20 && !P.warned && !P.hide) { P.warned = 1; saveMeta(); if (!tut) gtoast(`🐾 ${petName()} проголодался — покорми в 🎨 Косметике`, '#ffb0d0'); }
+}
+
+// ---------- окно «Косметика» ----------
+const COS_TABS = [['skin', '⛏', 'Кирки'], ['trail', '✨', 'Следы'], ['fx', '💥', 'Эффекты'], ['theme', '🌄', 'Шахты'], ['pet', '🐾', 'Питомец'], ['show', '👑', 'Понты']];
+let cosTab = 'skin', cosArm = { k: '', t: 0 };
+const cosPv = { skin: null, theme: null, kind: null, hat: null, fx: null };
+let pvFx = [], pvLast = 0, pvHold = 0, cosLoopOn = false;
+const cosSel = cat => cat === 'pet' ? meta.cos.pet.kind : cat === 'hat' ? meta.cos.pet.hat : meta.cos[cat];
+function openCos(tab) { if (tab) cosTab = tab; if (sheetId === 'cos') cosRender(); else openSheet('cos'); }
+function cItem(cat, id, icon) {
+  const it = COS[cat][id], key = cat + ':' + id, own = cosOwn(cat, id), on = cosSel(cat) === id;
+  let btn;
+  if (on) btn = '<span class="cbtn">✓ выбрано</span>';
+  else if (own) btn = `<button class="btn cbtn" data-sel="${key}">выбрать</button>`;
+  else if (cosBuyable(cat, id)) { const armed = cosArm.k === key && Date.now() < cosArm.t; btn = `<button class="btn cbtn buy${armed ? ' armed' : ''}" data-buy="${key}">${armed ? 'Точно? ' : ''}${it.shards ? '✨ ' + it.shards : fmtShort(it.price) + '<i class="coin"></i>'}</button>`; }
+  else btn = '<span class="cbtn lock">🔒</span>';
+  const sub = own ? (it.d || (on ? 'надето' : 'есть')) : cosHow(cat, id);
+  return `<div class="citem${on ? ' on' : ''}${own ? '' : ' locked'}" data-pv="${key}">${it.season ? `<em class="cseas">${SEASONS[it.season].i}</em>` : ''}<div class="ci">${icon}</div><b>${it.n}</b><small>${sub}</small>${btn}</div>`;
+}
+function seasonBanner() {
+  for (const s in SEASONS) {
+    if (!seasonOn(s)) continue; const S = SEASONS[s], items = COS_SETS[s], got = items.filter(k => { const [c, i] = k.split(':'); return cosOwn(c, i); }).length;
+    const names = items.map(k => { const [c, i] = k.split(':'); return COS[c][i].n; }).join(', ');
+    return `<div class="cseason"><b>${S.i} ${S.n} до ${seasonEnd(s)}</b> · ${names}. ${meta.cos.sets[s] ? `Набор собран — титул «${TITLES[S.title].n}» твой ✓` : `Собери все ${items.length} (${got}/${items.length}) — титул <b>«${TITLES[S.title].n}»</b>.`} Потом не купить, купленное — навсегда.</div>`;
+  }
+  return '';
+}
+const petIcon = (kind, hat) => { const c = mkCanvas(24, 24), g = c.getContext('2d'); drawPet(g, 4, 6, kind, hat, 'happy0', 1, 1); return `<img src="${c.toDataURL()}" alt="">`; };
+function cosRender() {
+  if (sheetId !== 'cos') return;
+  $('cWal').textContent = fmt(mainBal()); $('cShard').textContent = meta.cos.shards;
+  $('cTabs').innerHTML = COS_TABS.map(([id, i, n]) => `<button class="btn ctab${cosTab === id ? ' on' : ''}" data-tab="${id}">${i}<small>${n}</small></button>`).join('');
+  let h = cosTab === 'skin' ? seasonBanner() : '';
+  const grid = (cat, icon) => `<div class="cgrid">${Object.keys(COS[cat]).map(id => cItem(cat, id, icon(id))).join('')}</div>`;
+  const shownTier = Math.max(1, Math.min(5, meta.stats.maxTier || 3));
+  if (cosTab === 'skin') {
+    const sk = cosPv.skin || meta.cos.skin;
+    h += `<div class="cpicks" id="cPicks">${TIERS.map((t, i) => `<img src="${pickIcon(sk, i)}" title="${t.name}">`).join('')}</div>
+      <div class="note" style="margin-top:4px" id="cPickT">«${SKINS[sk].n}» на всех уровнях: от деревянной до незеритовой. Форма — от скина, цвет железа — от уровня кирки.</div>`;
+    h += grid('skin', id => `<img src="${pickIcon(id, shownTier)}" alt="">`);
+  } else if (cosTab === 'trail') {
+    h += `<div class="note">След тянется за киркой, пока она летит. Только для красоты.</div><div class="cgrid">${Object.keys(TRAILS).map(id => {
+      const T = TRAILS[id], own = meta.owned.includes(id), on = meta.trail === id;
+      const sw = T.rb ? 'linear-gradient(90deg,#ff3b3b,#ffd23f,#3ddc63,#4fc3ff,#c38bff)' : T.c ? `linear-gradient(90deg,${T.c.join(',')})` : 'linear-gradient(90deg,#666,#bbb)';
+      const btn = on ? '<span class="cbtn">✓ выбрано</span>' : own ? `<button class="btn cbtn" data-tr="${id}">выбрать</button>` : T.price ? `<button class="btn cbtn buy" data-tr="${id}">${fmtShort(T.price)}<i class="coin"></i></button>` : '<span class="cbtn lock">🔒</span>';
+      return `<div class="citem${on ? ' on' : ''}${own ? '' : ' locked'}"><div class="ci"><i class="ctrail" style="background:${sw}"></i></div><b>${T.n}</b><small>${own ? (T.d || 'есть') : trailHow(id)}</small>${btn}</div>`;
+    }).join('')}</div>`;
+  } else if (cosTab === 'fx') {
+    h += `<canvas class="cprev" id="cPrev" data-w="240"></canvas><div class="note" style="margin-top:4px">Нажми на карточку — эффект покажется тут.</div>`;
+    h += `<div class="secttl" style="margin-top:10px">💥 Когда кирка ломается</div>` + grid('fx', id => BFX[id].i);
+    h += `<div class="secttl" style="margin-top:12px">💰 Когда забираешь выигрыш</div>` + grid('cfx', id => CFX[id].i);
+    h += `<div class="secttl" style="margin-top:12px">🔊 Звук ударов</div>` + grid('snd', id => SNDS[id].i);
+  } else if (cosTab === 'theme') {
+    const th = cosPv.theme || meta.cos.theme;
+    h += `<canvas class="cprev" id="cPrev" data-w="360" style="border-color:${THEMES[th].fr || '#000'}"></canvas><div class="note" style="margin-top:4px">Тема меняет небо, стенки шахты, свет и частицы. Блоки и выплаты — те же. В аду своя тема.</div>`;
+    h += grid('theme', id => `<span class="csw" style="background:${THEMES[id].sw}">${THEMES[id].i}</span>`);
+  } else if (cosTab === 'pet') {
+    const P = meta.cos.pet; petSat(); const s = Math.round(P.sat), hrs = Math.max(0, Math.round((P.sat - 20) / 100 * 24));
+    h += `<div class="cpet"><canvas id="cPet" width="24" height="24" title="Погладить"></canvas><div class="cpi">
+        <input id="cPetName" maxlength="14" placeholder="${PETS[P.kind].n}" value="${(P.name || '').replace(/"/g, '&quot;')}" aria-label="Имя питомца">
+        <div class="note">Сытость <b style="color:${s < 20 ? '#ff6b6b' : s < 50 ? 'var(--gold)' : 'var(--green)'}">${s}%</b>${s >= 20 ? ` · проголодается через ~${hrs} ч` : ' · голодный!'}</div>
+        <div class="bar sm"><i style="width:${s}%;${s < 20 ? 'background:linear-gradient(90deg,#ff3b3b,#ff8a3d)' : ''}"></i></div>
+        <div class="cfeed"><button class="btn" data-feed="cookie">🍪 Печенька · 50</button><button class="btn" data-feed="meal">🍖 Обед · 100</button></div>
+      </div></div>
+      <div class="note" style="margin-top:6px">Живёт в углу шахты и реагирует на игру: радуется заносам, пугается трещин, грустит, когда кирка ломается, танцует в аду, ночью спит. Есть просит раз в день. Не умирает и на выигрыш не влияет. Нажми на него — погладишь.</div>
+      <label class="note cchk"><input type="checkbox" id="cPetHide"${P.hide ? ' checked' : ''}> Спрятать питомца из шахты</label>`;
+    h += `<div class="secttl" style="margin-top:10px">🐾 Кто живёт в шахте</div>` + grid('pet', id => petIcon(id, 'none'));
+    h += `<div class="secttl" style="margin-top:12px">🎩 Шапки</div>` + grid('hat', id => petIcon(cosPv.kind || P.kind, id));
+  } else if (cosTab === 'show') {
+    h += `<div class="note">Титул виден в профиле и на кнопке 👤, рамка — вокруг баланса наверху.</div><div class="secttl" style="margin-top:8px">🏷 Титулы</div>` + grid('title', id => TITLES[id].i || '—');
+    h += `<div class="secttl" style="margin-top:12px">🖼 Рамка баланса</div>` + grid('frame', id => `<span class="balance cfr fr fr-${id}">1 000</span>`);
+  }
+  $('cBody').innerHTML = h;
+  const nm = $('cPetName'); if (nm) nm.onchange = () => { meta.cos.pet.name = nm.value.trim().slice(0, 14); saveMeta(); };
+  const hd = $('cPetHide'); if (hd) hd.onchange = () => { meta.cos.pet.hide = hd.checked ? 1 : 0; saveMeta(); };
+  const pc = $('cPet'); if (pc) pc.onclick = () => petPoke();
+  if (!cosLoopOn) { cosLoopOn = true; pvLast = 0; requestAnimationFrame(cosLoop); }
+}
+function cosSelect(cat, id, quiet) {
+  if (busy() || !cosOwn(cat, id)) return;
+  if (cat === 'pet') meta.cos.pet.kind = id; else if (cat === 'hat') meta.cos.pet.hat = id; else meta.cos[cat] = id;
+  if (cat === 'skin') { cosPv.skin = null; applySkin(); }
+  if (cat === 'theme') cosPv.theme = null;
+  if (cat === 'pet') { cosPv.kind = null; petEmo('love', 2); }
+  if (cat === 'hat') { cosPv.hat = null; petEmo('happy', 2); }
+  saveMeta(); if (!quiet) { gtoast(`🎨 ${COS[cat][id].n}`, '#d6b0ff'); cosPreview(cat, id); } cosRender(); updatePanel();
+}
+function cosBuy(cat, id) {
+  const it = COS[cat][id], key = cat + ':' + id;
+  if (busy() || cosOwn(cat, id) || !cosBuyable(cat, id)) return;
+  if (it.shards) { if (meta.cos.shards < it.shards) { gtoast(`Нужно ✨ ${it.shards} осколков, у тебя ${meta.cos.shards}. Они выпадают из алмазов, изумрудов, сундуков и порталов.`, '#ff8a8a'); return; } }
+  else if (mainBal() < it.price) { gtoast('Не хватает монет на балансе Обычной версии', '#ff8a8a'); return; }
+  if ((it.price >= 10000 || it.shards) && !(cosArm.k === key && Date.now() < cosArm.t)) {
+    cosArm = { k: key, t: Date.now() + 3000 }; cosPreview(cat, id); cosRender();
+    setTimeout(() => { if (cosArm.k === key && Date.now() >= cosArm.t) { cosArm = { k: '', t: 0 }; cosRender(); } }, 3100); return;
+  }
+  cosArm = { k: '', t: 0 };
+  if (it.shards) meta.cos.shards -= it.shards; else addMain(-it.price);
+  meta.cos.own.push(key); sfxAch(); gtoast(`🎨 Куплено: «${it.n}»`, '#d6b0ff', true);
+  cosSelect(cat, id, true); cosCheckSets(); saveMeta(); cosRender(); updatePanel();
+}
+function cosPreview(cat, id) {
+  if (cat === 'skin') { cosPv.skin = id; const box = $('cPicks'); if (box) box.querySelectorAll('img').forEach((im, i) => im.src = pickIcon(id, i)); const t = $('cPickT'); if (t) t.textContent = `«${SKINS[id].n}» на всех уровнях: от деревянной до незеритовой. Форма — от скина, цвет железа — от уровня кирки.`; }
+  else if (cat === 'theme') { cosPv.theme = id; const cv = $('cPrev'); if (cv) cv.style.borderColor = THEMES[id].fr || '#000'; }
+  else if (cat === 'fx' || cat === 'cfx') { cosPv.fx = [cat, id]; pvFx = []; pvHold = 0; pvStart(); }
+  else if (cat === 'snd') { const f = SND_HIT[id]; const seq = ['dirt', 'stone', 'coal', 'iron', 'gold', 'diamond', 'emerald']; seq.forEach((t, i) => setTimeout(() => f ? f(t) : (noise(.07, .25, t === 'dirt' ? 700 : 2200), tone(t === 'dirt' ? 120 : 220, .05, 'triangle', .05, -60)), i * 150)); }
+  else if (cat === 'pet') { cosPv.kind = id; petEmo('happy', 1.5); }
+  else if (cat === 'hat') { cosPv.hat = id; petEmo('happy', 1.5); }
+}
+function pvStart() {
+  const cv = $('cPrev'); if (!cv || !cosPv.fx) return; const W = 240, Hh = W * cv.clientHeight / Math.max(1, cv.clientWidth), [cat, id] = cosPv.fx;
+  const x = W / 2, y = Hh * .42, view = { x0: 0, y0: 0, w: W, h: Hh };
+  pvFx.push(cat === 'fx' ? FXF[id](x, y, -.6, TEX.pick[Math.max(1, Math.min(5, meta.stats.maxTier || 3))], view) : CFXF[id](x, y, view));
+  pvHold = cat === 'fx' ? 2.2 : 0;
+}
+function cosLoop(now) {
+  if (sheetId !== 'cos') { cosLoopOn = false; pvFx = []; return; }
+  const dt = pvLast ? Math.min(.05, (now - pvLast) / 1000) : 0; pvLast = now;
+  for (let i = pvFx.length - 1; i >= 0; i--) if (!pvFx[i].upd(dt)) pvFx.splice(i, 1);
+  if (pvHold > 0) pvHold -= dt;
+  const cv = $('cPrev'); if (cv) drawPrev(cv);
+  const pc = $('cPet'); if (pc) { const g = pc.getContext('2d'); g.clearRect(0, 0, 24, 24); drawPet(g, 4, 6, cosPv.kind || meta.cos.pet.kind, cosPv.hat || meta.cos.pet.hat, petMood(), renderT, Math.sin(renderT * .7) > 0 ? 1 : -1); }
+  requestAnimationFrame(cosLoop);
+}
+const PV_MAP = [['grass', 'grass', 'grass', 'grass', 'air', 'grass', 'grass', 'grass', 'grass'], ['dirt', 'dirt', 'dirt', 'air', 'air', 'air', 'dirt', 'coal', 'dirt'],
+  ['stone', 'stone', 'coal', 'stone', 'air', 'air', 'air', 'iron', 'stone'], ['diamond', 'stone', 'stone', 'stone', 'stone', 'air', 'air', 'stone', 'gold'], ['stone', 'stone', 'iron', 'stone', 'stone', 'stone', 'stone', 'stone', 'stone']];
+function drawPrev(cv) {
+  const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1), W = +cv.dataset.w || 240;
+  if (!r.width) return;
+  if (!cv.style.height) cv.style.height = Math.round(r.width * (W === 360 ? .56 : .5)) + 'px';
+  const cw = Math.round(r.width * dpr), ch = Math.round(cv.clientHeight * dpr); if (cv.width !== cw || cv.height !== ch) { cv.width = cw; cv.height = ch; }
+  const g = cv.getContext('2d'), k = cw / W, Hh = ch / k; g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = '#000'; g.fillRect(0, 0, cw, ch); g.imageSmoothingEnabled = false;
+  if (W === 360) { // превью темы
+    const th = cosPv.theme || meta.cos.theme, T = TH[th], sky = 70; g.setTransform(k, 0, 0, k, 0, sky * k);
+    if (T) T.sky(g, -sky, 360); else { const gr = g.createLinearGradient(0, -sky, 0, 0); gr.addColorStop(0, '#5aa0ff'); gr.addColorStop(1, '#a8d4ff'); g.fillStyle = gr; g.fillRect(-20, -sky, 400, sky); g.fillStyle = '#fff7b0'; g.fillRect(280, -58, 30, 30); }
+    thL = [];
+    for (let rr = 0; rr < PV_MAP.length; rr++) for (let c = 0; c < 9; c++) {
+      const t = PV_MAP[rr][c], x = c * CELL, y = rr * CELL;
+      if (t === 'air') { g.drawImage(rr <= 1 ? TEX.bgDirt : TEX.bgStone, x, y, CELL + .5, CELL + .5);
+        if (T) T.air(g, x, y, rr, c, rr > 0 && PV_MAP[rr - 1][c] !== 'air', !PV_MAP[rr + 1] || PV_MAP[rr + 1][c] !== 'air', (rr === 2 && c === 6) || (rr === 1 && c === 3) ? true : false); }
+      else g.drawImage(TEX[t], x, y, CELL + .5, CELL + .5);
+    }
+    const px = 5 * CELL + 6, py = 2.5 * CELL + Math.sin(renderT * 2.5) * 4;
+    let dk = .5, r0 = 2.2, r1 = 6, rgb = '0,0,0'; if (T && T.dark) [dk, r0, r1, rgb] = T.dark(dk);
+    const gr = g.createRadialGradient(px, py, CELL * r0, px, py, CELL * r1); gr.addColorStop(0, `rgba(${rgb},0)`); gr.addColorStop(1, `rgba(${rgb},${dk})`); g.fillStyle = gr; g.fillRect(-20, -sky, 400, Hh + 20);
+    const gl = thL; thL = gl; thLights(g);
+    if (T && T.amb) T.amb(g, 0, -sky, 360, Hh);
+    g.save(); g.translate(px, py); g.rotate(-.5 + Math.sin(renderT * 1.7) * .15); g.drawImage(TEX.pick[Math.max(1, Math.min(5, meta.stats.maxTier || 3))], -22, -22, 44, 44); g.restore();
+    return;
+  }
+  // превью эффектов
+  g.setTransform(k, 0, 0, k, 0, 0);
+  for (let y = 0; y < Hh; y += CELL) for (let x = 0; x < W; x += CELL) g.drawImage(TEX.bgStone, x, y, CELL + .5, CELL + .5);
+  const fy = Math.floor(Hh / CELL) * CELL - CELL * .35; for (let x = 0; x < W; x += CELL) g.drawImage(TEX.stone, x, fy, CELL + .5, CELL + .5);
+  const tex = TEX.pick[Math.max(1, Math.min(5, meta.stats.maxTier || 3))];
+  if (pvHold <= 0) { g.save(); g.translate(W / 2, Hh * .42 + Math.sin(renderT * 2.5) * 4); g.rotate(-.6 + Math.sin(renderT * 1.7) * .15); g.drawImage(tex, -22, -22, 44, 44); g.restore(); }
+  for (const f of pvFx) f.drw(g);
+}
+function cosClick(e) {
+  const t = e.target.closest('[data-tab],[data-sel],[data-buy],[data-tr],[data-feed],[data-pv]'); if (!t) return;
+  const sp = s => s.split(':');
+  if (t.dataset.tab) { cosTab = t.dataset.tab; cosArm = { k: '', t: 0 }; pvFx = []; cosRender(); $('sh-cos').querySelector('.sh-body').scrollTop = 0; return; }
+  if (t.dataset.sel) return cosSelect(...sp(t.dataset.sel));
+  if (t.dataset.buy) return cosBuy(...sp(t.dataset.buy));
+  if (t.dataset.tr) { trailAction(t.dataset.tr); return; }
+  if (t.dataset.feed) return petFeed(t.dataset.feed);
+  if (t.dataset.pv) return cosPreview(...sp(t.dataset.pv));
+}
+const cosTitle = () => { const T = TITLES[meta.cos.title]; return T && meta.cos.title !== 'none' && cosOwn('title', meta.cos.title) ? T : null; };
+function cosPanel() {
+  const T = cosTitle(); setText('mProfSub', T ? T.n : rank().n);
+  const P = meta.cos.pet, hungry = P.sat < 20 && !P.hide, ss = Object.keys(SEASONS).find(s => seasonOn(s) && !meta.cos.sets[s]);
+  setText('mCosSub', hungry ? '🍖 голоден' : !meta.cos.seen ? 'новое!' : ss ? `${SEASONS[ss].i} сезон` : meta.cos.shards ? `✨ ${meta.cos.shards}` : 'скины');
+  setProp($('mCos'), 'mCosCls', 'className', 'btn' + (hungry || !meta.cos.seen ? ' hot' : ''));
+  const fr = meta.cos.frame !== 'none' && cosOwn('frame', meta.cos.frame) ? ' fr fr-' + meta.cos.frame : '';
+  setProp($('balance').parentElement, 'balFr', 'className', 'balance' + fr);
+}
+function cosInit() {
+  applySkin(); cosCheckSets(true);
+  const P = meta.cos.pet; petSat(); pet.act = renderT;
+  if (Date.now() - P.seen > 8 * 3600e3 && meta.stats.rounds > 0 && !P.hide) { petEmo('love', 6); setTimeout(() => { if (!tut) gtoast(`🐾 ${petName()} соскучился!`, '#ffb0d0'); }, 2200); }
+  P.seen = Date.now(); saveMeta();
+  if (!meta.cos.seen && meta.stats.rounds > 0) setTimeout(() => { if (!tut && !$('intro').classList.contains('show')) gtoast('🎨 Новое: <b>Косметика</b> — скины кирки, эффекты, темы шахты и питомец. Кнопка 🎨 внизу', '#d6b0ff', true); }, 3500);
+  $('cTabs').addEventListener('click', cosClick); $('cBody').addEventListener('click', cosClick);
+  $('petCv').addEventListener('click', e => { e.stopPropagation(); if (tut) return; petPoke(); if (!busy() && !sheetId) openCos('pet'); });
+  document.addEventListener('pointerdown', () => { pet.act = renderT; }, true);
+  setInterval(cosTick, 5000);
+}
+
+// ---------- режим разработчика (код меняется с каждой обновой; в коде хранится только хэш) ----------
+const DEV_H = '23041b58';
+const devHash = t => { let h = 0x811c9dc5; for (const b of new TextEncoder().encode(t)) { h ^= b; h = Math.imul(h, 0x01000193) >>> 0; } return h.toString(16).padStart(8, '0'); };
+const devOn = () => localStorage.getItem('kirka_dev') === DEV_H; // ключ не pk_ — в код сохранения не попадает; новая обнова → новый код → снова закрыто
+let devAsk = false, devTab = 'res', devArm = { k: '', t: 0 };
+const DEV_TABS = [['res', '💰', 'Монеты'], ['snap', '📸', 'Откат'], ['rank', '🏆', 'Ранги'], ['vil', '🏘', 'Деревни'], ['err', '🐞', 'Ошибки']];
+const devEsc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const devWhen = t => { const d = new Date(t); return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) + ' ' + d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); };
+function devArmed(k) { if (devArm.k === k && Date.now() < devArm.t) { devArm = { k: '', t: 0 }; return true; } devArm = { k, t: Date.now() + 4000 }; return false; } // опасное — по второму нажатию
+try { localStorage.removeItem('kirka_devfail'); } catch (e) { } // старая блокировка после неверных попыток убрана
+function devSnap() { try { return JSON.parse(localStorage.getItem('kirka_snap') || 'null'); } catch (e) { return null; } }
+function devBody() {
+  if (devTab === 'res') return `<div class="note">Монеты — на баланс Обычной версии (рекорд состояния и ранг тоже вырастут, могут выпасть достижения). Осколки — для скинов за ✨. Перед тестами удобно сохранить точку во вкладке 📸.</div>
+    <div class="devgrid"><button class="btn" data-dev="m:10000">+10 000 🪙</button><button class="btn" data-dev="m:100000">+100 000 🪙</button><button class="btn" data-dev="m:1000000">+1 000 000 🪙</button><button class="btn" data-dev="m:100000000">+100 млн 🪙</button>
+    <button class="btn" data-dev="s:10">+10 ✨</button><button class="btn" data-dev="s:100">+100 ✨</button></div>`;
+  if (devTab === 'snap') {
+    const sn = devSnap();
+    return `<div class="note">Сохрани точку → делай что хочешь → «Откатить» вернёт всё как было: монеты, банк, ранг, деревни, косметику, питомца, достижения, историю и забеги. Точка лежит только на этом устройстве и после отката остаётся — откатываться можно сколько угодно раз.</div>
+    <div class="devsnap">${sn ? `📍 Точка от <b>${devWhen(sn.t)}</b><br>баланс ${fmt(sn.bal)}${COIN} · ${devEsc(sn.rk)}` : 'Точки пока нет.'}</div>
+    <div class="devgrid"><button class="btn" data-dev="snap">📸 ${sn ? 'Перезаписать' : 'Сохранить точку'}</button><button class="btn" data-dev="back"${sn ? '' : ' disabled'}>↩️ Откатить</button></div>
+    ${sn ? '<button class="btn devwide" data-dev="snapdel">🗑 Удалить точку</button>' : ''}`;
+  }
+  if (devTab === 'rank') {
+    const ri = rankIdx(), got = ACH.filter(q => meta.ach[q.id]).length;
+    return `<div class="note">Сейчас: <b>${RANKS[ri].i} ${RANKS[ri].n}</b>. Выдать ранг = поставить рекорд состояния на его порог. Понизить можно, но если монет больше порога — ранг сам вернётся.</div>
+    <div class="devranks">${RANKS.map((r, i) => `<button class="btn${i === ri ? ' on' : ''}" data-dev="rank:${i}">${r.i}<small>${r.n}</small></button>`).join('')}</div>
+    <div class="note" style="margin-top:10px">Достижения: <b>${got}/${ACH.length}</b>. Серое — выдать (с наградой и всплывашкой, как по-настоящему). Цветное — забрать (монеты не вернутся; если условие уже выполнено, оно выдастся снова при следующей проверке).</div>
+    <div class="devach">${ACH.map(q => `<button class="${meta.ach[q.id] ? 'on' : ''}" data-dev="ach:${q.id}" title="${devEsc(q.d)}">${q.i} ${q.n}</button>`).join('')}</div>
+    <button class="btn devwide" data-dev="achall">🏆 Выдать все достижения</button>`;
+  }
+  if (devTab === 'vil') return `<div class="note">Стройка тут бесплатная — монеты не списываются. Деревня с 🔒 откроется, когда достроишь предыдущую.</div>`
+    + VILLAGES.map((V, i) => `<div class="devvil"><div class="dvn"><b>${V.i} ${V.n}</b><small>${vilDone(i)}/${vilTotal(i)}${vilUnlocked(i) ? '' : ' · 🔒'}</small></div>
+      <button class="btn" data-dev="vstep:${i}"${vilComplete(i) || !vilUnlocked(i) ? ' disabled' : ''}>+1</button><button class="btn" data-dev="vall:${i}"${vilComplete(i) || !vilUnlocked(i) ? ' disabled' : ''}>Достроить</button><button class="btn" data-dev="vrst:${i}"${vilDone(i) ? '' : ' disabled'}>Сброс</button></div>`).join('')
+    + `<button class="btn devwide" data-dev="vfill">💰 Наполнить все склады</button>`;
+  if (devTab === 'err') {
+    const L = errLog();
+    return `<div class="note">Ошибки ловятся всегда, даже когда режим выключен (последние 30). Если что-то сломалось — «Скопировать» и пришли текст.</div>
+    <div class="deverr">${L.length ? L.map(e => `<div><b>${devWhen(e.t)}${e.n > 1 ? ' · ×' + e.n : ''}</b> ${devEsc(e.m)}<small>${devEsc(e.s)}${e.b ? ' · ' + devEsc(e.b) : ''}</small></div>`).join('') : '<div class="dok">✓ Ошибок нет</div>'}</div>
+    <div class="devgrid"><button class="btn" data-dev="ecopy"${L.length ? '' : ' disabled'}>📋 Скопировать</button><button class="btn" data-dev="eclr"${L.length ? '' : ' disabled'}>🧹 Очистить</button></div>`;
+  }
+  return '';
+}
+function renderDev(msg) {
+  const box = $('pDevBox'); if (!box) return;
+  if (devOn()) {
+    box.innerHTML = `<div class="devtabs">${DEV_TABS.map(t => `<button class="${t[0] === devTab ? 'on' : ''}" data-devtab="${t[0]}">${t[1]}<small>${t[2]}</small></button>`).join('')}</div>
+      <div class="devpane">${devBody()}</div><div class="note" id="pDevMsg" style="margin-top:6px;min-height:1em">${msg || ''}</div>
+      ${NEWS.items.length ? '<button class="btn devwide" data-dev="news">📰 Показать окно новостей</button>' : ''}
+      <button class="btn devwide" data-dev="off">🔒 Выключить режим разработчика</button>`;
+    return;
+  }
+  if (!devAsk) { box.innerHTML = msg ? `<div class="note" style="margin-top:6px">${msg}</div>` : ''; return; }
+  box.innerHTML = `<div class="devin"><input id="pDevCode" type="password" inputmode="numeric" autocomplete="off" maxlength="12" placeholder="код"><button class="btn" id="pDevGo">Войти</button></div><div class="note" style="margin-top:4px;${msg ? 'color:#ff8a8a' : ''}">${msg || 'Введи код разработчика.'}</div>`;
+  const inp = $('pDevCode'); inp.focus(); inp.onkeydown = e => { if (e.key === 'Enter') devTry(); }; $('pDevGo').onclick = devTry;
+}
+function devTry() {
+  const v = ($('pDevCode').value || '').trim(); if (!v) return;
+  if (devHash('kirka-dev:' + v) === DEV_H) { localStorage.setItem('kirka_dev', DEV_H); devAsk = false; sfxAch(); renderDev(); return; }
+  renderDev('Неверный код');
+}
+const pkKeys = () => { const k = []; for (let i = 0; i < localStorage.length; i++) { const q = localStorage.key(i); if (q && q.startsWith('pk_')) k.push(q); } return k; };
+function devGrantAch(q, quiet) {
+  meta.ach[q.id] = Date.now();
+  const tr = ACH_TRAIL[q.id]; if (tr && !meta.owned.includes(tr)) meta.owned.push(tr);
+  if (q.r) addMain(q.r);
+  if (!quiet) { gtoast(`🏆 ${q.i} <b>${q.n}</b>${q.r ? ` · +${fmt(q.r)}${COIN}` : ''}${tr ? ` · след «${TRAILS[tr].n}»` : ''}`, '#ffd23f', true); sfxAch(); }
+  return q.r || 0;
+}
+function devVilSet(i, fn) { // fn(V, b, L) → новый уровень здания
+  const V = VILLAGES[i], now = Date.now(); if (!meta.vil.at) meta.vil.at = {};
+  for (const b of V.b) { const k = vKey(V, b), L = vilLv(V, b), n = fn(V, b, L); if (n === L) continue; meta.vil.lv[k] = n; if (n) meta.vil.at[k] = now; else delete meta.vil.at[k]; }
+  vPeople = []; saveMeta();
+}
+function devCopy(t) {
+  let ok = false; try { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); ok = document.execCommand && document.execCommand('copy'); ta.remove(); } catch (e) { }
+  try { navigator.clipboard && navigator.clipboard.writeText(t).catch(() => { }); ok = ok || !!navigator.clipboard; } catch (e) { }
+  return ok;
+}
+function devAct(a) {
+  if (!devOn()) return;
+  if (a.startsWith('tab:')) { devTab = a.slice(4); devArm = { k: '', t: 0 }; renderDev(); return; }
+  if (a === 'off') { localStorage.removeItem('kirka_dev'); devAsk = false; renderDev('Режим разработчика выключен.'); return; }
+  if (a === 'news') { showNews(); return; }
+  if (busy()) return;
+  const [k, n] = a.split(':'), v = +n; let msg = '';
+  if (k === 'm') { addMain(v); metaTick(); msg = `✓ +${fmt(v)} монет · баланс Обычной ${fmt(mainBal())}`; }
+  else if (k === 's') { meta.cos.shards += v; saveMeta(); msg = `✓ +${v} ✨ · всего ${meta.cos.shards}`; }
+  else if (k === 'snap') {
+    if (devSnap() && !devArmed('snap')) msg = '⚠ Старая точка сотрётся. Нажми «Перезаписать» ещё раз.';
+    else {
+      saveMeta(); save(); saveRun(); const d = {}; for (const q of pkKeys()) d[q] = localStorage.getItem(q);
+      try { localStorage.setItem('kirka_snap', JSON.stringify({ t: Date.now(), b: BUILD, bal: mainBal(), rk: rank().i + ' ' + rank().n, d })); msg = '✓ Точка сохранена. Теперь тестируй что угодно.'; }
+      catch (e) { msg = '✖ Не хватило памяти браузера для точки.'; }
+    }
+  }
+  else if (k === 'back') {
+    const sn = devSnap(); if (!sn || !sn.d) return;
+    if (!devArmed('back')) msg = `⚠ Всё, что было после ${devWhen(sn.t)}, пропадёт. Нажми «Откатить» ещё раз.`;
+    else { metaLock = true; pkKeys().forEach(q => localStorage.removeItem(q)); for (const q in sn.d) if (q.startsWith('pk_')) localStorage.setItem(q, sn.d[q]); location.reload(); return; }
+  }
+  else if (k === 'snapdel') { if (!devArmed('snapdel')) msg = '⚠ Нажми «Удалить точку» ещё раз.'; else { localStorage.removeItem('kirka_snap'); msg = 'Точка удалена.'; } }
+  else if (k === 'rank') {
+    const r0 = rankIdx(); meta.peak = RANKS[v].w; metaTick(); const r1 = rankIdx();
+    if (r1 > r0) { gtoast(`${RANKS[r1].i} Новый ранг: <b>${RANKS[r1].n}</b>! Макс. ставка ${RANKS[r1].bet === Infinity ? '∞' : fmt(RANKS[r1].bet)}, подарки ×${RANKS[r1].k}`, '#ffd23f', true); sfxAch(); }
+    saveMeta(); checkAch();
+    msg = r1 === v ? `✓ Ранг: ${RANKS[r1].i} ${RANKS[r1].n}` : `Ранг: ${RANKS[r1].i} ${RANKS[r1].n} — монет больше порога «${RANKS[v].n}», ранг вернулся.`;
+  }
+  else if (k === 'ach') {
+    const q = ACH.find(x => x.id === n); if (!q) return;
+    if (meta.ach[q.id]) { delete meta.ach[q.id]; saveMeta(); msg = `Забрано: ${q.i} ${q.n}`; }
+    else { devGrantAch(q); saveMeta(); msg = `✓ Выдано: ${q.i} ${q.n}`; }
+  }
+  else if (k === 'achall') {
+    let c = 0, sum = 0; for (const q of ACH) if (!meta.ach[q.id]) { sum += devGrantAch(q, true); c++; }
+    saveMeta(); if (c) { sfxAch(); gtoast(`🏆 Выдано достижений: <b>${c}</b>${sum ? ` · +${fmt(sum)}${COIN}` : ''}`, '#ffd23f', true); }
+    msg = c ? `✓ Выдано ${c}, награды +${fmt(sum)}` : 'Все достижения уже есть.';
+  }
+  else if (k === 'vstep' || k === 'vall') {
+    if (!vilUnlocked(v)) { msg = `🔒 Сначала дострой «${VILLAGES[v - 1].n}».`; }
+    else {
+      if (k === 'vall') devVilSet(v, (V, b) => b.st.length);
+      else { // самая дешёвая следующая стадия
+        const V = VILLAGES[v]; let best = null; for (const b of V.b) { const L = vilLv(V, b); if (L < b.st.length && (!best || b.st[L][1] < best.st[vilLv(V, best)][1])) best = b; }
+        if (best) devVilSet(v, (V2, b, L) => b === best ? L + 1 : L);
+      }
+      const V = VILLAGES[v];
+      if (vilComplete(v)) { gtoast(`🎉 Деревня «${V.n}» достроена!`, '#ffd23f', true); sfxAch(); }
+      checkAch(); msg = `✓ ${V.n}: ${vilDone(v)}/${vilTotal(v)}`;
+    }
+  }
+  else if (k === 'vrst') {
+    if (!devArmed('vrst' + v)) msg = `⚠ Все постройки «${VILLAGES[v].n}» исчезнут. Нажми «Сброс» ещё раз.`;
+    else { devVilSet(v, () => 0); msg = `Деревня «${VILLAGES[v].n}» сброшена.`; }
+  }
+  else if (k === 'vfill') {
+    const now = Date.now(), back = VCAP_H * 3600000 + 60000; let c = 0; if (!meta.vil.at) meta.vil.at = {};
+    VILLAGES.forEach((V, i) => { if (!vilUnlocked(i)) return; for (const b of V.b) if (vilLv(V, b)) { meta.vil.at[vKey(V, b)] = now - back; c++; } });
+    saveMeta(); msg = c ? `✓ Склады полны (${c} зданий) — собирай в 🏘 Деревне.` : 'Пока нечего наполнять — построй что-нибудь.';
+  }
+  else if (k === 'ecopy') {
+    const L = errLog(), txt = `Кирка · ${BUILD} · ${navigator.userAgent}\n` + L.map(e => `[${new Date(e.t).toISOString()}]${e.n > 1 ? ' ×' + e.n : ''} ${e.m} @ ${e.s} (${e.b})${e.st ? '\n  ' + e.st.split('\n').slice(0, 4).join('\n  ') : ''}`).join('\n');
+    msg = devCopy(txt) ? '✓ Скопировано — вставь мне в чат.' : '✖ Не получилось скопировать.';
+  }
+  else if (k === 'eclr') { ERRL = []; errFlush(); msg = 'Журнал очищен.'; }
+  updatePanel(); vilUi(); renderProfile(); renderDev(msg);
+}
+
+// ---------- новости обновления ----------
+// Заполняется с каждой обновой (id — любая новая строка, например дата). Пока список пуст — окно не показывается,
+// кнопки в профиле нет. Новичкам новости не показываются (им — приветствие и обучение).
+const NEWS = { id: '2026-10-30', title: 'Большое обновление', sub: 'Косметика, питомец, Хэллоуин и не только', items: [
+  ['🎨', '<b>Косметика.</b> В меню новая кнопка «🎨 Косметика» (на месте «Выплат»). Внутри вкладки: кирки, следы, эффекты, шахты, питомец и понты. Таблица выплат переехала в «⚙ Режим».'],
+  ['⛏', '<b>22 скина кирки:</b> топор, молот, секира, рыба, ложка, гаечный ключ, багет, 8-бит, неон, пламя, драконья, королевская и другие. Металл всегда в цвете уровня — сразу видно, деревянная кирка или алмазная.'],
+  ['💥', '<b>Эффекты.</b> Как кирка ломается: конфетти, призрак, курица, лёд, пепел, чёрная дыра и другие. При «Забрать» — монетный дождь, звездопад или салют. Плюс 3 новых звука ударов: 8-бит, пузыри, ксилофон.'],
+  ['🌄', '<b>Темы шахты:</b> ночная с факелами, песчаник, ледяная пещера, конфетная, неон, кристальный грот и праздничные. Меняется только вид — блоки и выплаты те же.'],
+  ['🐾', '<b>Питомец.</b> Кротик бесплатно, ещё котик, пёсик, лисёнок и аксолотль. Сидит у шахты и живёт игрой: радуется выигрышам, пугается трещин, грустит при поломке, танцует в аду, ночью спит. Раз в сутки покорми его (50–100 монет) — не умрёт, но голодный будет просить есть. 11 шапок: от бантика до короны.'],
+  ['👑', '<b>Понты:</b> титулы и рамки баланса — за ранги, достижения и деревни.'],
+  ['✨', '<b>Осколки</b> — новая редкая валюта. Иногда выпадают из алмазов, изумрудов, сундуков и порталов в Обычной версии. За них — особые вещи: кристальная кирка, кирка-молния, кристальный грот и нимб.'],
+  ['🎃', '<b>Хэллоуин — до 10 ноября!</b> Тыквенная и костяная кирки, эффект «Призрак», тема шахты и шапка-тыква. Собери весь набор — получишь титул «Повелитель тыкв». К Новому году будет свой набор.'],
+  ['🩹', '<b>Трещины мягче.</b> Трещина теперь снимает не больше 30 ❤ на любой кирке. Раньше на дорогих кирках могла отнять до 180.'],
+  ['🏘', '<b>Деревня.</b> В доме на Равнинах настоящая еловая дверь, а лишние подписи «что строится дальше» убраны — смотреть стало приятнее.'],
+  ['📰', '<b>Новости.</b> В 👤 Профиле появилась кнопка «📰 Новости» — там всё про обновления.'],
+] };
+const newsPending = () => !!(NEWS.id && NEWS.items.length && meta.news !== NEWS.id);
+function showNews() {
+  if (!NEWS.items.length) return;
+  $('newsBody').innerHTML = `<div class="iemo">📰</div><h2>${NEWS.title || 'Что нового'}</h2>${NEWS.sub ? `<div class="newssub">${NEWS.sub}</div>` : ''}<ul class="newslist">${NEWS.items.map(q => `<li><span>${q[0]}</span><div>${q[1]}</div></li>`).join('')}</ul>`;
+  $('news').classList.add('show');
+}
+function closeNews() { $('news').classList.remove('show'); if (NEWS.id && meta.news !== NEWS.id) { meta.news = NEWS.id; saveMeta(); } }
+function skipNews() { // ✕ — подсказка, где новость найти потом; кнопка Профиля в меню мигает
+  closeNews(); if (sheetId === 'prof') return; // уже в профиле — подсказка не нужна
+  $('newsLater').classList.add('show');
+}
+function newsLaterOk() { $('newsLater').classList.remove('show'); const b = $('mProf'); b.classList.remove('newsglow'); void b.offsetWidth; b.classList.add('newsglow'); setTimeout(() => b.classList.remove('newsglow'), 5200); }
+
 // ---------- init ----------
 let ICON = {}, PICKICON = [];
 buildTextures();
 for (const k of Object.keys(BLOCKS)) if (TEX[k]) ICON[k] = iconURL(TEX[k]);
 PICKICON = TEX.pick.map(t => iconURL(t));
 $('logo').src = PICKICON[4];
+cosInit();
 buildPayTable(); renderHistory(); resize(); syncIdlePick(); updatePanel();
 $('play').addEventListener('click', e => { e.currentTarget.blur(); play(); });
 // «Забрать» срабатывает в момент касания (pointerdown), не дожидаясь отпускания пальца
@@ -3603,7 +4818,9 @@ $('runGo').onclick = runGo;
 $('runAmt').addEventListener('input', () => { $('runErr').textContent = ''; markRunAmt(); });
 $('mRuns').onclick = e => { e.currentTarget.blur(); openSheet('runs'); };
 $('mMode').onclick = e => { e.currentTarget.blur(); openSheet('mode'); };
-$('mPay').onclick = e => { e.currentTarget.blur(); openSheet('pay'); };
+$('mCos').onclick = e => { e.currentTarget.blur(); openCos(); };
+$('mPayIn').onclick = () => openSheet('pay');
+$('pCos').onclick = () => openCos('skin');
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => closeSheet());
 window.addEventListener('popstate', () => closeSheet(true)); // кнопка «назад» сворачивает окно
 // Подстройка раскладки: решение принимается по «базовой» высоте поля (без классов), поэтому не дёргается туда-обратно.
@@ -3714,8 +4931,10 @@ const bankGo = () => { const err = bankOp(bankDir, parseFloat($('bkInput').value
 $('bkGo').onclick = bankGo;
 $('bkInput').addEventListener('keydown', e => { if (e.key === 'Enter') bankGo(); });
 $('bkInput').addEventListener('input', () => { $('bkErr').textContent = ''; });
-$('pTrails').addEventListener('click', e => { const b = e.target.closest('[data-tr]'); if (b) trailAction(b.dataset.tr); });
 $('pExport').onclick = exportSave;
+$('pNews').onclick = showNews; $('newsOk').onclick = closeNews; $('newsX').onclick = skipNews; $('newsLaterOk').onclick = newsLaterOk; $('pNewsCard').style.display = NEWS.items.length ? '' : 'none';
+$('pDev').onclick = () => { if (devOn()) { renderDev(); return; } devAsk = !devAsk; renderDev(); };
+$('pDevBox').addEventListener('click', e => { const t = e.target.closest('[data-devtab]'); if (t) { devAct('tab:' + t.dataset.devtab); return; } const b = e.target.closest('[data-dev]'); if (b && !b.disabled) devAct(b.dataset.dev); });
 $('pImport').onclick = importSave;
 $('introNext').onclick = () => introNext(false);
 $('introSkip').onclick = () => introNext(true);
@@ -3724,7 +4943,9 @@ bankAccrue(); ensureQuests();
 if (metaFresh || !meta.peak) meta.peak = wealth();
 saveMeta(); checkAch();
 if (meta.intro < 2 && oldSaveVer >= 1) setTimeout(() => showIntro(INTRO_UPD), 400); // игравшим до 2.0 — «Что нового», потом предложим обучение
-else if (meta.intro < 2) { meta.intro = 2; saveMeta(); learnHint(700); }    // новичкам — сразу окно «пройди обучение» (можно закрыть)
+else if (meta.intro < 2) { meta.intro = 2; saveMeta(); learnHint(700); }
+if (metaFresh) { if (NEWS.id) { meta.news = NEWS.id; saveMeta(); } }       // новичкам новости не нужны
+else if (meta.intro >= 2 && newsPending()) setTimeout(() => { if (!document.querySelector('.modal.show')) showNews(); }, 700); // игравшим — «Что нового» один раз после обновы    // новичкам — сразу окно «пройди обучение» (можно закрыть)
 else if (!meta.learnOffer) learnHint(1200);                                   // старым игрокам — один раз предложить обучения с наградой
 else if (meta.bank.pend >= 1) setTimeout(() => { gtoast(`🏦 Пока тебя не было, банк начислил +${fmt(meta.bank.pend)}${COIN}`, '#7fd0ff'); meta.bank.pend = 0; saveMeta(); }, 1200);
 setInterval(() => { metaTick(); if (sheetId === 'gift') renderGifts(); if (sheetId === 'bank') renderBank(); }, 1000);
