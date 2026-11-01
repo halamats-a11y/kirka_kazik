@@ -616,6 +616,18 @@
   .fr-rainbow{animation:frrb 3s linear infinite}
   @keyframes frfire{to{box-shadow:0 0 0 2px #ffd23f,0 0 20px #ff6a1aaa}}
   @keyframes frrb{0%,100%{box-shadow:0 0 0 2px #ff3b3b,0 0 12px #ff3b3b88}25%{box-shadow:0 0 0 2px #ffd23f,0 0 12px #ffd23f88}50%{box-shadow:0 0 0 2px #3ddc63,0 0 12px #3ddc6388}75%{box-shadow:0 0 0 2px #4fc3ff,0 0 12px #4fc3ff88}}
+  /* ---- режим разработчика ---- */
+  .devcard{border-style:dashed;opacity:.9}
+  .devin{display:flex;gap:6px;margin-top:8px}
+  .devin input{flex:1;min-width:0;font:inherit;font-weight:900;font-size:18px;letter-spacing:4px;text-align:center;background:#0e0e14;color:var(--text);border:2px solid #2a2a34;border-radius:8px;padding:6px}
+  .devgrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+  .devgrid .btn{font-size:13px;padding:9px 4px}
+  .devwide{width:100%;margin-top:6px;padding:8px;font-size:13px}
+  .devtabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:8px}
+  .devtabs button{font:inherit;font-size:17px;background:#16161e;color:var(--text);border:2px solid #2a2a34;border-radius:8px;padding:5px 0 3px;cursor:pointer}
+  .devtabs button small{display:block;font-size:9.5px;font-weight:700;color:var(--mut,#9a9ab0);margin-top:1px}
+  .devtabs button.on{border-color:#ffd23f;background:#2a2410}
+  .devpane{margin-top:8px}
   .devsnap{margin-top:8px;padding:8px 10px;border-radius:8px;background:#0e0e14;border:1px solid #2a2a34;font-size:13px;line-height:1.5}
   .devranks{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:8px}
   .devranks .btn{font-size:20px;padding:6px 2px}
@@ -732,7 +744,7 @@
   <div class="sh-body">
     <div class="card" id="runForm">
       <div class="label">Новый забег</div>
-      <div class="note" style="margin-top:4px">Тебе выдают монеты в отдельный кошелёк. Без подарков и бесплатных монет, бонуски покупать можно. Закончить — кнопкой «💰 ВЫВОД». Основной баланс не трогается.</div>
+      <div class="note" style="margin-top:4px">Тебе выдают монеты в отдельный кошелёк. Играешь обычную версию (без чит-режима и бесплатных монет), бонуски покупать можно. Закончить — кнопкой «💰 ВЫВОД». Основной баланс не трогается.</div>
       <div class="secttl" style="margin-top:10px">Начальная сумма (100 – 1 000 000)</div>
       <div class="betbox"><input id="runAmt" type="number" min="100" max="1000000" step="100" value="5000"></div>
       <div class="qgrid5">
@@ -757,13 +769,20 @@
   <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
 </div></div>
 
-<!-- ===== Окно «Режим»: волатильность + таблица выплат ===== -->
+<!-- ===== Окно «Режим»: версия + волатильность ===== -->
 <div class="sheet" id="sh-mode"><div class="sh-in">
   <div class="sh-head"><h1><i class="px px-gear"></i> Режим</h1><button class="btn sh-x" data-close title="Закрыть">✕</button></div>
   <div class="sh-body">
-    <div class="lockmsg" id="modeLock" style="display:none">🔒 Идёт забег: волатильность выбрана при старте. Поменять можно после забега или на паузе.</div>
+    <div class="lockmsg" id="modeLock" style="display:none">🔒 Идёт забег: версия всегда обычная, волатильность выбрана при старте. Поменять можно после забега или на паузе.</div>
     <div class="lockmsg" id="modeLockPlay" style="display:none">⛏ Идёт раунд — поменять можно после него.</div>
-    <div class="secttl">Волатильность</div>
+    <div class="secttl">Версия</div>
+    <div id="verOpts">
+      <button class="opt cheat" data-fair="0"><div class="h">😈 Чит<span class="chk"></span></div>
+        <ul><li>Щедрая демка: RTP 100–130%</li><li>Трещин нет</li><li>🎁 +1000 монет — без ограничений</li><li>Свой <b>демо-кошелёк</b>: деревня, банк, задания и достижения тут не копятся</li></ul></button>
+      <button class="opt fair" data-fair="1"><div class="h">🎰 Обычная<span class="chk"></span></div>
+        <ul><li>Как в казино: RTP ≈ 70–100% в зависимости от игры</li><li>Прочность честная, но изношенная кирка может треснуть (−10…30 ❤)</li><li>Основной кошелёк: 🏘 деревня, 🏦 банк, ранги, задания и достижения</li><li>🎁 Ежедневный подарок, задания, спасательный круг</li></ul></button>
+    </div>
+    <div class="secttl" style="margin-top:12px">Волатильность</div>
     <div id="modeOpts">
       <button class="opt low" data-mode="low"><div class="h">🟦 Низкая<span class="chk"></span></div>
         <ul><li>Частые выигрыши, небольшие суммы</li><li>Баланс скачет меньше</li><li>Бонуска: обычно ×20–×180, медиана ~×55</li></ul></button>
@@ -797,7 +816,7 @@
     <div class="cwal"><span>Баланс: <b id="cWal">0</b><i class="coin"></i></span></div>
     <div class="ctabs" id="cTabs"></div>
     <div id="cBody"></div>
-    <div class="note" style="margin-top:10px">Косметика только для красоты: на выплаты и шансы не влияет. Покупается за монеты. У скинов кирки 4 редкости — чем реже, тем дороже.</div>
+    <div class="note" style="margin-top:10px">Косметика только для красоты: на выплаты и шансы не влияет. Покупается монетами Обычной версии. У скинов кирки 4 редкости — чем реже, тем дороже.</div>
   </div>
   <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
 </div></div>
@@ -831,7 +850,7 @@
     <div class="vinc"><div class="vit"><b id="vIncT"></b><span id="vIncS"></span><div class="bar sm"><i id="vIncB"></i></div></div><button class="btn vcol" id="vCollect" disabled>💰 Собрать<small id="vColS">0</small></button></div>
     <div class="vcards" id="vCards"></div>
     <div class="vreward" id="vReward"></div>
-    <div class="note"><b>Деревня приносит монеты.</b> Каждое здание копит в час 0,25% от того, что в него вложено, склад — на 6 часов. Пока склад не полон, здание работает: дым из труб, искры в кузнице, растёт пшеница, жители бегают с грузом. Склад полон — работа стоит, деревня живёт обычной жизнью. Собирай: тапни по 💰 над зданием или «Собрать». На выплаты в шахте не влияет. Стройка идёт на монеты с баланса (если на балансе не хватает — добираем из банка) и не роняет ранг.</div>
+    <div class="note"><b>Деревня приносит монеты.</b> Каждое здание копит в час 0,25% от того, что в него вложено, склад — на 6 часов. Пока склад не полон, здание работает: дым из труб, искры в кузнице, растёт пшеница, жители бегают с грузом. Склад полон — работа стоит, деревня живёт обычной жизнью. Собирай: тапни по 💰 над зданием или «Собрать». На выплаты в шахте не влияет. Стройка идёт на монеты Обычной версии (если на балансе не хватает — добираем из банка) и не роняет ранг.</div>
   </div>
   <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
 </div></div>
@@ -849,6 +868,7 @@
       <div class="mrow" style="margin-top:8px"><button class="btn" id="pExport">📤 Код сохранения</button><button class="btn" id="pImport">📥 Загрузить</button></div>
       <textarea class="savebox" id="pSaveTxt" style="display:none" spellcheck="false"></textarea><div class="note" id="pSaveMsg"></div></div>
     <div class="card" id="pNewsCard" style="display:none"><div class="label">📰 Новости</div><div class="note" style="margin-top:4px">Что поменялось в последнем обновлении.</div><button class="btn" id="pNews" style="width:100%;margin-top:8px;padding:10px">📰 Что нового</button></div>
+    <div class="card devcard"><button class="btn" id="pDev" style="width:100%;padding:10px">🛠 Режим разработчика</button><div id="pDevBox"></div></div>
   </div>
   <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
 </div></div>
@@ -927,7 +947,7 @@
 <div class="modal" id="intro"><div class="card introcard"><div id="introBody"></div><div class="mrow"><button class="btn" id="introSkip">Пропустить</button><button class="btn runstart" id="introNext" style="margin-top:0">Дальше ▶</button></div></div></div>
 
 <script>
-// ---------- журнал ошибок (тихо пишется в память устройства, kirka_errlog) ----------
+// ---------- журнал ошибок (ловим с самой первой строки; смотреть — в режиме разработчика, вкладка 🐞) ----------
 var ERRK = 'kirka_errlog', ERRL = null, errT = 0;
 function errLog() { if (!ERRL) { try { ERRL = JSON.parse(localStorage.getItem(ERRK) || '[]'); } catch (e) { ERRL = []; } if (!Array.isArray(ERRL)) ERRL = []; } return ERRL; }
 function errFlush() { errT = 0; try { localStorage.setItem(ERRK, JSON.stringify(errLog().slice(0, 30))); } catch (e) { } }
@@ -1675,7 +1695,6 @@ if (localStorage.getItem('pk_cbal') === null) localStorage.setItem('pk_cbal', '1
 if (localStorage.getItem('pk_fair') === null) localStorage.setItem('pk_fair', '1'); // новички начинают в Обычной
 // формат 3: после обновления все один раз переключаются в Обычную (режим по умолчанию — не чит)
 if (+(localStorage.getItem('pk_ver') || 0) < 3) { localStorage.setItem('pk_fair', '1'); localStorage.setItem('pk_ver', '3'); }
-localStorage.setItem('pk_fair', '1'); // 3.0: Чит-версия убрана — игра всегда в одной (честной) версии; демо-кошелёк pk_cbal просто не используется
 function applyContext() {
   if (runActive()) { balance = run.bal; history = run.hist || []; mode = run.vol; fair = true; }
   else {
@@ -1708,7 +1727,7 @@ function save() {
 }
 
 function buildPayTable() {
-  const bet = getBet() || 0, M = MODES[mode]; $('payBet').innerHTML = fmt(bet) + COIN; $('payMode').textContent = `${M.name} волатильность`;
+  const bet = getBet() || 0, M = MODES[mode]; $('payBet').innerHTML = fmt(bet) + COIN; $('payMode').textContent = `${M.name} волатильность · ${fair ? 'обычная версия' : 'чит'}`;
   const chestMin = M.chest[0][0], chestMax = M.chest[M.chest.length - 1][0];
   const fm = fair ? FAIR_VALUE_MUL * M.fairMul : 1; // в Обычной руда платит ×fairMul (как в Game.val)
   const rows = ['dirt', 'stone', 'deepslate', 'coal', 'iron', 'lapis', 'redstone', 'gold', 'diamond', 'emerald', 'obsidian'].map(k =>
@@ -1735,7 +1754,7 @@ function renderHelp() {
     sec('hp', '❤ Прочность кирки', `<p>Каждый удар отнимает прочность: мягкие блоки (земля) почти не тратят её, крепкие (глубинный сланец, обсидиан) — больше. Полоска прочности всегда честно показывает, сколько осталось.</p>
       <p>Кирки бывают разные — чем лучше, тем больше прочности и сильнее удар:</p>${tiers}
       <p style="margin-top:8px">В начале каждого раунда кирка — деревянная. Улучшить её прямо в раунде можно наковальней.</p>
-      <p>🎰 Изношенная кирка может <b>треснуть</b> — потерять разом 10–30 ❤ (на любой кирке). Чем меньше осталось, тем выше шанс; он написан на полоске («трещина 2.4%»). В Чите трещин нет.</p>`),
+      <p>🎰 <b>В Обычной версии</b> изношенная кирка может <b>треснуть</b> — потерять разом 10–30 ❤ (на любой кирке). Чем меньше осталось, тем выше шанс; он написан на полоске («трещина 2.4%»). В Чите трещин нет.</p>`),
     sec('blk', '💎 Руда и особые блоки', `<p>Чем реже руда, тем дороже: ${ores}<br>Земля и камень платят копейки. Точные суммы при твоей ставке — в таблице выплат.</p>
       ${row(ICON.tnt, `<b>${BLOCKS.tnt.name}</b> — взрывается и разносит блоки вокруг (5×5). За всю руду в зоне — монеты.`)}
       ${row(ICON.crafting, `<b>${BLOCKS.crafting.name}</b> — чинит кирку: +${REPAIR_HEAL} ❤ (не выше максимума).`)}
@@ -1748,7 +1767,9 @@ function renderHelp() {
     sec('hell', '🔥 Портал в ад — бонуска', `${row(ICON.portal, `<b>${BLOCKS.portal.name}</b> иногда попадается в шахте. Кирка в него влетела — начинается бесплатная бонуска.`)}
       <p style="margin-top:6px">В аду кирка <b>не сгорает</b>: всё, что накопала, — твоё. Там дорогая руда на незерраке и чернокамне, а чем глубже — тем больше множитель (×1…×${HELL.maxMult}).</p>
       <p>Бонуску можно и <b>купить</b> кнопкой «🔥 ПОРТАЛ В АД» за ×${BONUS_PRICE} от ставки (нужно нажать два раза — защита от случайного тапа).</p>`),
-    sec('mode', '⚙ Волатильность', `<p><b>🟦 Низкая волатильность</b> — частые небольшие выигрыши. <b>🟥 Высокая</b> — реже, но крупнее. Переключается в «⚙ Режим».</p>`),
+    sec('mode', '⚙ Версии и волатильность', `<p><b>🎰 Обычная</b> — как настоящее казино: честная прочность, трещины, основной кошелёк. Здесь растут ранг, деревня, банк, задания и достижения.</p>
+      <p><b>😈 Чит</b> — щедрая демка без трещин, свой отдельный кошелёк и 🎁 +1000 без ограничений. На деревню и ранг не влияет.</p>
+      <p><b>🟦 Низкая волатильность</b> — частые небольшие выигрыши. <b>🟥 Высокая</b> — реже, но крупнее. Переключается в «⚙ Режим».</p>`),
     sec('meta', '🏆 Ранг, подарки, банк, деревня', `${row('👑', `<b>Ранг</b> растёт от рекорда богатства (баланс + банк + вложенное в деревню). Чем выше ранг — тем больше <b>макс. ставка</b> и ежедневный подарок. Сейчас: ${rank().i} ${rank().n}, ставка до ${isFinite(rank().bet) ? fmtShort(rank().bet) : '∞'}.`)}
       ${row('🎁', `<b>Подарки</b> (кнопка справа сверху): ежедневный подарок, 3 задания в день и спасательный круг — +${fmt(RESCUE)}, если монеты кончились.`)}
       ${row('🏦', `<b>Банк</b>: положи монеты — +${BANK_RATE * 100}% в день (проценты идут с первых ${fmtShort(BANK_CAP)}). В шахте их не потеряешь.`)}
@@ -1830,13 +1851,14 @@ function updatePanel() {
   setText('mBankSub', isMain() ? fmtShort(meta.bank.amt) + ' · +1%' : '🔒 ' + (ra ? 'забег' : 'чит'));
   setProp($('mRuns'), 'mRunsCls', 'className', 'btn' + (run ? ' hot' : ''));
   setText('mRunsSub', ra ? `идёт · р.${run.rounds}` : run ? '⏸ на паузе' : runs.length ? `${runs.length} шт.` : 'новый');
-  setText('mModeSub', ra ? `🔒 ${MODES[mode].name}` : MODES[mode].name);
+  setText('mModeSub', ra ? `🔒 ${MODES[mode].name}` : `${fair ? 'Обычная' : 'Чит'} · ${MODES[mode].name}`);
   cosPanel(); if (uiReady) uiApply(); // замки и подсветка новых кнопок — после всех className
-  // окно «Режим»: карточки волатильности
+  // окно «Режим»: карточки версии и волатильности
   const lockMode = playing || ra, modeKey = `${fair}|${mode}|${lockMode}`;
   if (_cache.get('modeKey') !== modeKey) {
     _cache.set('modeKey', modeKey);
     const mark = (o, on) => { o.classList.toggle('on', on); o.disabled = lockMode; o.querySelector('.chk').textContent = on ? 'выбрано' : (lockMode ? '—' : 'выбрать'); };
+    document.querySelectorAll('#verOpts .opt').forEach(o => mark(o, (o.dataset.fair === '1') === fair));
     document.querySelectorAll('#modeOpts .opt').forEach(o => mark(o, o.dataset.mode === mode));
   }
   setProp($('modeLock').style, 'modeLockD', 'display', ra ? '' : 'none');
@@ -1899,7 +1921,7 @@ function showLearnHint(txt) {
   const kill = () => { h.remove(); removeEventListener('pointerdown', kill, true); };
   addEventListener('pointerdown', kill, true); setTimeout(kill, 8000);
 }
-const BUILD = '2026-11-01 · 3.0 выпуск';
+const BUILD = '2026-10-31 · новость об обновлении';
 function play() {
   ac();
   if (tut) { if (tut.step === 'play') tutPlayRound(); return; } // во время обучения — только учебный раунд
@@ -2074,7 +2096,7 @@ function openSheet(id) {
   if (id === 'learn') renderLearn();
   sheetId = id; const el = $('sh-' + id); el.querySelector('.sh-body').scrollTop = 0; el.classList.add('show');
   if (id === 'vil') openVil();
-  if (id === 'prof') { $('pSaveMsg').textContent = ''; renderProfile(); }
+  if (id === 'prof') { $('pSaveMsg').textContent = ''; devAsk = false; renderProfile(); renderDev(); }
   if (id === 'cos') { meta.cos.seen = 1; saveMeta(); cosRender(); }
   if (id === 'pet') { cosPv.kind = null; cosPv.hat = null; digTick(true); petRender(); petLoopGo(); }
   if (id === 'gift') renderGifts();
@@ -2461,13 +2483,13 @@ const isMain = () => fair && !runActive();          // сейчас открыт
 // Счётчик — сыгранные раунды (как в статистике: честная игра, без обучений). Кто играл до v25 — всё открыто сразу.
 var uiReady = false; // var: updatePanel может сработать раньше, чем объявлен UNLOCK
 const UNLOCK = [
-  { k: 'vil', n: 3, btn: 'mVil', sheet: 'vil', i: px('house'), t: 'Деревня', d: 'Строй дома за монеты — они <b>приносят доход</b>, даже пока ты не играешь. Заходи и собирай.' },
-  { k: 'pet', n: 6, btn: 'mPet', sheet: 'pet', i: px('paw'), t: 'Питомец', d: 'Питомец умеет <b>копать</b>! Отправь его на свою землю — он выкапывает находки в рюкзак, даже когда игра закрыта. Продавай их за монеты.' },
-  { k: 'bank', n: 10, btn: 'mBank', sheet: 'bank', i: px('bank'), t: 'Банк', d: 'Положи монеты в банк — <b>каждый день +1%</b>, и там они точно не сгорят.' },
-  { k: 'cos', n: 15, btn: 'mCos', sheet: 'cos', i: px('palette'), t: 'Косметика', d: 'Скины кирки, следы, эффекты, темы шахты и <b>кейсы</b> (в них бывают питомцы и шапки).' },
-  { k: 'bonus', n: 20, btn: 'buyBonus', i: px('fire'), t: 'Портал в ад', d: 'Кнопка «Портал в ад» — <b>бонуска</b>: в аду множитель растёт с глубиной, а кирка не сгорает.' },
-  { k: 'runs', n: 30, btn: 'mRuns', sheet: 'runs', i: px('flag'), t: 'Забеги', d: 'Испытание: тебе дают <b>отдельный кошелёк</b> — сколько сможешь поднять?' },
-  { k: 'mode', n: 40, btn: 'mMode', sheet: 'mode', i: px('gear'), t: 'Режим', d: '<b>Волатильность</b> (частые небольшие выигрыши или редкие крупные) и <b>таблица выплат</b>.' },
+  { k: 'vil', n: 2, btn: 'mVil', sheet: 'vil', i: px('house'), t: 'Деревня', d: 'Строй дома за монеты — они <b>приносят доход</b>, даже пока ты не играешь. Заходи и собирай.' },
+  { k: 'bank', n: 4, btn: 'mBank', sheet: 'bank', i: px('bank'), t: 'Банк', d: 'Положи монеты в банк — <b>каждый день +1%</b>, и там они точно не сгорят.' },
+  { k: 'pet', n: 5, btn: 'mPet', sheet: 'pet', i: px('paw'), t: 'Питомец', d: 'Питомец умеет <b>копать</b>! Отправь его на свою землю — он выкапывает находки в рюкзак, даже когда игра закрыта. Продавай их за монеты.' },
+  { k: 'cos', n: 7, btn: 'mCos', sheet: 'cos', i: px('palette'), t: 'Косметика', d: 'Скины кирки, следы, эффекты, темы шахты и <b>кейсы</b> (в них бывают питомцы и шапки).' },
+  { k: 'bonus', n: 10, btn: 'buyBonus', i: px('fire'), t: 'Портал в ад', d: 'Кнопка «Портал в ад» — <b>бонуска</b>: в аду множитель растёт с глубиной, а кирка не сгорает.' },
+  { k: 'runs', n: 14, btn: 'mRuns', sheet: 'runs', i: px('flag'), t: 'Забеги', d: 'Испытание: тебе дают <b>отдельный кошелёк</b> — сколько сможешь поднять?' },
+  { k: 'mode', n: 18, btn: 'mMode', sheet: 'mode', i: px('gear'), t: 'Режим', d: 'Волатильность, <b>таблица выплат</b> и Чит-режим с бесплатными монетами.' },
 ];
 if (!meta.ui || typeof meta.ui !== 'object') meta.ui = { all: metaFresh ? 0 : 1, base: 0, early: [], seen: [], hot: [] };
 ['early', 'seen', 'hot'].forEach(k => { if (!Array.isArray(meta.ui[k])) meta.ui[k] = []; });
@@ -2561,7 +2583,7 @@ function bankAccrue() {
   b.t = now; if (add > 0) { b.amt += add; b.earned += add; b.pend = (b.pend || 0) + add; }
 }
 function bankOp(dir, amt) {
-  if (!isMain() || busy()) return 'Банк работает между раундами';
+  if (!isMain() || busy()) return 'Банк работает между раундами в Обычной версии';
   amt = Math.floor(amt * 100) / 100; if (!(amt > 0)) return 'Введи сумму';
   bankAccrue();
   if (dir === 'in') { if (amt > balance + 1e-9) return 'На балансе столько нет'; balance = Math.round((balance - amt) * 100) / 100; meta.bank.amt += amt; }
@@ -2653,7 +2675,7 @@ function trailAction(id) {
   cosPv.trail = id; pvParts = [];
   if (meta.owned.includes(id)) { meta.trail = id; saveMeta(); gtoast(`✨ След: ${T.n}`, '#d6b0ff'); renderProfile(); cosRender(); return; }
   if (!T.price) return;
-  if (mainBal() < T.price) { gtoast('Не хватает монет на балансе', '#ff8a8a'); return; }
+  if (mainBal() < T.price) { gtoast('Не хватает монет на балансе Обычной версии', '#ff8a8a'); return; }
   addMain(-T.price); meta.owned.push(id); meta.trail = id; saveMeta(); sfxAch(); gtoast(`✨ Куплен след «${T.n}»`, '#d6b0ff', true); renderProfile(); cosRender(); updatePanel();
 }
 
@@ -2767,7 +2789,7 @@ function renderGifts() {
     return `<div class="quest${q.done ? ' done' : ok ? ' ok' : ''}"><div class="qt"><b>${qText(q)}</b><span>${QLV[q.lv]} · ${q.p} / ${q.n}</span><div class="bar sm"><i style="width:${pct}%"></i></div></div>
       <button class="btn qbtn" data-qi="${i}" ${q.done || !ok ? 'disabled' : ''}>${q.done ? '✓' : `+${fmtShort(qReward(q))}`}</button></div>`;
   }).join('');
-  $('gQuestNote').textContent = `Новые задания — каждый день в полночь (через ${untilMidnight()}). Засчитываются обычные раунды и забеги.`;
+  $('gQuestNote').textContent = `Новые задания — каждый день в полночь (через ${untilMidnight()}). Засчитывается Обычная версия и забеги.`;
   const S = rescueState();
   $('gRescueBtn').disabled = !S.ok;
   $('gRescueBtn').innerHTML = S.ok ? `🛟 Забрать +${fmt(RESCUE)}${COIN}` : !S.poor ? '🛟 Пока не нужен' : `🛟 через ${Math.floor(S.left / 60000)}:${String(Math.floor(S.left / 1000) % 60).padStart(2, '0')}`;
@@ -2805,13 +2827,13 @@ function renderProfile() {
   const prog = nx ? Math.max(0, Math.min(1, (meta.peak - R.w) / (nx.w - R.w))) : 1;
   $('pRank').innerHTML = `<div class="rankcard"><div class="ri">${R.i}</div><div class="rn"><b>${R.n}</b><span>ранг ${ri + 1} из ${RANKS.length}</span></div><div class="rb"><span>макс. ставка</span><b>${R.bet === Infinity ? '∞' : fmtShort(R.bet)}</b></div></div>
     <div class="bar"><i style="width:${(prog * 100).toFixed(1)}%"></i></div>
-    <div class="note" style="margin-top:6px">Состояние сейчас <b>${fmt(wealth())}</b>${COIN} (баланс + банк + деревня), рекорд ${fmt(meta.peak)}.${nx ? ` До ранга «${nx.n}» ${nx.i} — рекорд ${fmtShort(nx.w)}.` : ' Это высший ранг!'} Ранг поднимает лимит ставки и умножает подарки и задания (сейчас ×${R.k}).</div>
+    <div class="note" style="margin-top:6px">Состояние сейчас <b>${fmt(wealth())}</b>${COIN} (баланс + банк + деревня), рекорд ${fmt(meta.peak)}.${nx ? ` До ранга «${nx.n}» ${nx.i} — рекорд ${fmtShort(nx.w)}.` : ' Это высший ранг!'} Ранг поднимает лимит ставки в Обычной версии и умножает подарки и задания (сейчас ×${R.k}).</div>
     <div class="ladder">${RANKS.map((q, i) => `<span class="${i <= ri ? 'on' : ''}" title="${q.n}: от ${fmt(q.w)}">${q.i}</span>`).join('')}</div>`;
   const rtp = s.bet > 0 ? (100 * s.won / s.bet).toFixed(1) + '%' : '—';
   const tiles = [[fmt(s.rounds), 'раундов'], [s.rounds ? Math.round(100 * s.wins / s.rounds) + '%' : '—', 'забрано'], [fmtShort(s.bet), 'поставлено'], [fmtShort(s.won), 'выиграно'],
     [rtp, 'твоя отдача'], ['×' + (s.bestX || 0).toFixed(1), 'лучший икс'], [s.maxDepth + ' м', 'глубже всего'], ['×' + (s.bonusBest || 0).toFixed(0), 'лучшая бонуска'],
     [fmt(s.blocks.diamond || 0), 'алмазов'], [fmt(s.blocks.emerald || 0), 'изумрудов'], [fmt(s.chests), 'сундуков'], [fmt(s.portals), 'порталов']];
-  $('pStats').innerHTML = `<div class="tiles">${tiles.map(t => `<div class="tile"><b>${t[0]}</b><span>${t[1]}</span></div>`).join('')}</div><div class="note" style="margin-top:6px">Считаются обычные раунды и забеги.</div>`;
+  $('pStats').innerHTML = `<div class="tiles">${tiles.map(t => `<div class="tile"><b>${t[0]}</b><span>${t[1]}</span></div>`).join('')}</div><div class="note" style="margin-top:6px">Считается только честная игра: Обычная версия и забеги.</div>`;
   const got = ACH.filter(a => meta.ach[a.id]).length;
   $('pAchT').textContent = `Достижения · ${got} / ${ACH.length}`;
   $('pAch').innerHTML = ACH.map(a => {
@@ -2852,6 +2874,7 @@ const INTRO_UPD = [
   ['🚀', 'Кирка 2.0', 'Большое обновление! Теперь у монет есть цель: <b>🏘 деревня</b>, <b>🏦 банк</b>, <b>🎁 подарки</b> и задания, <b>👤 профиль</b> с рангами, 33 достижениями и следами за киркой.'],
   ['🏘', 'Деревня', 'Строй деревню из блоков, как в Майнкрафте: дом, кузница, ферма… Четыре деревни — Равнины, Пустыня, Снега и Незер, 60 стадий. Здания копят монеты — заходи собирать. Здания вырастают на глазах, по дорожкам ходят жители.'],
   ['🎁', 'Подарки и банк', 'Каждый день — подарок (серия 7 дней) и 3 задания. 🏦 Банк: отложи монеты на чёрный день, они растут на 1% в день. Бесплатные +1000 теперь — спасательный круг, когда монеты кончились.'],
+  ['😈', 'Важно про Чит', 'Чит-версия теперь — <b>отдельный демо-кошелёк</b> (10 000 монет). Твой прежний баланс остался в Обычной версии. Деревня, банк, задания и достижения работают на монеты Обычной.'],
 ];
 let introPages = null, introI = 0;
 function showIntro(pages) { introPages = pages; introI = 0; renderIntro(); $('intro').classList.add('show'); }
@@ -2887,7 +2910,7 @@ var LEARN = [
   { k: 'cos', i: px('palette'), n: 'Косметика', d: 'Разделы, скины и редкости, как купить и выбрать, кейсы.', r: 100, need: 'cos' },
   { k: 'hell', i: px('fire'), n: 'Бонуска', d: 'Бесплатный учебный заход в ад: множитель глубины, руда ада, почему кирка там не сгорает.', r: 150, need: 'bonus' },
   { k: 'runs', i: px('flag'), n: 'Забеги', d: 'Отдельный кошелёк, волатильность на старте, вывод и история забегов.', r: 100, need: 'runs' },
-  { k: 'mode', i: px('gear'), n: 'Режим', d: 'Волатильность и таблица выплат.', r: 100, need: 'mode' },
+  { k: 'mode', i: px('gear'), n: 'Режим', d: 'Обычная и Чит, волатильность и таблица выплат.', r: 100, need: 'mode' },
 ];
 const TUT_SHEET = { vil: 'vil', bank: 'bank', pet: 'pet', cos: 'cos', runs: 'runs', mode: 'mode' }; // обучения, которые идут внутри своего окна
 const TUT_UNL = { vil: 'vil', bank: 'bank', pet: 'pet', cos: 'cos', bonus: 'hell', runs: 'runs', mode: 'mode' };   // что открылось → какое обучение показать сразу
@@ -2923,7 +2946,7 @@ const TUT = {
   hp: { holes: () => [rEl($('hudHp'))], ptrs: () => [rEl($('hudHp'))], next: 'Понятно ▶',
     t: 'Прочность кирки ❤', d: 'Каждый удар её тратит. Дойдёт до нуля — кирка <b>сломается</b>, и накопанное за раунд <b>сгорит</b>.' },
   crack: { holes: () => [rEl($('hudHp')), tutPt()], ptrs: () => [rEl($('hudHp')), tutPt()],
-    t: '💔 Трещина!', d: () => `Кирка треснула и разом потеряла <b>${tut.crackCost} ❤</b>. Так бывает: чем сильнее кирка изношена, тем выше шанс трещины (10–30 ❤ за раз на любой кирке). Шанс написан на полоске — сейчас <b>${(game.crackChance() * 100).toFixed(1)}%</b>. Поэтому «дотянуть до 1 ❤» не выйдет — <b>забирай с запасом</b>.` },
+    t: '💔 Трещина!', d: () => `Кирка треснула и разом потеряла <b>${tut.crackCost} ❤</b>. Так бывает в Обычной версии: чем сильнее кирка изношена, тем выше шанс трещины (10–30 ❤ за раз на любой кирке). Шанс написан на полоске — сейчас <b>${(game.crackChance() * 100).toFixed(1)}%</b>. Поэтому «дотянуть до 1 ❤» не выйдет — <b>забирай с запасом</b>.` },
   lit: { holes: () => [rPad(tutPt(), CELL * SC * 1.9)], ptrs: () => [tutPt()],
     t: () => `${blkImg('tnt')}Динамит!`, d: 'Кирка летит в динамит: от удара он <b>загорится</b> и через полсекунды рванёт — разнесёт блоки в зоне 5×5 (она подсвечена). Руда в зоне взрыва — тоже монеты. Кирку взрыв не ранит.' },
   repair: { holes: () => [tutPt(), rEl($('hudHp'))], ptrs: () => [tutPt(), rEl($('hudHp'))],
@@ -2938,9 +2961,9 @@ const TUT = {
     t: 'Забирай вовремя!', d: () => `Накопано <b>${tutWin()}</b> — это ставка назад и <b>+${fmt(Math.max(0, Math.round(game.win - TUT_BET)))}</b> сверху (×1 — просто ставка вернулась). Прочности ${Math.round(game.hp)} из ${game.maxHp}, дальше риск. Жми <b>«ЗАБРАТЬ»</b>.` },
   // ---------- кнопки и экран ----------
   uTop: { holes: () => [rUnion(rEl(qs('.topbar .balrow')), rEl($('free')), rEl($('learnBtn')))], ptrs: () => [rEl($('balance')), rEl($('free')), rEl($('learnBtn'))],
-    t: '💰 Верхняя полоса', d: () => `<b>Баланс</b> — твои монеты: ставка списывается отсюда, выигрыш приходит сюда.<br>🎁 <b>Подарки</b> — ${fair ? 'ежедневный подарок, задания и спасательный круг, зелёная точка — есть что забрать' : 'в Чите +1000 монет без ограничений'}.<br>🎓 <b>Обучения</b> — светится, пока есть обучения с наградой.` },
+    t: '💰 Верхняя полоса', d: () => `<b>Баланс</b> — твои монеты: ставка списывается отсюда, выигрыш приходит сюда (у Обычной и Чита разные кошельки).<br>🎁 <b>Подарки</b> — ${fair ? 'ежедневный подарок, задания и спасательный круг, зелёная точка — есть что забрать' : 'в Чите +1000 монет без ограничений'}.<br>🎓 <b>Обучения</b> — светится, пока есть обучения с наградой.` },
   uStage: { holes: () => [rEl($('stage'))], ptrs: () => [rEl($('hudDepth')), winPill(), rEl($('hudHp'))],
-    t: '⛏ Шахта', d: () => 'Сверху: <b>глубина</b>, <b>выигрыш раунда</b> и <b>прочность кирки ❤</b> (там же шанс трещины). 🔊 в углу — звук.' + (uiOpen('pet') ? ' В углу сидит твой 🐾 питомец, когда отдыхает (когда копает — его тут нет).' : '') },
+    t: '⛏ Шахта', d: () => 'Сверху: <b>глубина</b>, <b>выигрыш раунда</b> и <b>прочность кирки ❤</b> (в Обычной там же шанс трещины). 🔊 в углу — звук.' + (uiOpen('pet') ? ' В углу сидит твой 🐾 питомец, когда отдыхает (когда копает — его тут нет).' : '') },
   uBet: { holes: () => [rEl(qs('.betline'))], ptrs: () => [rEl($('bet'))],
     t: '🪙 Ставка', d: () => `− и + меняют ставку, ½ и ×2 — половина и вдвое, 10 — быстро поставить 10, MAX — максимум (не больше баланса и лимита ранга: сейчас ${isFinite(maxBet()) ? fmtShort(maxBet()) : '∞'}).` },
   uPlay: { holes: () => [rEl($('play')), rEl($('cash'))], ptrs: () => [rEl($('play')), rEl($('cash'))],
@@ -2952,7 +2975,7 @@ const TUT = {
   uMenuA: { holes: () => [menuRow(0)], ptrs: () => [],
     t: '☰ Меню · верхний ряд', d: () => 'Каждая кнопка открывает <b>окно на весь экран</b>, под кнопкой мелко — что там сейчас.<br>' + menuTxt([['vil', '🏘', 'Деревня', 'строй и собирай доход'], ['bank', '🏦', 'Банк', '+1% в день, там монеты не сгорят'], ['pet', '🐾', 'Питомец', 'копает находки, даже когда игра закрыта'], ['cos', '🎨', 'Косметика', 'скины кирки, следы, эффекты, темы, кейсы']]) },
   uMenuB: { holes: () => [menuRow(1)], ptrs: () => [],
-    t: '☰ Меню · нижний ряд', d: () => menuTxt([['runs', '🏁', 'Забеги', 'испытание с отдельным кошельком'], ['mode', '⚙', 'Режим', 'волатильность и выплаты'], ['', '📋', 'Выплаты', 'сколько платит каждый блок при твоей ставке (открыто сразу)'], ['', '👤', 'Профиль', 'ранг, статистика, достижения, сохранение и справка «Как играть»']]) + '<br>Пока идёт раунд, меню заблокировано — сначала забери или доиграй.' },
+    t: '☰ Меню · нижний ряд', d: () => menuTxt([['runs', '🏁', 'Забеги', 'испытание с отдельным кошельком'], ['mode', '⚙', 'Режим', 'Обычная / Чит и волатильность'], ['', '📋', 'Выплаты', 'сколько платит каждый блок при твоей ставке (открыто сразу)'], ['', '👤', 'Профиль', 'ранг, статистика, достижения, сохранение и справка «Как играть»']]) + '<br>Пока идёт раунд, меню заблокировано — сначала забери или доиграй.' },
   // ---------- питомец (окно 🐾 открыто) ----------
   pScene: { holes: () => [rEl(qs('#sh-pet .pscene'))], ptrs: () => [rPt(PT.HX - 2, PT.G - 12, PT.HX + 16, PT.G + 6)], scroll: () => qs('#sh-pet .pscene'), area: 1,
     t: () => `🐾 Земля питомца`, d: 'Тут он <b>копает сам</b>. Находка вылезает из ямки по чуть-чуть, вылезла целиком — летит в рюкзак. Находки — уголь, железо, редстоун, лазурит, золото, алмаз и изумруд. Копает <b>по реальному времени, даже когда игра закрыта</b>.' },
@@ -2998,10 +3021,12 @@ const TUT = {
   rVol: { holes: () => [rEl($('runVol'))], ptrs: () => [rEl($('runVol'))], scroll: () => $('runVol'), area: 1, need: () => !!rEl($('runVol')),
     t: '🎲 Волатильность', d: 'Выбирается на старте и в забеге <b>не меняется</b>. Низкая — часто и понемногу, высокая — редко, но крупно.' },
   rGo: { holes: () => [rEl($('runGo'))], ptrs: () => [rEl($('runGo'))], scroll: () => $('runGo'), area: 1, need: () => !!rEl($('runGo')),
-    t: '🏁 Старт и вывод', d: 'В забеге всё как обычно, бонуски покупать можно. Закончить — кнопкой <b>«💰 ВЫВОД»</b>. Задача — поднять как можно больше.' },
+    t: '🏁 Старт и вывод', d: 'В забеге всё как в Обычной (без чита), бонуски покупать можно. Закончить — кнопкой <b>«💰 ВЫВОД»</b>. Задача — поднять как можно больше.' },
   rStats: { holes: () => [rEl($('runList').parentElement)], ptrs: () => [rEl($('runList').parentElement)], scroll: () => $('runList'), area: 1,
     t: '📊 История забегов', d: 'Каждый забег попадает сюда — с графиком баланса, на нём отмечены бонуски.' },
   // ---------- режим ----------
+  mVer: { holes: () => [rEl($('verOpts'))], ptrs: () => [rEl(qs('#verOpts .fair')), rEl(qs('#verOpts .cheat'))], scroll: () => $('verOpts'), area: 1,
+    t: '🎰 Обычная или 😈 Чит', d: '<b>Обычная</b> — основной кошелёк: деревня, банк, ранги, задания. <b>Чит</b> — щедрая демка со своим кошельком и бесплатными монетами, но прогресс там не копится.' },
   mVol: { holes: () => [rEl($('modeOpts'))], ptrs: () => [rEl($('modeOpts'))], scroll: () => $('modeOpts'), area: 1,
     t: '🟦 Волатильность', d: '<b>Низкая</b> — частые небольшие выигрыши. <b>Высокая</b> — реже, но крупнее. Меняется между раундами.' },
   mPay: { holes: () => [rEl($('mPayIn'))], ptrs: () => [rEl($('mPayIn'))], scroll: () => $('mPayIn'), area: 1,
@@ -3016,7 +3041,7 @@ const TUT = {
   vProg: { holes: () => [rEl($('vProgT') && $('vProgT').parentElement.parentElement)], ptrs: () => [rEl($('vProgB') && $('vProgB').parentElement)], scroll: () => $('vProgB'), area: 1,
     t: '📊 Прогресс', d: 'Сколько стадий построено из всех. Достроишь всё — деревня готова.' },
   vCards: { holes: () => [rEl($('vCards').firstElementChild)], ptrs: () => [rEl($('vCards').firstElementChild)], scroll: () => $('vCards').firstElementChild || $('vCards'), area: 1,
-    t: '🔨 Здания', d: 'Каждое строится <b>стадиями</b> за монеты (не хватает — добираем из банка). Стройка не роняет ранг: вложенное считается в богатство.' },
+    t: '🔨 Здания', d: 'Каждое строится <b>стадиями</b> за монеты Обычной версии (не хватает — добираем из банка). Стройка не роняет ранг: вложенное считается в богатство.' },
   vInc: { holes: () => [rEl(qs('#sh-vil .vinc'))], ptrs: () => [rEl($('vIncB') && $('vIncB').parentElement), rEl($('vCollect'))], scroll: () => qs('#sh-vil .vinc'), area: 1,
     t: '💰 Доход', d: 'Здания копят <b>0,25% в час</b> от вложенного, склад — на 6 часов. Само на баланс не капает: заходи и жми <b>«Собрать»</b>. Склад полон — работа стоит.' },
   vReward: { holes: () => [rEl($('vReward'))], ptrs: () => [rEl($('vReward'))], scroll: () => $('vReward'), area: 1, need: () => !!rEl($('vReward')),
@@ -3045,7 +3070,7 @@ const TUT_FLOW = {
   bank: ['oSheet', 'bAmt', 'bTabs', 'bGo', 'bTip'],
   cos: ['oSheet', 'cTabs', 'cPicks', 'cCard', 'cCase'],
   runs: ['oSheet', 'rAmt', 'rVol', 'rGo', 'rStats'],
-  mode: ['oSheet', 'mVol', 'mPay'],
+  mode: ['oSheet', 'mVer', 'mVol', 'mPay'],
   welcome: ['welcome'],
 };
 const TUT_OUTRO = {
@@ -3053,10 +3078,10 @@ const TUT_OUTRO = {
   ui: 'Теперь ты знаешь, где что. Все правила — в 👤 Профиль → ❓ Как играть.',
   vil: 'Копи на здания: деревня приносит доход, даже когда на балансе пусто. Заходи собирать — само не капает.',
   bank: 'Банк — твоя подушка: монеты там растут и не сгорают.',
-  cos: 'Покупки — за монеты с баланса. Выбранное видно сразу в шахте.',
+  cos: 'Монеты на косметику — только с баланса Обычной версии. Выбранное видно сразу в шахте.',
   pet: 'Совет: отправляй питомца копать перед тем, как закрыть игру, — вернёшься к находкам. Устал — отправь отдыхать, это 2 часа.',
   runs: 'Забег — проверка: сколько поднимешь с одной суммы. Основной баланс в безопасности.',
-  mode: 'Новичку лучше низкая волатильность. Поменять можно в любой момент между раундами.',
+  mode: 'Новичку лучше Обычная и низкая волатильность. Поменять можно в любой момент между раундами.',
   hell: () => `По-настоящему бонуска стоит ×${BONUS_PRICE} от ставки или ловится бесплатно через портал в шахте. Итог бывает и меньше цены, и в разы больше.`,
 };
 // холостой прогон учебного раунда: на каком шаге кирка впервые ударит каждый новый объект
@@ -3266,11 +3291,11 @@ function tutComplete() {
   const first = !meta.learn[L.k];
   if (first) {
     meta.learn[L.k] = 1; addMain(L.r); saveMeta(); updatePanel();
-    gtoast(`🎓 Награда за обучение: +${fmt(L.r)}${COIN}` + (isMain() ? '' : ' <small>(на основной баланс)</small>'), '#ffd23f', true); sfxAch();
+    gtoast(`🎓 Награда за обучение: +${fmt(L.r)}${COIN}` + (isMain() ? '' : ' <small>(на баланс Обычной)</small>'), '#ffd23f', true); sfxAch();
   }
   const left = learnLeft(), f = v => typeof v === 'function' ? v() : v;
   TUT.end = { emo: '🎓', t: `✅ Обучение «${L.n}» закончено`,
-    d: (first ? `<span class="tut-rew">+${fmt(L.r)} <i class="coin"></i> на ${isMain() ? '' : 'основной '}баланс</span>` : '') + f(TUT_OUTRO[L.k]) +
+    d: (first ? `<span class="tut-rew">+${fmt(L.r)} <i class="coin"></i> на баланс${isMain() ? '' : ' Обычной'}</span>` : '') + f(TUT_OUTRO[L.k]) +
       (left ? `<br><br>Ещё ${left} ${left === 1 ? 'обучение' : 'обучения'} с наградой — кнопка <b>🎓</b> наверху.` : learnLocked() ? '<br><br>Новые обучения откроются по ходу игры.' : '<br><br>🎉 <b>Все обучения пройдены!</b>'),
     next: 'Понятно ▶', skip: left ? '🎓 Другие' : 'Закрыть' };
   tut.step = 'end'; tut.pt = null; tut.round = false; tutShow();
@@ -3297,7 +3322,7 @@ function renderLearn() {
   meta.learn = meta.learn || {};
   $('learnList').innerHTML = LEARN.map(L => { const d = !!meta.learn[L.k]; if (!learnOk(L)) { const U = uiU(L.need); return `<div class="lcard lock"><div class="li">${L.i}</div><div class="ltx"><b>${L.n}</b><small>Откроется вместе с «${U.t}» — ${uiLockTxt(U.k)}.</small><span class="lrw">награда +${fmt(L.r)}<i class="coin"></i></span></div><button class="btn lgo" disabled>🔒</button></div>`; } return `<div class="lcard${d ? ' done' : ''}"><div class="li">${L.i}</div><div class="ltx"><b>${L.n}</b><small>${L.d}</small><span class="lrw">${d ? '✓ пройдено' : `награда +${fmt(L.r)}`}<i class="coin"></i></span></div><button class="btn lgo" data-l="${L.k}"${ra ? ' disabled' : ''}>${d ? 'Ещё раз' : 'Начать ▶'}</button></div>`; }).join('');
   const left = learnLeft(), sum = LEARN.filter(L => !meta.learn[L.k]).reduce((a, L) => a + L.r, 0);
-  $('learnNote').innerHTML = ra ? '🏁 Идёт забег — обучения доступны после него или на паузе.' : !left && learnLocked() ? 'Открытые обучения пройдены. Остальные откроются по ходу игры.' : left ? `Осталось ${left} из ${LEARN.length} · ещё <b style="color:var(--gold)">+${fmt(sum)}</b><i class="coin"></i>. Награда — один раз за каждое обучение, монеты идут на основной баланс. Всё бесплатно: баланс не тратится, проиграть нельзя.` : '🎉 Все обучения пройдены. Можно пройти любое ещё раз — уже без награды.';
+  $('learnNote').innerHTML = ra ? '🏁 Идёт забег — обучения доступны после него или на паузе.' : !left && learnLocked() ? 'Открытые обучения пройдены. Остальные откроются по ходу игры.' : left ? `Осталось ${left} из ${LEARN.length} · ещё <b style="color:var(--gold)">+${fmt(sum)}</b><i class="coin"></i>. Награда — один раз за каждое обучение, монеты идут на баланс Обычной версии. Всё бесплатно: баланс не тратится, проиграть нельзя.` : '🎉 Все обучения пройдены. Можно пройти любое ещё раз — уже без награды.';
 }
 $('learnList').addEventListener('click', e => { const b = e.target.closest('[data-l]'); if (b && !b.disabled) { b.blur(); tutBegin(b.dataset.l); } });
 $('learnBtn').onclick = e => { e.currentTarget.blur(); if (tut) return; openSheet('learn'); };
@@ -3992,7 +4017,7 @@ function vDraw(now) {
   for (let i = vCoins.length - 1; i >= 0; i--) { const c = vCoins[i]; c.t += dt; if (c.t > c.life) { vCoins.splice(i, 1); continue; } c.vy += 420 * dt; c.x += c.vx * dt; c.y += c.vy * dt; g.globalAlpha = 1 - c.t / c.life; g.fillStyle = '#ffd23f'; g.strokeStyle = '#8a5a00'; g.lineWidth = 1.5; g.beginPath(); g.arc(c.x, c.y, 4, 0, 7); g.fill(); g.stroke(); }
   for (let i = vFloats.length - 1; i >= 0; i--) { const f = vFloats[i]; f.t += dt; if (f.t > 1.3) { vFloats.splice(i, 1); continue; } g.globalAlpha = Math.max(0, Math.min(1, 2.6 - f.t * 2)); g.font = '900 16px ui-monospace,monospace'; g.textAlign = 'center'; g.lineJoin = 'round'; g.lineWidth = 4; g.strokeStyle = '#000'; const y = f.y - f.t * 36; g.strokeText(f.text, f.x, y); g.fillStyle = '#ffd23f'; g.fillText(f.text, f.x, y); }
   g.globalAlpha = 1;
-  if (locked) { g.fillStyle = 'rgba(10,10,16,.55)'; g.fillRect(0, 0, vW, vH); g.font = '900 16px ui-monospace,monospace'; g.textAlign = 'center'; g.fillStyle = '#fff'; g.fillText('Сначала дострой «' + VILLAGES[meta.vil.cur - 1].n + '»', vW / 2, vH / 2); }
+  if (locked) { g.fillStyle = 'rgba(10,10,16,.55)'; g.fillRect(0, 0, vW, vH); g.font = '900 16px ui-monospace,monospace'; g.textAlign = 'center'; g.fillStyle = '#fff'; g.fillText('🔒 Сначала дострой «' + VILLAGES[meta.vil.cur - 1].n + '»', vW / 2, vH / 2); }
 }
 function vFrame(now) { if (sheetId !== 'vil') { vLoop = false; return; } try { vDraw(now); } catch (e) { } requestAnimationFrame(vFrame); }
 function vConfetti() { const cols = ['#ffd23f', '#3ddc63', '#4fc3ff', '#ff6b9a', '#c38bff', '#fff']; for (let i = 0; i < 140; i++) vConf.push({ x: vW / 2 + (Math.random() - .5) * 60, y: vH * .45, vx: (Math.random() - .5) * 420, vy: -150 - Math.random() * 320, t: 0, life: 1.4 + Math.random(), c: cols[i % cols.length] }); }
@@ -4005,7 +4030,7 @@ function renderVil() {
   $('vTabs').innerHTML = VILLAGES.map((q, i) => `<button class="btn vtab${i === vi ? ' on' : ''}" data-v="${i}">${vilUnlocked(i) ? q.i : '🔒'} ${q.n}<small>${vilDone(i)}/${vilTotal(i)}</small></button>`).join('');
   $('vProgT').textContent = `${V.i} ${V.n}: построено ${done} / ${total}`; $('vProgP').textContent = Math.round(100 * done / total) + '%';
   $('vProgB').style.width = (100 * done / total) + '%';
-  $('vMoney').innerHTML = `Для стройки: баланс <b>${fmt(mb)}</b>${COIN}` + (bank > 0 ? ` + банк <b>${fmt(bank)}</b>${COIN}` : '') + (fair && !runActive() ? '' : ' <span style="color:#ffcf6a">(с основного баланса)</span>');
+  $('vMoney').innerHTML = `Для стройки: баланс <b>${fmt(mb)}</b>${COIN}` + (bank > 0 ? ` + банк <b>${fmt(bank)}</b>${COIN}` : '') + (fair && !runActive() ? '' : ' <span style="color:#ffcf6a">(монеты Обычной версии)</span>');
   // ближайшая цель — самая дешёвая следующая стадия, на которую пока не хватает
   let goal = null; if (unl) for (const b of V.b) { const n2 = b.st[vilLv(V, b)]; if (n2 && mb + bank < n2[1] && (!goal || n2[1] < goal.p)) goal = { id: b.id, p: n2[1], n: b.n }; }
   if (goal) $('vMoney').innerHTML += `<div class="vgoaltop">🎯 Ближайшая цель: <b>${goal.n}</b> — ещё <b>${fmt(Math.ceil(goal.p - mb - bank))}</b>${COIN}</div>`;
@@ -4229,7 +4254,7 @@ function cosDefaults() { return { skin: 'classic', fx: 'classic', cfx: 'classic'
 function cosOwn(cat, id) {
   const it = COS[cat] && COS[cat][id]; if (!it) return false;
   if (it.free || meta.cos.own.includes(cat + ':' + id)) return true;
-  if (false && meta.cos.deny.includes(cat + ':' + id)) return false; // убрано в режиме разработчика (даже если положено за достижение/ранг/деревню)
+  if (meta.cos.deny.includes(cat + ':' + id)) return false; // убрано в режиме разработчика (даже если положено за достижение/ранг/деревню)
   if (it.ach && meta.ach[it.ach]) return true;
   if (it.rank != null && rankIdx() >= it.rank) return true;
   if (it.vil != null && typeof vilComplete === 'function' && vilComplete(it.vil)) return true;
@@ -4372,40 +4397,6 @@ const PX = {
     p: { g: '#9a9aac', G: '#c8c8d8', r: '#ff4d4d' } },
   zzz: { m: ['......wwww..', '.........w..', '........w...', '.......w....', '......wwww..', '.wwww.......', '....w.......', '...w........', '..w.........', '.wwww.......', '............', '............'],
     p: { w: '#cfe0ff' } },
-  heart: { m: ['............', '.rrrr..rrrr.', 'rRRrrrrrrrrr', 'rRrrrrrrrrrr', 'rrrrrrrrrrrr', 'rrrrrrrrrrrd', '.rrrrrrrrrd.', '..rrrrrrrd..', '...rrrrrd...', '....rrrd....', '.....rd.....', '............'],
-    p: { r: '#e8303a', R: '#ff9a9a', d: '#a01820' } },
-  heartb: { m: ['............', '.rrrr..rrrr.', 'rRRrrr.rrrrr', 'rRrrr.rrrrrr', 'rrrrrr.rrrrr', 'rrrrr.rrrrrd', '.rrrrr.rrrd.', '..rrr.rrrd..', '...rrr.rd...', '....rrrd....', '.....rd.....', '............'],
-    p: { r: '#e8303a', R: '#ff9a9a', d: '#a01820' } },
-  cup: { m: ['............', '..yyyyyyyy..', 'yyyYyyyyydyy', 'y.yYyyyyyd.y', 'yyyYyyyyydyy', '...yYyyyd...', '....yyyd....', '.....yd.....', '.....yd.....', '...yyyyyy...', '..bbbbbbbb..', '............'],
-    p: { y: '#ffd23f', Y: '#fff3a0', d: '#c08a10', b: '#6a4a2a' } },
-  crown: { m: ['............', '............', '.y...yy...y.', '.yy..yy..yy.', '.yyy.yy.yyy.', '.yyyyyyyyyy.', '.yryybbyyry.', '.yyyyyyyyyy.', '.dddddddddd.', '............', '............', '............'],
-    p: { y: '#ffd23f', d: '#c08a10', r: '#ff3b3b', b: '#3fa0ff' } },
-  skull: { m: ['............', '...wwwwww...', '..wwwwwwww..', '.wwwwwwwwww.', '.wkkwwwwkkw.', '.wkkwwwwkkw.', '.wwwwkkwwww.', '..wwwwwwww..', '..wkwkwkwk..', '...wwwwww...', '............', '............'],
-    p: { w: '#e8e8f0', k: '#1a1a24' } },
-  unlock: { m: ['......gggg..', '.....g....g.', '.....g....g.', '..........g.', '..........g.', '.yyyyyyyyyy.', '.yYyyyyyyyd.', '.yyyykkyyyd.', '.yyyykkyyyd.', '.yyyyyyyyyd.', '.dddddddddd.', '............'],
-    p: { g: '#b8bcc8', y: '#ffd23f', Y: '#fff3a0', d: '#c08a10', k: '#3a2a10' } },
-  ring: { m: ['....rrrr....', '..rrrrrrrr..', '.wrr....rrw.', '.ww......ww.', 'www......www', 'www......www', 'www......www', 'www......www', '.ww......ww.', '.wrr....rrw.', '..rrrrrrrr..', '....rrrr....'],
-    p: { r: '#ff4d4d', w: '#f4f4ff' } },
-  log: { m: ['............', '............', '............', '..bbbbbbttt.', '.bBbbBbtTTTt', '.bbbBbbtTrTt', '.bBbbbBtTTTt', '..bbbbbbttt.', '............', '............', '............', '............'],
-    p: { b: '#6b4a2a', B: '#4a3018', t: '#b08850', T: '#d8b878', r: '#8a6a3a' } },
-  rock: { m: ['............', '............', '............', '....gggg....', '..ggGGgggg..', '.gGGggggggd.', '.gGgggggggdd', 'gggggggggddd', '.ggggggdddd.', '..dddddddd..', '............', '............'],
-    p: { g: '#8a8a94', G: '#b8b8c4', d: '#5a5a64' } },
-  band: { m: ['............', '............', '............', '............', '.tttttttttt.', 'tthtppppthtt', 'ttttpppptttt', 'tthtppppthtt', '.tttttttttt.', '............', '............', '............'],
-    p: { t: '#f0c090', p: '#f8e8d0', h: '#c09060' } },
-  bucket: { m: ['...hhhhhh...', '..h......h..', '.gggggggggg.', '.gbbbbbbbbg.', '..gGgggggd..', '..gGgggggd..', '..gGgggggd..', '...gGgggd...', '...ggggdd...', '............', '............', '............'],
-    p: { h: '#8a8a94', g: '#b8b8c4', G: '#e0e0ea', d: '#6a6a74', b: '#3f76e4' } },
-  medal: { m: ['..rr....rr..', '...rr..rr...', '....rrrr....', '...yyyyyy...', '..yYYyyyyy..', '..yYyyyyyd..', '..yyyyyyyd..', '..yyyyyydd..', '...yyyydd...', '....dddd....', '............', '............'],
-    p: { r: '#3f76e4', y: '#ffd23f', Y: '#fff3a0', d: '#c08a10' } },
-  sqb: { m: ['............', '.LLLLLLLLLL.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.DDDDDDDDDD.', '............'],
-    p: { c: '#3f76e4', L: '#7aa8ff', D: '#244a9a' } },
-  sqr: { m: ['............', '.LLLLLLLLLL.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.DDDDDDDDDD.', '............'],
-    p: { c: '#e43f3f', L: '#ff8a8a', D: '#9a2424' } },
-  sqy: { m: ['............', '.LLLLLLLLLL.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.DDDDDDDDDD.', '............'],
-    p: { c: '#ffd23f', L: '#fff0a0', D: '#b08a10' } },
-  sqg: { m: ['............', '.LLLLLLLLLL.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.DDDDDDDDDD.', '............'],
-    p: { c: '#3ddc63', L: '#9af0b0', D: '#1f8a3a' } },
-  sqp: { m: ['............', '.LLLLLLLLLL.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.LccccccccD.', '.DDDDDDDDDD.', '............'],
-    p: { c: '#a050e0', L: '#d0a0ff', D: '#5a2a8a' } },
 };
 const pxC = {};
 function pxCanvas(k) { if (pxC[k]) return pxC[k]; const P = PX[k]; return (pxC[k] = mkSprite(P.m, P.p, P.o || '#0b0b12')); }
@@ -4415,37 +4406,8 @@ function pxInit() { // CSS-классы с картинками: .px-имя
   let css = ''; for (const k in PX) css += `.px-${k}{background-image:url(${pxURL(k)})}`;
   css += `.px-ghost{background-image:url(${sprites().ghost.toDataURL()})}.px-chicken{background-image:url(${sprites().chicken.toDataURL()})}`;
   css += `.px-chest{background-image:url(${ICON.chest})}.px-grass{background-image:url(${ICON.grass})}.px-pick{background-image:url(${PICKICON[3]})}`;
-  for (const [n, b] of [['tnt', 'tnt'], ['nether', 'netherrack'], ['diamond', 'diamond'], ['emerald', 'emerald'], ['anvil', 'anvil']]) if (ICON[b]) css += `.px-${n}{background-image:url(${ICON[b]})}`;
   css += `:root{--px-lock:url(${pxURL('lock')})}`;
   const st = document.createElement('style'); st.id = 'pxCss'; st.textContent = css; document.head.appendChild(st);
-}
-// ---------- смайлики → пиксельные иконки (автоматически во всём интерфейсе) ----------
-// Любой текст на странице (уведомления, обучения, ранги, достижения…) проверяется: известные смайлики
-// заменяются на <i class="px px-имя">. Холст (шахта, деревня), поля ввода и подсказки title не трогаются.
-const PXE = {"💰": "coin", "🪙": "coin", "🔥": "fire", "❤": "heart", "💔": "heartb", "🎓": "cap", "🔒": "lock", "🔓": "unlock", "⛏": "pick", "⚒": "pick", "🎨": "palette", "🎁": "gift", "🐾": "paw", "🏁": "flag", "🏦": "bank", "📋": "pay", "🏘": "house", "🏠": "house", "👤": "head", "🎉": "confetti", "🛟": "ring", "⬆": "up", "📈": "up", "⚙": "gear", "✨": "spark", "💀": "skull", "🪦": "skull", "🍖": "meat", "🍪": "cookie", "🟦": "sqb", "🟥": "sqr", "🟨": "sqy", "🟩": "sqg", "🟪": "sqp", "💎": "crystal", "🏆": "cup", "👑": "crown", "🏅": "medal", "🎒": "bag", "😴": "zzz", "🔊": "sound", "💥": "boom", "🪵": "log", "🪨": "rock", "🩹": "band", "🪣": "bucket", "❄": "snow", "📰": "quill", "📜": "quill", "✏": "quill", "⭐": "star", "🎃": "pumpkin", "📦": "chest", "🧨": "tnt", "🕳": "hole", "🌋": "nether", "🌳": "grass", "💠": "diamond", "💚": "emerald", "🧰": "anvil"};
-const PXE_SRC = '(' + Object.keys(PXE).join('|') + ')\uFE0F?';
-const PXE_T = new RegExp(PXE_SRC, 'u'), PXE_G = new RegExp(PXE_SRC, 'gu');
-const pxSkip = el => !el || !!el.closest('script,style,textarea,option,title,svg,canvas,[data-nopx]');
-function pxText(n) {
-  const t = n.nodeValue; if (!t || !PXE_T.test(t)) return;
-  const par = n.parentNode; if (!par || pxSkip(n.parentElement)) return;
-  const f = document.createDocumentFragment(); let last = 0; PXE_G.lastIndex = 0; let m;
-  while ((m = PXE_G.exec(t))) {
-    if (m.index > last) f.appendChild(document.createTextNode(t.slice(last, m.index)));
-    const el = document.createElement('i'); el.className = 'px px-' + PXE[m[1]]; f.appendChild(el); last = m.index + m[0].length;
-  }
-  if (last < t.length) f.appendChild(document.createTextNode(t.slice(last)));
-  par.replaceChild(f, n);
-}
-function pxWalk(r) {
-  if (r.nodeType === 3) return pxText(r);
-  if (r.nodeType !== 1 || pxSkip(r)) return;
-  const w = document.createTreeWalker(r, NodeFilter.SHOW_TEXT), a = []; while (w.nextNode()) a.push(w.currentNode); a.forEach(pxText);
-}
-function pxAuto() {
-  pxWalk(document.body);
-  new MutationObserver(ms => { for (const m of ms) { if (m.type === 'characterData') pxText(m.target); else m.addedNodes.forEach(pxWalk); } })
-    .observe(document.body, { childList: true, subtree: true, characterData: true });
 }
 const GHOST_M = ['...wwww...', '..wwwwww..', '.wwwwwwww.', '.weewweew.', '.weewweew.', '.wwwwwwww.', '.wwweewws.', '.wwwwwwws.', '.wwwwwwss.', '.ww.www.s.', '.w...w....'];
 const CHICK_M = ['......rr..', '.....wwww.', '.....wwkwy', '.....wwwyy', 'w....wwwr.', 'ww..wwwww.', 'wwwwwwwww.', '.wwwwwwww.', '..wwwwww..', '...y..y...', '..yy.yy...'];
@@ -4826,7 +4788,7 @@ function petPoke() { petEmo('love', 1.4); tone(880, .08, 'sine', .05, 200); tone
 function petFeed(kind) {
   if (busy()) return; digTick(true); petSat(); const P = meta.cos.pet, price = kind === 'meal' ? 100 : 50;
   if (P.sat >= 97) { gtoast(`🐾 ${petName()} сыт и доволен`, '#ffd23f'); petEmo('happy', 1.5); return; }
-  if (mainBal() < price) { gtoast('Не хватает монет на балансе', '#ff8a8a'); return; }
+  if (mainBal() < price) { gtoast('Не хватает монет на балансе Обычной версии', '#ff8a8a'); return; }
   addMain(-price); P.sat = kind === 'meal' ? 100 : Math.min(100, P.sat + 40); P.warned = 0; saveMeta();
   petEmo('happy', 3); [659, 784, 1047].forEach((f, i) => tone(f, .09, 'square', .04, 0, i * .07));
   gtoast(`${kind === 'meal' ? '🍖' : '🍪'} ${petName()}: ням!`, '#ffd23f'); cosRender(); updatePanel(); if (sheetId === 'pet') petUi();
@@ -4943,7 +4905,7 @@ function digUp(k) {
   if (busy()) return; const D = meta.dig, L = D.lv[k]; if (L >= 5) return; const price = DIG_PRICE[L];
   if (digArm.k !== k || Date.now() > digArm.t) { digArm = { k, t: Date.now() + 3000 }; petRender(); setTimeout(() => { if (digArm.k === k && Date.now() >= digArm.t) { digArm = { k: '', t: 0 }; if (sheetId === 'pet') petRender(); } }, 3050); return; }
   digArm = { k: '', t: 0 };
-  if (mainBal() < price) { gtoast('Не хватает монет на балансе', '#ff8a8a'); petRender(); return; }
+  if (mainBal() < price) { gtoast('Не хватает монет на балансе Обычной версии', '#ff8a8a'); petRender(); return; }
   digTick(true); addMain(-price); D.lv[k]++; D.fl = digState(); saveMeta(); updatePanel(); petRender();
   petEmo('happy', 2); [659, 784, 1047, 1319].forEach((f, i) => tone(f, .08, 'square', .04, 0, i * .07));
   gtoast(`${px('up')} ${DIG_UPS.find(q => q[0] === k)[1]}: уровень ${D.lv[k]}`, '#ffd23f');
@@ -5177,7 +5139,7 @@ function cosSelect(cat, id, quiet) {
 function cosBuy(cat, id) {
   const it = COS[cat][id], key = cat + ':' + id;
   if (busy() || cosOwn(cat, id) || !cosBuyable(cat, id)) return;
-  if (mainBal() < it.price) { gtoast('Не хватает монет на балансе', '#ff8a8a'); return; }
+  if (mainBal() < it.price) { gtoast('Не хватает монет на балансе Обычной версии', '#ff8a8a'); return; }
   if (it.price >= 10000 && !(cosArm.k === key && Date.now() < cosArm.t)) {
     cosArm = { k: key, t: Date.now() + 3000 }; cosPreview(cat, id); cosRender();
     setTimeout(() => { if (cosArm.k === key && Date.now() >= cosArm.t) { cosArm = { k: '', t: 0 }; cosRender(); } }, 3100); return;
@@ -5287,7 +5249,7 @@ function caseCard(cid) {
 let caseAnim = null;
 function caseOpen(cid, again) {
   const C = CASES[cid], key = 'case:' + cid; if (!C || busy() || caseAnim) return;
-  if (mainBal() < C.price) { gtoast('Не хватает монет на балансе', '#ff8a8a'); return; }
+  if (mainBal() < C.price) { gtoast('Не хватает монет на балансе Обычной версии', '#ff8a8a'); return; }
   if (!again && C.price >= 10000 && !(cosArm.k === key && Date.now() < cosArm.t)) {
     cosArm = { k: key, t: Date.now() + 3000 }; cosRender();
     setTimeout(() => { if (cosArm.k === key && Date.now() >= cosArm.t) { cosArm = { k: '', t: 0 }; cosRender(); } }, 3100); return;
@@ -5418,11 +5380,205 @@ function cosInit() {
   petInit();
 }
 
+// ---------- режим разработчика (код меняется с каждой обновой; в коде хранится только хэш) ----------
+const DEV_H = '23041b58';
+const devHash = t => { let h = 0x811c9dc5; for (const b of new TextEncoder().encode(t)) { h ^= b; h = Math.imul(h, 0x01000193) >>> 0; } return h.toString(16).padStart(8, '0'); };
+const devOn = () => localStorage.getItem('kirka_dev') === DEV_H; // ключ не pk_ — в код сохранения не попадает; новая обнова → новый код → снова закрыто
+let devAsk = false, devTab = 'res', devArm = { k: '', t: 0 };
+const DEV_TABS = [['res', '💰', 'Ресурсы'], ['cos', '🎨', 'Косметика'], ['snap', '📸', 'Откат'], ['rank', '🏆', 'Ранги'], ['vil', '🏘', 'Деревни'], ['err', '🐞', 'Ошибки']];
+// 🎨 косметика по одной вещи: серая — нет, цветная — есть; тап — выдать / забрать
+const DEV_COS = [['skin', '⛏ Скины кирки'], ['trail', '✨ Следы'], ['fx', '💥 Эффекты поломки'], ['cfx', '💰 Эффекты забора'], ['theme', '🌄 Темы шахты'], ['pet', '🐾 Питомцы'], ['hat', '🎩 Шапки']];
+const DEV_COS0 = { skin: 'classic', fx: 'classic', cfx: 'classic', theme: 'classic', pet: 'mole', hat: 'none', trail: 'classic' };
+const devCosList = cat => cat === 'trail' ? Object.keys(TRAILS) : Object.keys(COS[cat]);
+const devCosName = (cat, id) => (cat === 'trail' ? TRAILS[id] : COS[cat][id]).n;
+const devCosFree = (cat, id) => cat === 'trail' ? (id === 'none' || id === 'classic') : !!COS[cat][id].free;
+const devCosHas = (cat, id) => cat === 'trail' ? meta.owned.includes(id) : cosOwn(cat, id);
+const devCosSel = cat => cat === 'trail' ? meta.trail : cat === 'pet' ? meta.cos.pet.kind : cat === 'hat' ? meta.cos.pet.hat : meta.cos[cat];
+function devCosSet(cat, id, on) { // выдать / забрать одну вещь; забрали выбранную — ставим базовую
+  const key = cat + ':' + id;
+  if (cat === 'trail') { const i = meta.owned.indexOf(id); if (on && i < 0) meta.owned.push(id); if (!on && i >= 0) meta.owned.splice(i, 1); if (!on && meta.trail === id) meta.trail = DEV_COS0.trail; return; }
+  const own = meta.cos.own, deny = meta.cos.deny;
+  if (on) { if (!own.includes(key)) own.push(key); const j = deny.indexOf(key); if (j >= 0) deny.splice(j, 1); return; }
+  let i; while ((i = own.indexOf(key)) >= 0) own.splice(i, 1);
+  if (cosOwn(cat, id) && !deny.includes(key)) deny.push(key);
+  if (devCosSel(cat) === id) { const d = DEV_COS0[cat]; if (cat === 'pet') meta.cos.pet.kind = d; else if (cat === 'hat') meta.cos.pet.hat = d; else meta.cos[cat] = d; }
+}
+function devCosAfter() { cosPv.skin = cosPv.theme = cosPv.kind = cosPv.hat = cosPv.trail = null; applySkin(); saveMeta(); cosRender(); if (sheetId === 'pet') petRender(); renderProfile(); updatePanel(); }
+const devEsc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const devWhen = t => { const d = new Date(t); return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) + ' ' + d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); };
+function devArmed(k) { if (devArm.k === k && Date.now() < devArm.t) { devArm = { k: '', t: 0 }; return true; } devArm = { k, t: Date.now() + 4000 }; return false; } // опасное — по второму нажатию
+try { localStorage.removeItem('kirka_devfail'); } catch (e) { } // старая блокировка после неверных попыток убрана
+function devSnap() { try { return JSON.parse(localStorage.getItem('kirka_snap') || 'null'); } catch (e) { return null; } }
+function devBody() {
+  if (devTab === 'res') return `<div class="note">Монеты — на баланс Обычной версии (рекорд состояния и ранг тоже вырастут, могут выпасть достижения). «Разблокировать всю косметику» — все скины, эффекты, темы, питомцы, шапки и следы. Перед тестами удобно сохранить точку во вкладке 📸.</div>
+    <div class="devgrid"><button class="btn" data-dev="m:10000">+10 000 🪙</button><button class="btn" data-dev="m:100000">+100 000 🪙</button><button class="btn" data-dev="m:1000000">+1 000 000 🪙</button><button class="btn" data-dev="m:100000000">+100 млн 🪙</button>
+</div>
+    <button class="btn devwide" data-dev="unlock">🎨 Разблокировать всю косметику</button>
+    <div class="devgrid" style="margin-top:6px"><button class="btn" data-dev="uiall">🔓 Открыть весь интерфейс</button><button class="btn" data-dev="uinew">🐣 Как у новичка (+ обучение)</button><button class="btn" data-dev="pet1h">⏩ Питомец: +1 час</button><button class="btn" data-dev="pet8h">⏩ Питомец: +8 часов</button></div>`;
+  if (devTab === 'cos') {
+    let have = 0, all = 0;
+    const secs = DEV_COS.map(([cat, n]) => `<div class="secttl" style="margin-top:10px">${n}</div><div class="devach">${devCosList(cat).map(id => {
+      const fr = devCosFree(cat, id), on = devCosHas(cat, id), sel = devCosSel(cat) === id; if (!fr) { all++; if (on) have++; }
+      return `<button class="${on ? 'on' : ''}" ${fr ? 'disabled title="базовое — есть всегда"' : `data-dev="cos:${cat}:${id}"`}>${sel ? '✓ ' : ''}${devEsc(devCosName(cat, id))}${fr ? ' · база' : ''}</button>`; }).join('')}</div>`).join('');
+    return `<div class="note">Тап по вещи — <b>выдать</b> (станет цветной) или <b>забрать</b> (серая). ✓ — сейчас выбрано; забрал выбранное — вернётся базовое. Монеты не списываются и не возвращаются. Сейчас есть <b>${have} из ${all}</b>.</div>
+    <div class="devgrid" style="margin-top:6px"><button class="btn" data-dev="unlock">🎨 Выдать всё</button><button class="btn" data-dev="cosnone">🧹 Убрать всю косметику</button></div>${secs}`;
+  }
+  if (devTab === 'snap') {
+    const sn = devSnap();
+    return `<div class="note">Сохрани точку → делай что хочешь → «Откатить» вернёт всё как было: монеты, банк, ранг, деревни, косметику, питомца, достижения, историю и забеги. Точка лежит только на этом устройстве и после отката остаётся — откатываться можно сколько угодно раз.</div>
+    <div class="devsnap">${sn ? `📍 Точка от <b>${devWhen(sn.t)}</b><br>баланс ${fmt(sn.bal)}${COIN} · ${devEsc(sn.rk)}` : 'Точки пока нет.'}</div>
+    <div class="devgrid"><button class="btn" data-dev="snap">📸 ${sn ? 'Перезаписать' : 'Сохранить точку'}</button><button class="btn" data-dev="back"${sn ? '' : ' disabled'}>↩️ Откатить</button></div>
+    ${sn ? '<button class="btn devwide" data-dev="snapdel">🗑 Удалить точку</button>' : ''}`;
+  }
+  if (devTab === 'rank') {
+    const ri = rankIdx(), got = ACH.filter(q => meta.ach[q.id]).length;
+    return `<div class="note">Сейчас: <b>${RANKS[ri].i} ${RANKS[ri].n}</b>. Выдать ранг = поставить рекорд состояния на его порог. Понизить можно, но если монет больше порога — ранг сам вернётся.</div>
+    <div class="devranks">${RANKS.map((r, i) => `<button class="btn${i === ri ? ' on' : ''}" data-dev="rank:${i}">${r.i}<small>${r.n}</small></button>`).join('')}</div>
+    <div class="note" style="margin-top:10px">Достижения: <b>${got}/${ACH.length}</b>. Серое — выдать (с наградой и всплывашкой, как по-настоящему). Цветное — забрать (монеты не вернутся; если условие уже выполнено, оно выдастся снова при следующей проверке).</div>
+    <div class="devach">${ACH.map(q => `<button class="${meta.ach[q.id] ? 'on' : ''}" data-dev="ach:${q.id}" title="${devEsc(q.d)}">${q.i} ${q.n}</button>`).join('')}</div>
+    <button class="btn devwide" data-dev="achall">🏆 Выдать все достижения</button>`;
+  }
+  if (devTab === 'vil') return `<div class="note">Стройка тут бесплатная — монеты не списываются. Деревня с 🔒 откроется, когда достроишь предыдущую.</div>`
+    + VILLAGES.map((V, i) => `<div class="devvil"><div class="dvn"><b>${V.i} ${V.n}</b><small>${vilDone(i)}/${vilTotal(i)}${vilUnlocked(i) ? '' : ' · 🔒'}</small></div>
+      <button class="btn" data-dev="vstep:${i}"${vilComplete(i) || !vilUnlocked(i) ? ' disabled' : ''}>+1</button><button class="btn" data-dev="vall:${i}"${vilComplete(i) || !vilUnlocked(i) ? ' disabled' : ''}>Достроить</button><button class="btn" data-dev="vrst:${i}"${vilDone(i) ? '' : ' disabled'}>Сброс</button></div>`).join('')
+    + `<button class="btn devwide" data-dev="vfill">💰 Наполнить все склады</button>`;
+  if (devTab === 'err') {
+    const L = errLog();
+    return `<div class="note">Ошибки ловятся всегда, даже когда режим выключен (последние 30). Если что-то сломалось — «Скопировать» и пришли текст.</div>
+    <div class="deverr">${L.length ? L.map(e => `<div><b>${devWhen(e.t)}${e.n > 1 ? ' · ×' + e.n : ''}</b> ${devEsc(e.m)}<small>${devEsc(e.s)}${e.b ? ' · ' + devEsc(e.b) : ''}</small></div>`).join('') : '<div class="dok">✓ Ошибок нет</div>'}</div>
+    <div class="devgrid"><button class="btn" data-dev="ecopy"${L.length ? '' : ' disabled'}>📋 Скопировать</button><button class="btn" data-dev="eclr"${L.length ? '' : ' disabled'}>🧹 Очистить</button></div>`;
+  }
+  return '';
+}
+function renderDev(msg) {
+  const box = $('pDevBox'); if (!box) return;
+  if (devOn()) {
+    box.innerHTML = `<div class="devtabs">${DEV_TABS.map(t => `<button class="${t[0] === devTab ? 'on' : ''}" data-devtab="${t[0]}">${t[1]}<small>${t[2]}</small></button>`).join('')}</div>
+      <div class="devpane">${devBody()}</div><div class="note" id="pDevMsg" style="margin-top:6px;min-height:1em">${msg || ''}</div>
+      ${NEWS.items.length ? '<button class="btn devwide" data-dev="news">📰 Показать окно новостей</button>' : ''}
+      <button class="btn devwide" data-dev="off">🔒 Выключить режим разработчика</button>`;
+    return;
+  }
+  if (!devAsk) { box.innerHTML = msg ? `<div class="note" style="margin-top:6px">${msg}</div>` : ''; return; }
+  box.innerHTML = `<div class="devin"><input id="pDevCode" type="password" inputmode="numeric" autocomplete="off" maxlength="12" placeholder="код"><button class="btn" id="pDevGo">Войти</button></div><div class="note" style="margin-top:4px;${msg ? 'color:#ff8a8a' : ''}">${msg || 'Введи код разработчика.'}</div>`;
+  const inp = $('pDevCode'); inp.focus(); inp.onkeydown = e => { if (e.key === 'Enter') devTry(); }; $('pDevGo').onclick = devTry;
+}
+function devTry() {
+  const v = ($('pDevCode').value || '').trim(); if (!v) return;
+  if (devHash('kirka-dev:' + v) === DEV_H) { localStorage.setItem('kirka_dev', DEV_H); devAsk = false; sfxAch(); renderDev(); return; }
+  renderDev('Неверный код');
+}
+const pkKeys = () => { const k = []; for (let i = 0; i < localStorage.length; i++) { const q = localStorage.key(i); if (q && q.startsWith('pk_')) k.push(q); } return k; };
+function devGrantAch(q, quiet) {
+  meta.ach[q.id] = Date.now();
+  const tr = ACH_TRAIL[q.id]; if (tr && !meta.owned.includes(tr)) meta.owned.push(tr);
+  if (q.r) addMain(q.r);
+  if (!quiet) { gtoast(`🏆 ${q.i} <b>${q.n}</b>${q.r ? ` · +${fmt(q.r)}${COIN}` : ''}${tr ? ` · след «${TRAILS[tr].n}»` : ''}`, '#ffd23f', true); sfxAch(); }
+  return q.r || 0;
+}
+function devVilSet(i, fn) { // fn(V, b, L) → новый уровень здания
+  const V = VILLAGES[i], now = Date.now(); if (!meta.vil.at) meta.vil.at = {};
+  for (const b of V.b) { const k = vKey(V, b), L = vilLv(V, b), n = fn(V, b, L); if (n === L) continue; meta.vil.lv[k] = n; if (n) meta.vil.at[k] = now; else delete meta.vil.at[k]; }
+  vPeople = []; saveMeta();
+}
+function devCopy(t) {
+  let ok = false; try { const ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); ok = document.execCommand && document.execCommand('copy'); ta.remove(); } catch (e) { }
+  try { navigator.clipboard && navigator.clipboard.writeText(t).catch(() => { }); ok = ok || !!navigator.clipboard; } catch (e) { }
+  return ok;
+}
+function devAct(a) {
+  if (!devOn()) return;
+  if (a.startsWith('tab:')) { devTab = a.slice(4); devArm = { k: '', t: 0 }; renderDev(); return; }
+  if (a === 'off') { localStorage.removeItem('kirka_dev'); devAsk = false; renderDev('Режим разработчика выключен.'); return; }
+  if (a === 'news') { showNews(); return; }
+  if (busy()) return;
+  const [k, n] = a.split(':'), v = +n; let msg = '';
+  if (k === 'm') { addMain(v); metaTick(); msg = `✓ +${fmt(v)} монет · баланс Обычной ${fmt(mainBal())}`; }
+  else if (k === 'pet1h' || k === 'pet8h') { const h = k === 'pet1h' ? 1 : 8; digTick(true); meta.dig.t -= h * 3600e3; meta.cos.pet.t -= h * 3600e3; const f = digTick(true); saveMeta(); msg = `⏩ Питомцу +${h} ч: находок ${f.length}, состояние «${digState()}».`; }
+  else if (k === 'cos') { const [, cat, id] = a.split(':'); if (!DEV_COS0[cat] || devCosFree(cat, id)) return; const on = !devCosHas(cat, id); devCosSet(cat, id, on); devCosAfter(); msg = `${on ? '✓ Выдано' : '✖ Забрано'}: «${devEsc(devCosName(cat, id))}».`; }
+  else if (k === 'cosnone') {
+    if (!devArmed('cosnone')) msg = '⚠ Заберу все скины, следы, эффекты, темы, питомцев и шапки (останется базовое). Нажми ещё раз.';
+    else { let c = 0; for (const [cat] of DEV_COS) for (const id of devCosList(cat)) if (!devCosFree(cat, id) && devCosHas(cat, id)) { devCosSet(cat, id, false); c++; }
+      for (const cat in DEV_COS0) if (cat === 'trail') meta.trail = DEV_COS0.trail; else if (cat === 'pet') meta.cos.pet.kind = 'mole'; else if (cat === 'hat') meta.cos.pet.hat = 'none'; else meta.cos[cat] = DEV_COS0[cat];
+      devCosAfter(); msg = c ? `🧹 Убрано: ${c} вещей. Осталось только базовое.` : 'Косметики и так нет — только базовое.'; }
+  }
+  else if (k === 'uiall') { meta.ui.all = 1; meta.ui.hot = []; saveMeta(); updatePanel(); msg = '✓ Весь интерфейс открыт.'; }
+  else if (k === 'uinew') { // как первый заход: замки, обучения не пройдены, окно «Привет! Это Кирка» (монеты, деревни и прочее не трогаются)
+    meta.ui = { all: 0, base: (meta.stats && meta.stats.rounds) || 0, early: [], seen: [], hot: [] };
+    meta.learn = {}; meta.learnOffer = 1; meta.learnHint = 1; saveMeta(); updatePanel();
+    if (runActive()) msg = '✓ Интерфейс как у новичка. ⚠ Идёт забег — обучение запустится, когда поставишь его на паузу (кнопка 🎓).';
+    else { renderProfile(); renderDev(); closeSheet(); setTimeout(() => { if (tut || busy()) return; tut = { kind: 'welcome', step: 'welcome', hold: false, round: false, seen: {}, bet: getBet(), n: 0, plan: [], old: false }; tutShow(); }, 450); return; }
+  }
+  else if (k === 'unlock') {
+    let c = 0; for (const cat in COS) for (const id in COS[cat]) { const key = cat + ':' + id; if (!COS[cat][id].free && !meta.cos.own.includes(key)) { meta.cos.own.push(key); c++; } }
+    for (const id in TRAILS) if (!meta.owned.includes(id)) { meta.owned.push(id); c++; }
+    if (meta.cos.deny.length) { c += meta.cos.deny.length; meta.cos.deny = []; }
+    devCosAfter(); msg = c ? `✓ Открыто: ${c} вещей. Всё в 🎨 Косметике.` : 'Вся косметика уже открыта.';
+  }
+  else if (k === 'snap') {
+    if (devSnap() && !devArmed('snap')) msg = '⚠ Старая точка сотрётся. Нажми «Перезаписать» ещё раз.';
+    else {
+      saveMeta(); save(); saveRun(); const d = {}; for (const q of pkKeys()) d[q] = localStorage.getItem(q);
+      try { localStorage.setItem('kirka_snap', JSON.stringify({ t: Date.now(), b: BUILD, bal: mainBal(), rk: rank().i + ' ' + rank().n, d })); msg = '✓ Точка сохранена. Теперь тестируй что угодно.'; }
+      catch (e) { msg = '✖ Не хватило памяти браузера для точки.'; }
+    }
+  }
+  else if (k === 'back') {
+    const sn = devSnap(); if (!sn || !sn.d) return;
+    if (!devArmed('back')) msg = `⚠ Всё, что было после ${devWhen(sn.t)}, пропадёт. Нажми «Откатить» ещё раз.`;
+    else { metaLock = true; pkKeys().forEach(q => localStorage.removeItem(q)); for (const q in sn.d) if (q.startsWith('pk_')) localStorage.setItem(q, sn.d[q]); location.reload(); return; }
+  }
+  else if (k === 'snapdel') { if (!devArmed('snapdel')) msg = '⚠ Нажми «Удалить точку» ещё раз.'; else { localStorage.removeItem('kirka_snap'); msg = 'Точка удалена.'; } }
+  else if (k === 'rank') {
+    const r0 = rankIdx(); meta.peak = RANKS[v].w; metaTick(); const r1 = rankIdx();
+    if (r1 > r0) { gtoast(`${RANKS[r1].i} Новый ранг: <b>${RANKS[r1].n}</b>! Макс. ставка ${RANKS[r1].bet === Infinity ? '∞' : fmt(RANKS[r1].bet)}, подарки ×${RANKS[r1].k}`, '#ffd23f', true); sfxAch(); }
+    saveMeta(); checkAch();
+    msg = r1 === v ? `✓ Ранг: ${RANKS[r1].i} ${RANKS[r1].n}` : `Ранг: ${RANKS[r1].i} ${RANKS[r1].n} — монет больше порога «${RANKS[v].n}», ранг вернулся.`;
+  }
+  else if (k === 'ach') {
+    const q = ACH.find(x => x.id === n); if (!q) return;
+    if (meta.ach[q.id]) { delete meta.ach[q.id]; saveMeta(); msg = `Забрано: ${q.i} ${q.n}`; }
+    else { devGrantAch(q); saveMeta(); msg = `✓ Выдано: ${q.i} ${q.n}`; }
+  }
+  else if (k === 'achall') {
+    let c = 0, sum = 0; for (const q of ACH) if (!meta.ach[q.id]) { sum += devGrantAch(q, true); c++; }
+    saveMeta(); if (c) { sfxAch(); gtoast(`🏆 Выдано достижений: <b>${c}</b>${sum ? ` · +${fmt(sum)}${COIN}` : ''}`, '#ffd23f', true); }
+    msg = c ? `✓ Выдано ${c}, награды +${fmt(sum)}` : 'Все достижения уже есть.';
+  }
+  else if (k === 'vstep' || k === 'vall') {
+    if (!vilUnlocked(v)) { msg = `🔒 Сначала дострой «${VILLAGES[v - 1].n}».`; }
+    else {
+      if (k === 'vall') devVilSet(v, (V, b) => b.st.length);
+      else { // самая дешёвая следующая стадия
+        const V = VILLAGES[v]; let best = null; for (const b of V.b) { const L = vilLv(V, b); if (L < b.st.length && (!best || b.st[L][1] < best.st[vilLv(V, best)][1])) best = b; }
+        if (best) devVilSet(v, (V2, b, L) => b === best ? L + 1 : L);
+      }
+      const V = VILLAGES[v];
+      if (vilComplete(v)) { gtoast(`🎉 Деревня «${V.n}» достроена!`, '#ffd23f', true); sfxAch(); }
+      checkAch(); msg = `✓ ${V.n}: ${vilDone(v)}/${vilTotal(v)}`;
+    }
+  }
+  else if (k === 'vrst') {
+    if (!devArmed('vrst' + v)) msg = `⚠ Все постройки «${VILLAGES[v].n}» исчезнут. Нажми «Сброс» ещё раз.`;
+    else { devVilSet(v, () => 0); msg = `Деревня «${VILLAGES[v].n}» сброшена.`; }
+  }
+  else if (k === 'vfill') {
+    const now = Date.now(), back = VCAP_H * 3600000 + 60000; let c = 0; if (!meta.vil.at) meta.vil.at = {};
+    VILLAGES.forEach((V, i) => { if (!vilUnlocked(i)) return; for (const b of V.b) if (vilLv(V, b)) { meta.vil.at[vKey(V, b)] = now - back; c++; } });
+    saveMeta(); msg = c ? `✓ Склады полны (${c} зданий) — собирай в 🏘 Деревне.` : 'Пока нечего наполнять — построй что-нибудь.';
+  }
+  else if (k === 'ecopy') {
+    const L = errLog(), txt = `Кирка · ${BUILD} · ${navigator.userAgent}\n` + L.map(e => `[${new Date(e.t).toISOString()}]${e.n > 1 ? ' ×' + e.n : ''} ${e.m} @ ${e.s} (${e.b})${e.st ? '\n  ' + e.st.split('\n').slice(0, 4).join('\n  ') : ''}`).join('\n');
+    msg = devCopy(txt) ? '✓ Скопировано — вставь мне в чат.' : '✖ Не получилось скопировать.';
+  }
+  else if (k === 'eclr') { ERRL = []; errFlush(); msg = 'Журнал очищен.'; }
+  updatePanel(); vilUi(); renderProfile(); renderDev(msg);
+}
+
 // ---------- новости обновления ----------
 // Заполняется с каждой обновой (id — любая новая строка, например дата). Пока список пуст — окно не показывается,
 // кнопки в профиле нет. Новичкам новости не показываются (им — приветствие и обучение).
-const NEWS = { id: '2026-11-01', title: 'Обновление', sub: 'Питомец-копатель, кейсы и новый интерфейс', items: [
-  [px('gear'), '<b>Одна версия игры.</b> Чит-версия убрана — теперь все играют в одну, честную. Твой основной баланс, деревня, банк и косметика на месте; пропали только демо-монеты Чита.'],
+const NEWS = { id: '2026-10-31', title: 'Обновление', sub: 'Питомец-копатель, кейсы и новый интерфейс', items: [
   [px('paw'), '<b>Питомец теперь копает.</b> У него своя кнопка в меню и своё окно. Отправь его копать — он добывает уголь, железо, редстоун, лазурит, золото, алмазы и даже изумруды. Копает, даже когда игра закрыта.'],
   [px('bag'), '<b>Рюкзак.</b> Находки падают в рюкзак. Когда он раздуется — продай всё одним нажатием.'],
   [px('bed'), '<b>Силы и сытость.</b> Питомец устаёт: когда силы кончатся, отправь его отдохнуть к себе в шахту. Если не кормить — копает медленнее.'],
@@ -5455,7 +5611,7 @@ buildTextures();
 for (const k of Object.keys(BLOCKS)) if (TEX[k]) ICON[k] = iconURL(TEX[k]);
 PICKICON = TEX.pick.map(t => iconURL(t));
 $('logo').src = PICKICON[4];
-pxInit(); pxAuto();
+pxInit();
 cosInit();
 buildPayTable(); renderHistory(); resize(); syncIdlePick(); updatePanel();
 $('play').addEventListener('click', e => { e.currentTarget.blur(); play(); });
@@ -5512,6 +5668,26 @@ fitLayout(); setTimeout(fitLayout, 300); setTimeout(fitLayout, 1000);
 // iOS иногда отдаёт правильные размеры не сразу и меняет их при возврате в приложение
 window.addEventListener('pageshow', () => { fitSoon(); setTimeout(() => { fitLayout(); resize(); }, 350); });
 document.addEventListener('visibilitychange', () => { if (!document.hidden) setTimeout(() => { fitLayout(); resize(); }, 250); });
+// диагностика: 5 быстрых нажатий на логотип «КИРКА» — табличка с размерами экрана (для скриншота, если что-то не так)
+(() => { let n = 0, t = 0; $('logoBox').addEventListener('click', () => { const now = Date.now(); n = now - t < 700 ? n + 1 : 1; t = now; if (n >= 5) { n = 0; showDiag(); } }); })();
+function showDiag() {
+  const probe = h => { const d = document.createElement('div'); d.style.cssText = 'position:fixed;top:0;left:0;width:1px;visibility:hidden;height:' + h; document.body.appendChild(d); const v = Math.round(d.getBoundingClientRect().height); d.remove(); return v; };
+  const [sT, sB] = safeInsets(), app = $('app'), st = $('stage'), avail = app.clientHeight - sT - sB;
+  const sa = navigator.standalone === true || matchMedia('(display-mode: standalone)').matches;
+  const L = [
+    'КИРКА · диагностика экрана', 'сборка: ' + BUILD, '',
+    'запуск: ' + (sa ? 'с иконки (приложение)' : 'в браузере'),
+    'экран: ' + screen.width + '×' + screen.height + ' · DPR ' + (window.devicePixelRatio || 1),
+    'окно (innerW×H): ' + innerWidth + '×' + innerHeight,
+    'visualViewport: ' + (window.visualViewport ? Math.round(visualViewport.width) + '×' + Math.round(visualViewport.height) : '—'),
+    'clientHeight: ' + document.documentElement.clientHeight,
+    '100vh = ' + probe('100vh') + ' · 100dvh = ' + probe('100dvh') + ' · 100% = ' + probe('100%'),
+    'вырез сверху: ' + sT + ' · снизу: ' + sB,
+    'коробка игры: ' + Math.round(app.getBoundingClientRect().height) + ' (видимая часть ' + Math.round(avail) + ')',
+    'шахта: ' + Math.round(st.getBoundingClientRect().height) + ' = ' + Math.round(100 * st.getBoundingClientRect().height / Math.max(1, avail)) + '% видимой части',
+    'классы: ' + (document.body.className || '—'), '', navigator.userAgent, '', '(нажми, чтобы закрыть)'];
+  const d = document.createElement('div'); d.id = 'diag'; d.innerHTML = '<pre></pre>'; d.firstChild.textContent = L.join('\n'); d.onclick = () => d.remove(); document.body.appendChild(d);
+}
 if (window.ResizeObserver) new ResizeObserver(() => resize()).observe($('stage')); // поле меняет размер, когда появляются/прячутся кнопки забега
 $('runAmt').addEventListener('keydown', e => { if (e.key === 'Enter') runGo(); });
 document.querySelectorAll('[data-ra]').forEach(b => b.onclick = () => { $('runAmt').value = b.dataset.ra; $('runErr').textContent = ''; markRunAmt(); });
@@ -5536,6 +5712,8 @@ $('free').onclick = () => {
   if (fair) { openSheet('gift'); return; } // в Обычной — окно подарков (ежедневный, задания, спасательный круг)
   balance += 1000; save(); updatePanel(); toast(`+1000${COIN} на демо-баланс`, '#c9a8ff'); tone(1047, .08, 'square', .04); tone(1568, .14, 'square', .04, 0, .07); };
 function syncIdlePick() { if (phase === 'play' || phase === 'portal') return; game.win = 0; game.fair = fair; game.tier = 0; game.maxHp = game.tierHp(0); game.hp = game.maxHp; }
+const toggleFair = () => { if (phase === 'play' || phase === 'portal' || runActive()) return; save(); fair = !fair; localStorage.setItem('pk_fair', fair ? '1' : '0'); applyContext(); syncIdlePick(); buildPayTable(); renderHistory(); updatePanel(); toast(fair ? '🎰 Обычная версия · основной кошелёк' : '😈 Чит · демо-кошелёк', fair ? '#3ddc63' : '#ff7a6a'); };
+document.querySelectorAll('#verOpts .opt').forEach(o => o.onclick = () => { if ((o.dataset.fair === '1') !== fair) toggleFair(); });
 document.querySelectorAll('#modeOpts .opt').forEach(b => b.onclick = () => { if (phase === 'play' || phase === 'portal' || runActive() || b.dataset.mode === mode) return; mode = b.dataset.mode; localStorage.setItem('pk_mode', mode); game.cfg = MODES[mode]; buildPayTable(); updatePanel(); });
 // ---- 2.0: окна и кнопки ----
 $('mVil').onclick = e => { e.currentTarget.blur(); openSheet('vil'); };
@@ -5573,6 +5751,8 @@ $('bkInput').addEventListener('keydown', e => { if (e.key === 'Enter') bankGo();
 $('bkInput').addEventListener('input', () => { $('bkErr').textContent = ''; });
 $('pExport').onclick = exportSave;
 $('pNews').onclick = showNews; $('newsOk').onclick = closeNews; $('newsX').onclick = skipNews; $('newsLaterOk').onclick = newsLaterOk; $('pNewsCard').style.display = NEWS.items.length ? '' : 'none';
+$('pDev').onclick = () => { if (devOn()) { renderDev(); return; } devAsk = !devAsk; renderDev(); };
+$('pDevBox').addEventListener('click', e => { const t = e.target.closest('[data-devtab]'); if (t) { devAct('tab:' + t.dataset.devtab); return; } const b = e.target.closest('[data-dev]'); if (b && !b.disabled) devAct(b.dataset.dev); });
 $('pImport').onclick = importSave;
 $('introNext').onclick = () => introNext(false);
 $('introSkip').onclick = () => introNext(true);
