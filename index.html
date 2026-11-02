@@ -994,6 +994,7 @@ const LUCK_BLOCKS = 12;
 // Множитель растёт с глубиной: ×1, ×2 с HELL.step м, ×3 с 2·step м … (до HELL.maxMult).
 // hell.mul в режимах подобран симуляцией так, чтобы бонуска в Обычной версии возвращала ~95–98% цены (низкая / высокая).
 const BONUS_PRICE = 100;
+const ROUND_MAX_WIN = 400; // потолок выигрыша обычного раунда (× ставка): дошёл — раунд сам забирается («Максимальный выигрыш!»)
 const HELL = { startTier: 1, step: 3, maxMult: 30, maxTime: 120, cheatMul: 1.12, maxWin: 5000 }; // maxWin — потолок выигрыша бонуски (× ставка), как в слотах
 const PORTAL_W = 0.035;   // вес портала при генерации обычной шахты (с 6 м)
 // ===== ОБЫЧНАЯ ВЕРСИЯ =====
@@ -1256,6 +1257,10 @@ class Game {
     if (!this.running) return false;
     this.win += coins;
     if (this.bonus && this.win >= HELL.maxWin * this.bet) { this.win = HELL.maxWin * this.bet; this.maxed = true; this.endBonus(); return false; }
+    if (!this.bonus && this.win >= ROUND_MAX_WIN * this.bet) { // потолок обычного раунда — забираем сами
+      this.win = ROUND_MAX_WIN * this.bet; this.maxed = true; this.running = false; this.over = true;
+      this.emit('cashout', { win: this.win, x: this.p.x, y: this.p.y, maxed: true }); return false;
+    }
     return true;
   }
 
@@ -1904,7 +1909,7 @@ function showLearnHint(txt) {
   const kill = () => { h.remove(); removeEventListener('pointerdown', kill, true); };
   addEventListener('pointerdown', kill, true); setTimeout(kill, 8000);
 }
-const BUILD = '2026-11-01 · 3.1: без смайликов, новые монеты, удачный старт';
+const BUILD = '2026-11-02 · 3.2: потолок выигрыша ×400 за раунд';
 // Удача новичка: первые 10 обычных раундов — полная, к 25-му плавно сходит на нет. Игроку об этом не сообщается.
 // Пока она действует, после 2+ сгоревших подряд следующий раунд ещё удачливее (×1.5) — чтобы не было обидных серий.
 let begLoss = 0;
@@ -2241,7 +2246,8 @@ function endRound(win, broke) {
     balance += win;
     history.unshift({ w: 1, m: win / game.bet, d: game.depth });
     const profit = win - game.bet;
-    overlay('ЗАБРАНО!', `+${fmt(win)}${COIN}`, `×${(win / game.bet).toFixed(2)} · ${profit >= 0 ? 'прибыль +' : 'убыток '}${fmt(profit)}`, profit >= 0 ? '#3ddc63' : '#ffd23f');
+    if (game.maxed) overlay('МАКСИМАЛЬНЫЙ ВЫИГРЫШ!', `+${fmt(win)}${COIN}`, `×${ROUND_MAX_WIN} — потолок раунда, забрано автоматически`, '#ffd23f');
+    else overlay('ЗАБРАНО!', `+${fmt(win)}${COIN}`, `×${(win / game.bet).toFixed(2)} · ${profit >= 0 ? 'прибыль +' : 'убыток '}${fmt(profit)}`, profit >= 0 ? '#3ddc63' : '#ffd23f');
   }
   runAfterRound(broke ? 0 : win, game.bet, 0);
   metaRound(broke ? 0 : win, game.bet, !!broke, game.depth);
@@ -2717,7 +2723,6 @@ const ACH = [
   { id: 'deep100', i: '🌋', n: 'Сотня метров', d: 'Дойти до 100 м', v: s => s.maxDepth, g: 100, r: 5000 },
   { id: 'x10', i: '🔟', n: 'Десятка', d: 'Забрать ×10 за раунд', v: s => s.bestX, g: 10, r: 1000 },
   { id: 'x100', i: '💯', n: 'Сотка', d: 'Забрать ×100 за раунд', v: s => s.bestX, g: 100, r: 10000 },
-  { id: 'x1000', i: '🚀', n: 'Тысяча!', d: 'Забрать ×1000 за раунд', v: s => s.bestX, g: 1000, r: 100000 },
   { id: 'nether', i: '⚫', n: 'Незерит', d: 'Получить незеритовую кирку', v: s => s.maxTier, g: 5, r: 5000 },
   { id: 'tnt50', i: '🧨', n: 'Подрывник', d: 'Взорвать 50 динамитов', v: s => s.tnt, g: 50, r: 2000 },
   { id: 'chest50', i: '🧰', n: 'Кладоискатель', d: 'Открыть 50 сундуков', v: s => s.chests, g: 50, r: 3000 },
