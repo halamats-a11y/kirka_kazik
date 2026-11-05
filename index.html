@@ -46,8 +46,7 @@
   html,body{margin:0;height:100%;-webkit-tap-highlight-color:transparent;touch-action:manipulation;overscroll-behavior:none;background:var(--bg);color:var(--text);
     font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;}
   body{background:
-    radial-gradient(circle at 20% 0%,#2a2238 0,transparent 50%),
-    radial-gradient(circle at 100% 100%,#1d2a2a 0,transparent 45%),var(--bg);}
+    radial-gradient(circle at 20% 0%,#2a2238 0,transparent 50%),var(--bg);} /* v52: убран зеленоватый градиент в правом нижнем углу */
   button,.btn,.label,.title,.hud,canvas{user-select:none;-webkit-user-select:none}
   .stage{position:relative;width:min(470px,100%);height:100%;border-radius:12px;overflow:hidden;
     border:3px solid #000;box-shadow:0 0 0 2px #3c3c48,0 20px 60px #0009;background:#000;}
@@ -659,6 +658,12 @@
   .devvil .btn{font-size:12px;padding:7px 8px}
   .devvil .btn:disabled,.devgrid .btn:disabled{opacity:.35}
   .deverr{margin-top:8px;max-height:260px;overflow:auto;background:#0e0e14;border:1px solid #2a2a34;border-radius:8px;padding:6px 8px;font-size:11.5px;line-height:1.4;word-break:break-word}
+  .chkin{width:100%;box-sizing:border-box;height:70px;margin:8px 0 6px;background:#0e0e14;color:#ddd;border:1px solid #2a2a34;border-radius:8px;padding:6px 8px;font:11px/1.3 monospace;resize:vertical;word-break:break-all}
+  .chkv{margin-top:8px;padding:9px 10px;border-radius:8px;font-weight:700;font-size:14px;line-height:1.35;background:#16301c;border:1px solid #3c8a4c;color:#9ff0ae}
+  .chkv.mid{background:#33290f;border-color:#a8862c;color:#ffe08a}.chkv.bad{background:#3a1414;border-color:#a83a3a;color:#ffb0b0}
+  .chkt{width:100%;margin-top:6px;border-collapse:collapse;font-size:12.5px}.chkt td{padding:3px 4px;border-bottom:1px solid #22222c}.chkt td+td{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .chkt tr.h td{padding-top:9px;color:#9a9ab0;font-size:11.5px;border-bottom:1px solid #3a3a48}.chkt tr.b td{font-weight:700;color:#ffe9a0}
+  .chkl{margin-top:5px;font-size:12.5px;line-height:1.4;color:#c8c8d8}.chkl.bad{color:#ffb0b0}.chkl.mid{color:#ffe08a}
   .deverr>div+div{border-top:1px dashed #2a2a34;margin-top:5px;padding-top:5px}
   .deverr b{color:#ff9a8a}
   .deverr small{display:block;color:#77778a}
@@ -1523,13 +1528,16 @@ function buildTextures() {
     for (let y = 4; y < 9; y++) for (let x = 7; x < 9; x++) px(x, y, y === 4 ? '#fff3a0' : '#d4a62a');
     px(7, 7, '#333'); px(8, 7, '#333');
   }, 35);
+  // v51: стол как в Майнкрафте — чёрный обсидиан без фиолетового (раньше путался с порталом), красное сукно с книгой, алмазы по углам
   TEX.enchant = texFrom((px, R) => {
-    fillNoise(px, R, PAL.obsidian);
-    for (let y = 2; y < 7; y++) for (let x = 2; x < 14; x++) px(x, y, '#b82a2a');
-    for (let y = 3; y < 6; y++) for (let x = 3; x < 13; x++) px(x, y, x === 7 || x === 8 ? '#8a1c1c' : '#f3ecd8');
-    for (let x = 4; x < 12; x += 2) px(x, 4, '#9a8f78');
-    [[1, 8], [14, 8], [1, 13], [14, 13]].forEach(([x, y]) => { px(x, y, '#4ee6dc'); px(x, y + 1, '#1fb5b0'); });
-    for (let x = 0; x < 16; x++) px(x, 7, '#3a2a5c');
+    fillNoise(px, R, ['#141414', '#1c1c1c', '#252525', '#0e0e0e', '#2c2c2c']);
+    for (let y = 1; y < 7; y++) for (let x = 1; x < 15; x++) px(x, y, y > 1 ? '#c0282a' : '#e04a3a');
+    for (let y = 2; y < 6; y++) for (let x = 3; x < 13; x++) px(x, y, x === 7 || x === 8 ? '#8a5a32' : '#f3ecd8');
+    for (const x of [4, 5, 10, 11]) px(x, 3, '#9a8f78');
+    for (const x of [4, 5, 9, 10]) px(x, 4, '#9a8f78');
+    for (let x = 0; x < 16; x++) px(x, 7, '#3a3a3a');
+    [[1, 9], [13, 9], [1, 13], [13, 13]].forEach(([x, y]) => { px(x, y, '#d4fffb'); px(x + 1, y, '#4ee6dc'); px(x, y + 1, '#4ee6dc'); px(x + 1, y + 1, '#1fb5b0'); });
+    [[6, 10], [9, 11], [7, 13]].forEach(([x, y]) => px(x, y, '#7ff7ff'));
   }, 36);
   // ----- ад -----
   TEX.netherrack = texFrom((px, R) => { fillNoise(px, R, PAL.netherrack); for (let i = 0; i < 10; i++) px(Math.floor(R() * 16), Math.floor(R() * 16), '#a24a44'); }, 41);
@@ -1958,7 +1966,7 @@ function showLearnHint(txt) {
 }
 // версия разработчика: make-apk.sh dev ставит true (отдельный APK «Кирка DEV»). На сайте и в обычном APK — false, режима нет совсем.
 const DEV_BUILD = false;
-const BUILD = '2026-11-06 · 3.3: экономика, ранги до Бессмертного, Кролик, роскошная косметика, деревня Джунгли';
+const BUILD = '2026-11-06 · 3.3: экономика, ранги до Бессмертного, Кролик, роскошная косметика, деревня Джунгли · v50: Лягушка, Панда, Динозаврик, новые задания и достижения · v51: новый стол зачарований · v52: без градиента в углу';
 // Удача новичка: первые 10 обычных раундов — полная, к 25-му плавно сходит на нет. Игроку об этом не сообщается.
 // Пока она действует, после 2+ сгоревших подряд следующий раунд ещё удачливее (×1.5) — чтобы не было обидных серий.
 let begLoss = 0;
@@ -1968,7 +1976,7 @@ function play() {
   if (tut) { if (tut.step === 'play') tutPlayRound(); return; } // во время обучения — только учебный раунд
   if (phase === 'play' || phase === 'portal' || performance.now() < playLockUntil) return;
   const bet = getBet(); if (!(bet >= 1 && bet <= balance && bet <= maxBet())) return;
-  balance -= bet; save(); roundCrack = false;
+  balance -= bet; save(); roundCrack = false; roundUp = 0; roundBlk = 0;
   parts.length = 0; floats.length = 0; trail.length = 0;
   $('overlay').classList.remove('show');
   if (DEV_BUILD) devSeedRound();
@@ -2513,7 +2521,8 @@ function metaDefaults() {
   return {
     bank: { amt: 0, t: Date.now(), earned: 0, pend: 0, log: [] }, daily: { streak: 0, last: '' }, quests: { day: '', list: [] },
     stats: { rounds: 0, wins: 0, breaks: 0, cracks: 0, bet: 0, won: 0, bestX: 0, bestWin: 0, maxDepth: 0, maxTier: 0, blocks: {}, tnt: 0, chests: 0, portals: 0,
-      buys: 0, bonuses: 0, bonusBest: 0, closeCalls: 0, crackWins: 0, upgrades: 0, runBestX: 0, runBigBust: 0 },
+      buys: 0, bonuses: 0, bonusBest: 0, closeCalls: 0, crackWins: 0, upgrades: 0, runBestX: 0, runBigBust: 0,
+      quests: 0, greedy: 0, early: 0, brkRow: 0, brkRowMax: 0, miracle: 0 }, // v50: для новых достижений
     ach: {}, vil: { lv: {}, cur: 0, at: {} }, trail: 'classic', owned: ['classic'], peak: 0, spentVil: 0, rescueT: 0, intro: 0,
     cb: { day: '', net: 0, pend: 0 }, // 3.3: возврат проигрыша — net = проиграно сегодня (ставки − выигрыши), pend = можно забрать
   };
@@ -2691,24 +2700,42 @@ const QUESTS = [
   { id: 'chest', t: 'Открой {n} сундука', n: 3, lv: 1 }, { id: 'x3', t: 'Забери на ×3 или больше {n} раза', n: 3, lv: 1 }, { id: 'diamond', t: 'Выкопай {n} алмазов', n: 5, lv: 1 },
   { id: 'tnt', t: 'Взорви {n} динамитов', n: 5, lv: 1 }, { id: 'depth', t: 'Дойди до 25 м {n} раза', n: 3, lv: 1 }, { id: 'anvil', t: 'Улучши кирку на наковальне {n} раза', n: 3, lv: 1 },
   { id: 'emerald', t: 'Выкопай {n} изумруда', n: 2, lv: 2 }, { id: 'x10', t: 'Забери на ×10 или больше', n: 1, lv: 2 }, { id: 'deep50', t: 'Дойди до 50 м', n: 1, lv: 2 },
+  // v50: новые задания
+  { id: 'vil', t: 'Собери монеты с деревни {n} раза', n: 3, lv: 0, need: () => vilDone(-1) > 0 }, { id: 'pet', t: 'Сыграй {n} раундов с питомцем', n: 10, lv: 0 },
+  { id: 'row5', t: 'Забери выигрыш {n} раз подряд, не сломав кирку', n: 5, lv: 0 }, { id: 'blk', t: 'Выкопай {n} блоков', n: 100, lv: 0 }, { id: 'd8', t: 'Дойди до 8 м {n} раза', n: 3, lv: 0 },
+  { id: 'case', t: 'Открой кейс', n: 1, lv: 1 }, { id: 'x2', t: 'Забери на ×2 или больше {n} раза', n: 3, lv: 1 }, { id: 'safe', t: 'Забери выигрыш {n} раза при прочности 30 или меньше', n: 3, lv: 1 },
+  { id: 'up2', t: 'Получи 2 улучшения кирки за один раунд', n: 1, lv: 1 }, { id: 'gold2', t: 'Выкопай {n} золота', n: 2, lv: 1 },
+  { id: 'x5', t: 'Забери на ×5 или больше', n: 1, lv: 2 }, { id: 'dia', t: 'Выкопай алмаз', n: 1, lv: 2 }, { id: 'd15', t: 'Дойди до 15 м', n: 1, lv: 2 },
+  { id: 'two', t: 'Выполни сегодня два других задания', n: 2, lv: 2 },
 ];
 const QREW = [600, 1000, 1600], QLV = ['лёгкое', 'среднее', 'сложное'];
 function ensureQuests() {
   const today = dayKey(); if (meta.quests.day === today && meta.quests.list.length === 3) return;
   let s = [...today].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
   const R = () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; R(); R();
-  meta.quests = { day: today, list: [0, 1, 2].map(lv => { const pool = QUESTS.filter(q => q.lv === lv), q = pool[Math.floor(R() * pool.length)]; return { id: q.id, p: 0, n: q.n, lv, done: 0 }; }) };
+  meta.quests = { day: today, list: [0, 1, 2].map(lv => { const pool = QUESTS.filter(q => q.lv === lv && (!q.need || q.need())), q = pool[Math.floor(R() * pool.length)]; return { id: q.id, p: 0, n: q.n, lv, done: 0 }; }) };
   saveMeta();
 }
 const qText = q => (QUESTS.find(x => x.id === q.id) || { t: '?' }).t.replace('{n}', q.n);
 const qReward = q => Math.round(QREW[q.lv] * rank().k);
 function qEv(id, k = 1) {
   if (!counting()) return; ensureQuests();
-  for (const q of meta.quests.list) if (q.id === id && !q.done && q.p < q.n) { q.p = Math.min(q.n, q.p + k); if (q.p >= q.n) gtoast(`📜 Задание выполнено: ${qText(q)} — награда в 🎁`, '#ffcf6a'); }
+  let fin = false;
+  for (const q of meta.quests.list) if (q.id === id && !q.done && q.p < q.n) { q.p = Math.min(q.n, q.p + k); if (q.p >= q.n) { fin = true; gtoast(`📜 Задание выполнено: ${qText(q)} — награда в 🎁`, '#ffcf6a'); } }
+  if (fin) qTwo();
 }
+// «Выполни сегодня два других задания»: прогресс = сколько остальных заданий дня уже выполнено
+function qTwo() {
+  for (const q of meta.quests.list) if (q.id === 'two' && !q.done && q.p < q.n) {
+    q.p = Math.min(q.n, meta.quests.list.filter(o => o !== q && o.p >= o.n).length);
+    if (q.p >= q.n) gtoast(`📜 Задание выполнено: ${qText(q)} — награда в 🎁`, '#ffcf6a');
+  }
+}
+// «… подряд»: поломка сбрасывает прогресс, если задание ещё не выполнено
+function qReset(id) { if (!counting()) return; ensureQuests(); for (const q of meta.quests.list) if (q.id === id && !q.done && q.p < q.n) q.p = 0; }
 function claimQuest(i) {
   const q = meta.quests.list[i]; if (!q || q.done || q.p < q.n || runActive()) return;
-  q.done = 1; const r = qReward(q); addMain(r); saveMeta(); gtoast(`📜 +${fmt(r)}${COIN} за задание`, '#ffcf6a'); sfxAch(); renderGifts(); updatePanel();
+  q.done = 1; meta.stats.quests = (meta.stats.quests || 0) + 1; const r = qReward(q); addMain(r); saveMeta(); gtoast(`📜 +${fmt(r)}${COIN} за задание`, '#ffcf6a'); sfxAch(); renderGifts(); updatePanel(); checkAch();
 }
 function giftCount() {
   if (!fair || runActive()) return 0; ensureQuests();
@@ -2753,19 +2780,19 @@ function trailAction(id) {
   if (mainBal() < T.price) { gtoast('Не хватает монет на балансе', '#ff8a8a'); return; }
   if (T.price >= 10000 && !(trArm.k === id && Date.now() < trArm.t)) { trArm = { k: id, t: Date.now() + 3000 }; gtoast(`Нажми ещё раз — купить «${T.n}» за ${fmt(T.price)}${COIN}`, '#d6b0ff'); cosRender(); return; }
   trArm = { k: '', t: 0 };
-  addMain(-T.price); meta.owned.push(id); meta.trail = id; saveMeta(); sfxAch(); gtoast(`✨ Куплен след «${T.n}»`, '#d6b0ff', true); renderProfile(); cosRender(); updatePanel();
+  addMain(-T.price); meta.owned.push(id); meta.trail = id; saveMeta(); sfxAch(); gtoast(`✨ Куплен след «${T.n}»`, '#d6b0ff', true); renderProfile(); cosRender(); updatePanel(); checkAch();
 }
 
 // ---------- статистика (только честная игра) ----------
 const TRACK = ['coal', 'iron', 'lapis', 'redstone', 'gold', 'diamond', 'emerald', 'obsidian'];
-let roundCrack = false;
+let roundCrack = false, roundUp = 0, roundBlk = 0; // v50: улучшений и блоков за раунд (для заданий и достижений)
 function metaEv(e) {
   if (!counting()) return; const s = meta.stats;
   switch (e.type) {
     case 'hit': if (e.crack) { s.cracks++; roundCrack = true; } break;
-    case 'break': { const k = (BLOCKS[e.t] && BLOCKS[e.t].ore) || e.t; if (TRACK.includes(k)) { s.blocks[k] = (s.blocks[k] || 0) + 1; if (k === 'gold' || k === 'diamond' || k === 'emerald') qEv(k); } break; }
+    case 'break': { const k = (BLOCKS[e.t] && BLOCKS[e.t].ore) || e.t; roundBlk++; qEv('blk'); if (TRACK.includes(k)) { s.blocks[k] = (s.blocks[k] || 0) + 1; if (k === 'gold' || k === 'diamond' || k === 'emerald') qEv(k); if (k === 'gold') qEv('gold2'); if (k === 'diamond') qEv('dia'); } break; }
     case 'explode': s.tnt++; qEv('tnt'); break;
-    case 'special': if (e.kind === 'chest') { s.chests++; qEv('chest'); } if (e.kind === 'upgrade') { s.upgrades++; s.maxTier = Math.max(s.maxTier, e.tier); qEv('anvil'); } break;
+    case 'special': if (e.kind === 'chest') { s.chests++; qEv('chest'); } if (e.kind === 'upgrade') { s.upgrades++; s.maxTier = Math.max(s.maxTier, e.tier); qEv('anvil'); if (++roundUp === 2) qEv('up2'); } break;
     case 'portal': s.portals++; break;
   }
 }
@@ -2776,13 +2803,21 @@ function metaRound(win, bet, broke, depth) {
   cbTrack(bet, win);
   const s = meta.stats; s.rounds++; s.bet += bet; s.maxDepth = Math.max(s.maxDepth, depth || 0);
   qEv('rounds'); if (depth >= 25) qEv('depth'); if (depth >= 50) qEv('deep50');
-  if (broke) s.breaks++;
-  else {
-    s.wins++; s.won += win; const x = win / bet; qEv('cash');
+  if (depth >= 8) qEv('d8'); if (depth >= 15) qEv('d15');
+  if (!(meta.cos.pet.hide || (meta.dig && meta.dig.st === 'dig'))) qEv('pet'); // питомец был в шахте
+  if (broke) {
+    s.breaks++; qReset('row5');
+    s.brkRow = (s.brkRow || 0) + 1; s.brkRowMax = Math.max(s.brkRowMax || 0, s.brkRow);
+    if (game.win >= 5 * bet) s.greedy = (s.greedy || 0) + 1; // сгорело ×5 или больше
+  } else {
+    s.wins++; s.won += win; const x = win / bet; qEv('cash'); qEv('row5'); s.brkRow = 0;
     if (x > s.bestX) s.bestX = x; if (win > s.bestWin) s.bestWin = win; if (x >= 3) qEv('x3'); if (x >= 10) qEv('x10');
+    if (x >= 2) qEv('x2'); if (x >= 5) qEv('x5'); if (game.hp > 0 && game.hp <= 30) qEv('safe');
     if (game.hp > 0 && game.hp <= 5) s.closeCalls++; if (roundCrack) s.crackWins++;
+    if (game.hp > 0 && Math.ceil(game.hp) <= 1) s.miracle = (s.miracle || 0) + 1;
+    if (win > 0 && roundBlk === 1) s.early = (s.early || 0) + 1;
   }
-  roundCrack = false; saveMeta(); checkAch();
+  roundCrack = false; roundUp = 0; roundBlk = 0; saveMeta(); checkAch();
 }
 function metaBonus(win, bet, src) {
   if (!counting()) return; const s = meta.stats;
@@ -2832,7 +2867,28 @@ const ACH = [
   { id: 'farm1', i: '💰', n: 'Хозяйство', d: 'Собрать 100 000 с деревень', v: () => meta.vilEarned || 0, g: 100000, r: 5000 },
   { id: 'vil3', i: '🔥', n: 'Незер', d: 'Достроить деревню «Незер»', v: () => vilComplete(3) ? 1 : 0, g: 1, r: 0 },
   { id: 'vil4', i: '🦜', n: 'Джунгли', d: 'Достроить деревню «Джунгли»', v: () => vilComplete(4) ? 1 : 0, g: 1, r: 0 },
+  // v50: новые достижения (награда — только монеты). Ранги: 5 Барон, 6 Король шахты, 7 Легенда, 8 Император, 11 Бессмертный (по рекорду состояния, как и сам ранг); награда = 1% от порога ранга
+  { id: 'rk5', i: '👑', n: 'Барон', d: 'Получить ранг «Барон»', v: () => meta.peak, g: RANKS[5].w, r: 50000 },
+  { id: 'rk6', i: '🏰', n: 'Король шахты', d: 'Получить ранг «Король шахты»', v: () => meta.peak, g: RANKS[6].w, r: 250000 },
+  { id: 'rk7', i: '🐉', n: 'Легенда', d: 'Получить ранг «Легенда»', v: () => meta.peak, g: RANKS[7].w, r: 1e6 },
+  { id: 'rk8', i: '🤴', n: 'Император', d: 'Получить ранг «Император»', v: () => meta.peak, g: RANKS[8].w, r: 5e6 },
+  { id: 'rk11', i: '🌟', n: 'Бессмертный', d: 'Получить ранг «Бессмертный»', v: () => meta.peak, g: RANKS[11].w, r: 500e6 },
+  { id: 'pet1', i: '🐾', n: 'Первый друг', d: 'Купить первого питомца', v: () => achPets(), g: 1, r: 1000 },
+  { id: 'zoo', i: '🐾', n: 'Зоопарк', d: 'Собрать всех питомцев', v: () => achPets() >= Object.keys(PETS).filter(k => !PETS[k].free).length ? 1 : 0, g: 1, r: 50000 },
+  { id: 'hats10', i: '🎓', n: 'Модник', d: 'Купить 10 шапок', v: () => Object.keys(HATS).filter(k => !HATS[k].free && cosOwn('hat', k)).length, g: 10, r: 10000 },
+  { id: 'case25', i: '📦', n: 'Азарт', d: 'Открыть 25 кейсов', v: () => meta.cos.cases.n || 0, g: 25, r: 10000 },
+  { id: 'lux1', i: '💎', n: 'Роскошь', d: 'Получить «Роскошную» вещь', v: () => achLux(), g: 1, r: 25000 },
+  { id: 'q30', i: '📜', n: 'Исполнитель', d: 'Выполнить 30 заданий', v: s => s.quests || 0, g: 30, r: 5000 },
+  { id: 'streak30', i: '📅', n: 'Месяц', d: '30 дней подряд забирать ежедневный подарок', v: () => meta.daily.streak, g: 30, r: 15000 },
+  { id: 'vilall', i: '🏰', n: 'Архитектор', d: 'Достроить все 5 деревень', v: () => [0, 1, 2, 3, 4].every(i => vilComplete(i)) ? 1 : 0, g: 1, r: 50000 },
+  { id: 'farm2', i: '💰', n: 'Хозяйство II', d: 'Собрать 10 000 000 с деревень', v: () => meta.vilEarned || 0, g: 1e7, r: 250000 },
+  { id: 'greedy', i: '💔', n: 'Жадина', d: 'Сломать кирку, когда на кону было ×5 или больше', v: s => s.greedy || 0, g: 1, r: 1000 },
+  { id: 'early', i: '🛟', n: 'Осторожный', d: 'Забрать выигрыш на первом же блоке', v: s => s.early || 0, g: 1, r: 300 },
+  { id: 'unlucky', i: '💀', n: 'Невезучий', d: 'Сломать кирку 5 раз подряд', v: s => s.brkRowMax || 0, g: 5, r: 1000 },
+  { id: 'miracle', i: '❤', n: 'Чудом', d: 'Забрать выигрыш при прочности 1', v: s => s.miracle || 0, g: 1, r: 2000 },
 ];
+const achPets = () => Object.keys(PETS).filter(k => !PETS[k].free && cosOwn('pet', k)).length;
+const achLux = () => { for (const c in COS) for (const id in COS[c]) if (COS[c][id].r === 'x' && cosOwn(c, id)) return 1; return Object.keys(TRAILS).some(id => TRAILS[id].r === 'x' && meta.owned.includes(id)) ? 1 : 0; };
 // награда «следом»
 const ACH_TRAIL = { vil0: 'rainbow', vil1: 'sand', vil2: 'snow', vil3: 'magma', vil4: 'vines', hell500: 'fire', em50: 'emerald', run2: 'love', runbust: 'void' };
 function checkAch() {
@@ -4005,7 +4061,7 @@ function vilCollect(vi, bid, quiet) {
     meta.vil.at[vKey(V, b)] = q.full ? now : now - (q.amt - q.take) / q.rate * 3600000; // дробный остаток не сгорает
   }
   if (!sum) return 0;
-  addMain(sum); meta.vilEarned = (meta.vilEarned || 0) + sum; saveMeta();
+  addMain(sum); meta.vilEarned = (meta.vilEarned || 0) + sum; qEv('vil'); saveMeta();
   if (sheetId === 'vil' && vi === meta.vil.cur) for (const [id, n] of got) vCoinFx(id, n);
   SFX.cash(); vibe(25);
   if (!quiet) gtoast(`💰 +${fmt(sum)}${COIN} с деревни «${V.n}»`, '#ffd23f');
@@ -4438,6 +4494,15 @@ const PETS = {
   fox: { n: 'Лисёнок', price: 40000, eye: [4, 10, 7], mouth: [7, 10], hat: [8, 4], pal: { k: PETK, b: '#ff7a1a', d: '#c85000', l: '#ffffff', n: '#1a1010' },
     map: ['................', '..k..........k..', '..kk........kk..', '..kbk......kbk..', '..kbbkkkkkkbbk..', '.kbbbbbbbbbbbbk.', '.kbbbbbbbbbbbbk.', '.kbbbbbbbbbbbbk.', 'kbllbbbbbbbbllbk', '.kllllbnnbllllk.',
       '..kllllllllllk..', '...kkkllllkkk...', '...kbbbllbbbk...', '...kbbbllbbbkk..', '...kbbbbbbbbkdk.', '...kkk.kk.kkkk..'] },
+  frog: { n: 'Лягушка', price: 50000, eye: [3, 11, 2], mouth: [7, 8], hat: [8, 0], pal: { k: PETK, g: '#6cc04a', d: '#2f6a2a', y: '#e0f4a8', p: '#ff9ab0' },
+    map: ['..kkkk....kkkk..', '.kggggk..kggggk.', '.kggggk..kggggk.', '.kggggkkkkggggk.', '.kggggggggggggk.', 'kggggggggggggggk', 'kgpggggggggggpgk', 'kggdggggggggdggk', '.kgddddddddddgk.', '..kggggggggggk..',
+      '..kgyyyyyyyygk..', '.kggkyyyyyykggk.', 'kgggkyyyyyykgggk', 'kggggkyyyykggggk', 'kkggggkkkkggggkk', '.kkkkk....kkkkk.'] },
+  panda: { n: 'Панда', price: 50000, weye: 1, eye: [4, 11, 5], mouth: [7, 9], hat: [8, 2], pal: { k: PETK, b: '#2c2a32', w: '#f4f2ee', g: '#cfcbd4', n: '#1c1416', p: '#6a5450' },
+    map: ['.kkkk......kkkk.', 'kbbbbkkkkkkbbbbk', 'kbbbwwwwwwwwbbbk', '.kbwwwwwwwwwwbk.', '.kwwwwwwwwwwwwk.', 'kwwbbbwwwwbbbwwk', 'kwbbbbwwwwbbbbwk', 'kwbbbwwnnwwbbbwk', '.kwwwwwwwwwwwwk.', '..kgwwwwwwwwgk..',
+      '.kbbkkggggkkbbk.', 'kbbbbbwwwwbbbbbk', 'kbbbbwwwwwwbbbbk', 'kbbbbgwwwwgbbbbk', 'kbpbbbbwwbbbbpbk', '.kkkkkkkkkkkkkk.'] },
+  dino: { n: 'Динозаврик', price: 50000, eye: [4, 10, 4], mouth: [7, 7], hat: [8, 2], pal: { k: PETK, g: '#5ec24a', d: '#3e8a30', y: '#f4e08a', o: '#ff8a3a', p: '#ff9ab0', w: '#f4f0e6' },
+    map: ['.....o..o..o....', '....kookookook..', '..kggggggggggk..', '.kggggggggggggk.', '.kggggggggggggk.', '.kggggggggggggk.', '.kgpggggggggpgk.', '.kggggggggggggk.', '..kgggwggwgggk..', '...kgyyyyyygk...',
+      '..kgkyyyyyykgk..', '..kggyyyyyyggk..', '..kggyyyyyyggggk', '..kgggyyyygggkk.', '..kggkggggkggk..', '..kkkk....kkkk..'] },
   axolotl: { n: 'Аксолотль', price: 75000, eye: [4, 10, 7], mouth: [7, 9], hat: [8, 3], pal: { k: PETK, b: '#ff9ac8', d: '#e06aa0', l: '#ffd6ea', g: '#ff4f8a' },
     map: ['................', '................', '................', '.g..kkkkkkkk..g.', '.gg.kbbbbbbk.gg.', '..gkbbbbbbbbkg..', '.ggkbbbbbbbbkgg.', '..kbbbbbbbbbbk..', '.gkbbbbbbbbbbkg.', '..kbbbbbbbbbbk..',
       '..kbbllllllbbk..', '...kkbbbbbbkk...', '...kbllllllbk...', '..kdbllllllbdk..', '..kkbbbbbbbbkk..', '...kk.kkkk.kk...'] },
@@ -5109,13 +5174,15 @@ function drawPet(g, ox, oy, kind, hat, emo, t, look) {
   const X = ox + dx, Y = oy + dy, P = (x, y, c, w = 1, h = 1) => { g.fillStyle = c; g.fillRect(X + x, Y + y, w, h); };
   g.drawImage(petSpr(kind), X, Y);
   const [lx, rx, ey] = S.eye, [mx, my] = S.mouth, K = '#111', blink = (t % 3.3) < .14, lid = S.pal.d || S.pal.b;
+  const EW = S.weye ? '#ffffff' : K; // у панды глаза на чёрных пятнах — рисуем их белыми
   if (!H.eyes) for (const ex of [lx, rx]) {
-    if (emo === 'sleep' || (blink && (emo === 'normal' || emo === 'happy0' || emo === 'hungry'))) P(ex, ey + 1, K, 2, 1);
-    else if (emo === 'happy' || emo === 'dance') { P(ex, ey, K, 2, 1); P(ex === lx ? ex - 1 : ex + 2, ey + 1, '#ff8aa8'); }
+    if (emo === 'sleep' || (blink && (emo === 'normal' || emo === 'happy0' || emo === 'hungry'))) P(ex, ey + 1, EW, 2, 1);
+    else if (emo === 'happy' || emo === 'dance') { P(ex, ey, EW, 2, 1); P(ex === lx ? ex - 1 : ex + 2, ey + 1, '#ff8aa8'); }
     else if (emo === 'excited') { P(ex, ey, '#ffd23f', 2, 2); P(ex, ey, '#ffffff'); }
     else if (emo === 'love') P(ex, ey, '#ff3d6a', 2, 2);
     else if (emo === 'scared') { P(ex, ey, '#ffffff', 2, 2); P(ex + (look > 0 ? 1 : 0), ey + 1, K); }
-    else if (emo === 'hungry') { P(ex, ey, lid, 2, 1); P(ex, ey + 1, K, 2, 1); }
+    else if (emo === 'hungry') { P(ex, ey, lid, 2, 1); P(ex, ey + 1, EW, 2, 1); }
+    else if (S.weye) { P(ex + (look > 0 ? 1 : 0), ey, '#ffffff', 1, 2); if (emo === 'sad') P(ex === lx ? ex + 1 : ex, ey - 1, '#ffffff'); }
     else { P(ex, ey, K, 2, 2); P(ex + (look > 0 ? 1 : 0), ey, '#ffffff'); if (emo === 'sad') P(ex === lx ? ex + 1 : ex, ey - 1, K); }
   }
   if (emo === 'sad') P(lx, ey + 2 + Math.floor(t * 3) % 3, '#5ab8ff');
@@ -5515,7 +5582,7 @@ function cosBuy(cat, id) {
   cosArm = { k: '', t: 0 };
   addMain(-it.price);
   meta.cos.own.push(key); sfxAch(); gtoast(`🎨 Куплено: «${it.n}»`, '#d6b0ff', true);
-  cosSelect(cat, id, true); saveMeta(); cosRender(); updatePanel();
+  cosSelect(cat, id, true); saveMeta(); cosRender(); updatePanel(); checkAch();
 }
 function cosPreview(cat, id) {
   if (cat === 'skin') { cosPv.skin = id; const box = $('cPicks'); if (box) box.querySelectorAll('img').forEach((im, i) => im.src = pickIcon(id, i)); const t = $('cPickT'); if (t) t.textContent = `«${SKINS[id].n}» на всех уровнях: от деревянной до незеритовой. Форма — от скина, цвет железа — от уровня кирки.`; }
@@ -5625,7 +5692,7 @@ function caseOpen(cid, again) {
   cosArm = { k: '', t: 0 };
   // результат определяется и сохраняется сразу — закрыл приложение во время прокрутки, вещь всё равно твоя
   const win = caseRoll(cid), back = caseGive(win), st = meta.cos.cases;
-  addMain(-C.price + back); st.n++; st.spent += C.price; st.back += back; saveMeta(); updatePanel();
+  addMain(-C.price + back); st.n++; st.spent += C.price; st.back += back; qEv('case'); saveMeta(); updatePanel();
   // лента: случайные вещи по тем же шансам, выигрыш — на 38-м месте
   const N = 46, W = 38, strip = []; for (let i = 0; i < N; i++) strip.push(i === W ? win : caseRoll(cid));
   $('caseTtl').innerHTML = `<span style="color:${C.rc}">${C.n}</span>`;
@@ -5658,7 +5725,7 @@ function caseDone() {
   const can = mainBal() >= C.price;
   $('caseBtns').innerHTML = (A.back ? '' : `<button class="btn" data-cw="use">Надеть</button>`) + `<button class="btn buy" data-cw="again"${can ? '' : ' disabled'}>Ещё · ${fmtShort(C.price)}<i class="coin"></i></button><button class="btn" data-cw="close">Готово</button>`;
   $('caseBtns').dataset.cid = A.cid; $('caseBtns').dataset.item = x.cat + ':' + x.id;
-  cosRender(); updatePanel();
+  cosRender(); updatePanel(); checkAch(); // достижения за коллекцию — после прокрутки, чтобы не подсказать, что выпало
 }
 function caseBtn(e) {
   const b = e.target.closest('[data-cw]'); if (!b) return; const box = $('caseBtns'), [cat, id] = box.dataset.item.split(':');
@@ -5752,7 +5819,7 @@ function cosInit() {
 // Без кода и пароля: кнопка DEV в левом верхнем углу → окно на весь экран с вкладками. В обычной версии кнопки нет.
 const devOn = () => DEV_BUILD;
 let devTab = 'test', devArm = { k: '', t: 0 };
-const DEV_TABS = [['test', '⚙', 'Тест'], ['res', '💰', 'Ресурсы'], ['cos', '🎨', 'Косметика'], ['snap', '💾', 'Откат'], ['rank', '🏆', 'Ранги'], ['vil', '🏘', 'Деревни'], ['err', '❓', 'Ошибки']];
+const DEV_TABS = [['test', '⚙', 'Тест'], ['res', '💰', 'Ресурсы'], ['cos', '🎨', 'Косметика'], ['snap', '💾', 'Откат'], ['rank', '🏆', 'Ранги'], ['vil', '🏘', 'Деревни'], ['err', '❓', 'Ошибки'], ['chk', '📏', 'Проверка']];
 // 🎨 косметика по одной вещи: серая — нет, цветная — есть; тап — выдать / забрать
 const DEV_COS = [['skin', '⛏ Скины кирки'], ['trail', '✨ Следы'], ['fx', '💥 Эффекты поломки'], ['cfx', '💰 Эффекты забора'], ['theme', '🌄 Темы шахты'], ['pet', '🐾 Питомцы'], ['hat', '🎩 Шапки']];
 const DEV_COS0 = { skin: 'classic', fx: 'classic', cfx: 'classic', theme: 'classic', pet: 'mole', hat: 'none', trail: 'classic' };
@@ -5775,6 +5842,87 @@ const devEsc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '
 const devWhen = t => { const d = new Date(t); return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) + ' ' + d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }); };
 function devArmed(k) { if (devArm.k === k && Date.now() < devArm.t) { devArm = { k: '', t: 0 }; return true; } devArm = { k, t: Date.now() + 4000 }; return false; } // опасное — по второму нажатию
 function devSnap() { try { return JSON.parse(localStorage.getItem('kirka_snap') || 'null'); } catch (e) { return null; } }
+// 📏 проверка чужого кода сохранения: сходятся ли монеты со статистикой (код НЕ загружается, свой прогресс не трогается)
+let devChk = { code: '', html: '' };
+function devCheckSave(code) {
+  code = String(code || '').trim().replace(/\s+/g, '');
+  if (!code.startsWith('KIRKA2:')) return '<div class="chkv bad">✕ Это не код сохранения — он начинается с KIRKA2:</div>';
+  let o, M; try { o = JSON.parse(decodeURIComponent(escape(atob(code.slice(7))))); } catch (e) { return '<div class="chkv bad">✕ Код повреждён — не читается (скопирован не целиком?)</div>'; }
+  if (!o || typeof o !== 'object' || !('pk_meta' in o || 'pk_balance' in o)) return '<div class="chkv bad">✕ В коде нет прогресса Кирки</div>';
+  try { M = JSON.parse(o.pk_meta || 'null') || {}; } catch (e) { return '<div class="chkv bad">✕ Прогресс в коде повреждён</div>'; }
+  const D0 = metaDefaults(); M = Object.assign(D0, M);
+  for (const k of ['bank', 'daily', 'quests', 'stats', 'vil', 'cb']) M[k] = Object.assign(metaDefaults()[k], M[k] && typeof M[k] === 'object' ? M[k] : {});
+  M.cos = Object.assign(cosDefaults(), M.cos || {}); M.cos.cases = Object.assign(cosDefaults().cases, M.cos.cases || {});
+  M.dig = Object.assign(digDefaults(), M.dig || {}); M.dig.lv = Object.assign(digDefaults().lv, M.dig.lv || {});
+  if (!Array.isArray(M.owned)) M.owned = ['classic']; if (!Array.isArray(M.cos.own)) M.cos.own = []; if (!M.ach || typeof M.ach !== 'object') M.ach = {};
+  const N = v => { v = +v; return isFinite(v) ? v : 0; }, S = M.stats;
+  const bal = o.pk_balance == null ? 1000 : parseFloat(o.pk_balance), bank = N(M.bank.amt);
+  const bad = [], warn = [], info = [];
+  if (!isFinite(bal) || bal < 0) bad.push('Баланс не число или меньше нуля: «' + devEsc(o.pk_balance) + '»');
+  // доходы, которые игра записывает
+  let achSum = 0, achOld = 0; for (const id in M.ach) { const q = ACH.find(a => a.id === id); if (q) achSum += q.r || 0; else achOld++; }
+  let learnSum = 0; for (const L of LEARN) if (M.learn && M.learn[L.k]) learnSum += L.r || 0;
+  const game = N(S.won) - N(S.bet);
+  const inc = [['Начальные монеты', 1000], ['Раунды: выиграно − поставлено', game], ['Награды за достижения', achSum], ['Награды за обучения', learnSum],
+    ['Доход деревень', N(M.vilEarned)], ['Проценты банка', N(M.bank.earned)], ['Питомец: продажа', N(M.dig.sold)], ['Кейсы: монеты за повторы', N(M.cos.cases.back)]];
+  // траты, которые можно посчитать
+  let digSum = 0; for (const k in M.dig.lv) for (let i = 0; i < Math.min(5, N(M.dig.lv[k])); i++) digSum += DIG_PRICE[i];
+  let trailSum = 0; for (const id of M.owned) { const T = TRAILS[id]; if (T && T.price >= 1e6) trailSum += T.price; }
+  let luxSum = 0, poolSum = 0; for (const key of M.cos.own) { const [c, id] = String(key).split(':'), it = COS[c] && COS[c][id]; if (!it || !it.price || it.free || it.ach || it.vil != null || it.rank != null) continue; if (it.price >= 1e6) luxSum += it.price; else poolSum += it.price; }
+  for (const id of M.owned) { const T = TRAILS[id]; if (T && T.price && T.price < 1e6) poolSum += T.price; }
+  const out = [['Стройка деревень', N(M.spentVil)], ['Кейсы', N(M.cos.cases.spent)], ['Прокачка питомца', digSum], ['Роскошная косметика', luxSum + trailSum]];
+  const incT = inc.reduce((a, r) => a + r[1], 0), outT = out.reduce((a, r) => a + r[1], 0), have = (isFinite(bal) ? bal : 0) + bank;
+  const gap = have + outT - incT; // сколько монет есть сверх того, что объясняет статистика
+  // что игра не записывает: подарки, задания, возврат проигрыша, спасательный круг (+ старые достижения)
+  const ts = []; const tp = v => { v = N(v); if (v > 1.7e12 && v < Date.now() + 864e5 * 2) ts.push(v); };
+  Object.values(M.ach).forEach(tp); Object.values(M.vil.at || {}).forEach(tp); (M.bank.log || []).forEach(e => tp(e && e.t)); tp(M.bank.t); tp(M.rescueT); tp(M.dig.t); tp(M.cos.pet && M.cos.pet.t);
+  const t0 = ts.length ? Math.min(...ts) : Date.now(), t1 = ts.length ? Math.max(...ts) : Date.now();
+  const days = Math.max(1, Math.ceil((t1 - t0) / 864e5 + .01));
+  // ранг для запаса: по рекорду состояния, но не выше того, что вообще можно было набрать (рекорд в коде тоже можно подделать)
+  const upper = 1000 + N(S.won) + achSum + learnSum + N(M.vilEarned) + N(M.bank.earned) + N(M.dig.sold) + N(M.cos.cases.back) + achOld * 50000;
+  const rankOf = w => { let i = 0; RANKS.forEach((r, j) => { if (w >= r.w) i = j; }); return i; };
+  const allowK = k => days * ((DAILY[DAILY.length - 1] + QREW.reduce((a, b) => a + b, 0)) * k + 30 * RESCUE * k) + CB_RATE * N(S.bet) + achOld * 50000 + 20000;
+  const peak = N(M.peak) || have + N(M.spentVil);
+  let ri = rankOf(Math.min(peak, upper)); ri = rankOf(Math.min(peak, upper + allowK(RANKS[ri].k))); const K = RANKS[ri].k;
+  const allow = allowK(K), maxBet = RANKS[ri].bet;
+  const lost = -(poolSum + days * 3000 + 20000); // куда монеты могли уйти незаписанными: обычная косметика (если купил, а не из кейса), корм
+  // сама статистика
+  if (N(S.rounds) !== N(S.wins) + N(S.breaks)) bad.push(`Раундов ${fmt(N(S.rounds))}, а побед + поломок = ${fmt(N(S.wins) + N(S.breaks))} — счётчики правили`);
+  if (N(S.bestWin) > N(S.won) + 1) bad.push('Лучший выигрыш больше, чем выиграно за всё время');
+  if (N(S.bonusBest) > HELL.maxWin + .01) bad.push(`Бонуска ×${fmt(N(S.bonusBest))} — больше максимума ×${fmt(HELL.maxWin)}`);
+  if (N(S.bet) < N(S.rounds)) bad.push('Поставлено меньше, чем сыграно раундов');
+  if (N(S.won) > N(S.wins) * N(S.bestWin) + N(S.bonuses) * N(S.bonusBest) * maxBet + 1) bad.push(`Выиграно ${fmt(Math.round(N(S.won)))}, а побед всего ${fmt(N(S.wins))} с лучшим выигрышем ${fmt(Math.round(N(S.bestWin)))} — столько не набрать`);
+  if (N(S.bestWin) > N(S.bestX) * maxBet * 1.01 + 1) bad.push(`Лучший выигрыш ${fmt(Math.round(N(S.bestWin)))} — больше, чем лучший множитель × макс. ставка ранга`);
+  if (N(S.bet) > (N(S.rounds) + N(S.buys) * BONUS_PRICE) * maxBet + 1) bad.push('Поставлено больше, чем позволяет макс. ставка ранга');
+  if (N(M.peak) > upper + allow) bad.push(`Рекорд состояния ${fmt(Math.round(N(M.peak)))} — больше, чем можно было набрать за всё время (${fmt(Math.round(upper + allow))})`);
+  if (N(S.bestX) > ROUND_MAX_WIN && N(S.bestX) > HELL.maxWin) bad.push(`Множитель ×${fmt(N(S.bestX))} — так не бывает`);
+  else if (N(S.bestX) > ROUND_MAX_WIN) info.push(`Лучший множитель ×${fmt(N(S.bestX))} (больше ×${ROUND_MAX_WIN} — бонуска или старая версия до 3.2)`);
+  let vilSum = 0; VILLAGES.forEach(V => V.b.forEach(b => { const L = Math.min(b.st.length, N(M.vil.lv[V.id + '.' + b.id])); for (let i = 0; i < L; i++) vilSum += b.st[i][1]; }));
+  if (vilSum > 0 && N(M.spentVil) < vilSum * .5) bad.push(`Построено на ${fmt(vilSum)}, а потрачено на стройку ${fmt(N(M.spentVil))} — дома появились бесплатно`);
+  else if (Math.abs(vilSum - N(M.spentVil)) > 1) info.push(`Стройка по нынешним ценам — ${fmt(vilSum)}, оплачено ${fmt(N(M.spentVil))} (цены менялись между версиями)`);
+  if (N(M.peak) + 1 < have + N(M.spentVil)) warn.push('Монет больше, чем рекорд состояния — баланс меняли не через игру');
+  // достижения: условие должно быть выполнено
+  const mine = meta; let achBad = []; try { meta = M; for (const id in M.ach) { const q = ACH.find(a => a.id === id); if (q && q.v && q.g) { let v = 0; try { v = q.v(S); } catch (e) { continue; } if (v < q.g) achBad.push(q.n); } } } finally { meta = mine; }
+  if (achBad.length) warn.push('Получены, но условие не выполнено: ' + achBad.slice(0, 6).map(devEsc).join(', ') + (achBad.length > 6 ? '…' : ''));
+  const oldRuns = N(S.runBestX) > 0 || N(S.runBigBust) > 0 || (o.pk_runs && o.pk_runs !== '[]');
+  if (oldRuns) info.push('Играл в Забеги (старая версия): у них был свой кошелёк, а раунды шли в общую статистику — разница может быть неточной, поэтому строгого «нечестно» по ней не ставлю');
+  if (achOld) info.push(`Достижений из старых версий: ${achOld} (их награду не знаю — до 50 000 за каждое в запасе)`);
+  // вердикт
+  let cls, head;
+  if (bad.length || (gap > allow * 1.5 + 50000 && !oldRuns)) { cls = 'bad'; head = gap > allow ? `✕ Нечестно: ${fmt(Math.round(gap - allow))} монет взялись из ниоткуда` : '✕ Нечестно: статистику правили руками'; }
+  else if (gap > allow || gap < lost || warn.length) { cls = 'mid'; head = gap > allow ? `! Подозрительно: лишние ${fmt(Math.round(gap - allow))} монет` : gap < lost ? '! Странно: монет меньше, чем по статистике' : '! Почти всё сходится, но есть вопросы'; }
+  else { cls = 'ok'; head = '✓ Честно: монеты сходятся со статистикой'; }
+  const row = (n, v, b) => `<tr${b ? ' class="b"' : ''}><td>${n}</td><td>${(v < 0 ? '−' : b === 2 && v > 0 ? '+' : '') + fmt(Math.round(Math.abs(v)))}</td></tr>`;
+  return `<div class="chkv ${cls}">${head}</div>
+    <div class="note" style="margin-top:6px">Ранг <b>${devEsc(RANKS[ri].n)}</b> (подарки ×${K}) · раундов ${fmt(N(S.rounds))} · играет ${days} дн. (${devWhen(t0)} — ${devWhen(t1)})</div>
+    <table class="chkt"><tr class="h"><td colspan="2">Откуда монеты (записано игрой)</td></tr>${inc.map(r => row(r[0], r[1])).join('')}${row('Итого пришло', incT, 1)}
+    <tr class="h"><td colspan="2">Куда ушли</td></tr>${out.map(r => row(r[0], r[1])).join('')}${row('Итого ушло', outT, 1)}
+    <tr class="h"><td colspan="2">Сейчас</td></tr>${row('Баланс', isFinite(bal) ? bal : 0)}${row('В банке', bank)}
+    ${row('Должно быть по статистике', incT - outT, 1)}${row('Разница (есть − должно)', gap, 2)}
+    ${row(`Подарки, задания, возврат, круг — максимум за ${days} дн.`, allow)}</table>
+    ${bad.map(t => `<div class="chkl bad">✕ ${t}</div>`).join('')}${warn.map(t => `<div class="chkl mid">! ${t}</div>`).join('')}${info.map(t => `<div class="chkl">· ${t}</div>`).join('')}
+    <div class="note" style="margin-top:6px">Разница должна быть не больше «максимума»: подарки, задания, возврат проигрыша и спасательный круг игра не записывает, поэтому для них берётся запас по рангу и дням. Монеты, добавленные режимом разработчика, тоже покажутся как «из ниоткуда».</div>`;
+}
 function devBody() {
   if (devTab === 'test') return devTest();
   if (devTab === 'res') return `<div class="note">Монеты — на баланс (рекорд состояния и ранг тоже вырастут, могут выпасть достижения). «Разблокировать всю косметику» — все скины, эффекты, темы, питомцы, шапки и следы. Перед тестами удобно сохранить точку во вкладке «Откат».</div>
@@ -5809,6 +5957,9 @@ function devBody() {
     + VILLAGES.map((V, i) => `<div class="devvil"><div class="dvn"><b>${V.i} ${V.n}</b><small>${vilDone(i)}/${vilTotal(i)}${vilUnlocked(i) ? '' : ' · 🔒'}</small></div>
       <button class="btn" data-dev="vstep:${i}"${vilComplete(i) || !vilUnlocked(i) ? ' disabled' : ''}>+1</button><button class="btn" data-dev="vall:${i}"${vilComplete(i) || !vilUnlocked(i) ? ' disabled' : ''}>Достроить</button><button class="btn" data-dev="vrst:${i}"${vilDone(i) ? '' : ' disabled'}>Сброс</button></div>`).join('')
     + `<button class="btn devwide" data-dev="vfill">💰 Наполнить все склады</button>`;
+  if (devTab === 'chk') return `<div class="note">Вставь чужой код <b>KIRKA2:…</b> — покажу, честно ли набраны монеты. Код <b>не загружается</b>, твой прогресс не меняется.</div>
+    <textarea id="devChkIn" class="chkin" placeholder="KIRKA2:…" spellcheck="false">${devEsc(devChk.code)}</textarea>
+    <div class="devgrid"><button class="btn" data-dev="chk">Проверить</button><button class="btn" data-dev="chkclr">Очистить</button></div><div id="devChkOut">${devChk.html}</div>`;
   if (devTab === 'err') {
     const L = errLog();
     return `<div class="note">Ошибки ловятся всегда (последние 30). Если что-то сломалось — «Скопировать» и пришли текст.</div>
@@ -5847,6 +5998,8 @@ function devAct(a) {
   if (!devOn()) return;
   if (a.startsWith('tab:')) { devTab = a.slice(4); devArm = { k: '', t: 0 }; renderDev(); return; }
   if (a === 'news') { showNews(); return; }
+  if (a === 'chk') { devChk.code = ($('devChkIn') || {}).value || ''; let h; try { h = devCheckSave(devChk.code); } catch (e) { h = '<div class="chkv bad">✕ Не получилось проверить: ' + devEsc(e.message) + '</div>'; } devChk.html = h; renderDev(); return; }
+  if (a === 'chkclr') { devChk = { code: '', html: '' }; renderDev(); return; }
   if (busy()) return;
   const [k, n] = a.split(':'), v = +n; let msg = devTestAct(k, a) || '';
   if (msg) { }
