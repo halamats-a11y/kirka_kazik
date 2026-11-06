@@ -575,6 +575,8 @@
   .citem .cbtn.buy{background:linear-gradient(#ffcf3a,#e09a00);color:#2a1a00;text-shadow:none}
   .citem .cbtn.buy.armed{background:linear-gradient(#ff8a1a,#c2281a);color:#fff;animation:pulse .6s infinite}
   .cseas{position:absolute;right:4px;top:3px;font-style:normal;font-size:13px}
+  .cnew{position:absolute;left:3px;top:3px;z-index:2;font-style:normal;font-weight:800;font-size:9px;letter-spacing:.5px;line-height:1;padding:3px 4px 2px;border-radius:4px;background:#ffd23f;color:#1a1408;box-shadow:0 0 6px #ffd23f88}
+  .ctab{position:relative}.cnewdot{position:absolute;right:5px;top:4px;width:8px;height:8px;border-radius:50%;background:#ffd23f;box-shadow:0 0 5px #ffd23f}
   .ctrail{display:block;width:56px;height:14px;border-radius:7px;border:2px solid #000}
   .csw{display:flex;align-items:center;justify-content:center;width:56px;height:42px;border-radius:8px;border:2px solid #000;font-size:20px}
   .cprev{display:block;width:100%;border:3px solid #000;border-radius:10px;box-shadow:0 0 0 2px #2c2c38;background:#000;margin-top:8px}
@@ -598,6 +600,12 @@
   .pgain.show{display:block}
   .paway{position:absolute;right:6px;top:6px;font-size:11.5px;font-weight:800;background:#000a;color:#fff;border-radius:8px;padding:3px 8px;display:none}
   .paway.show{display:block}
+  .pslots{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+  .pslot{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:12px;border:2px solid #3c3c48;background:#1e1c26;color:inherit;font:inherit;text-align:left;cursor:pointer;min-width:0}
+  .pslot.on{border-color:var(--gold);background:#2a2618}
+  .pslot canvas{width:44px;height:44px;flex:none;image-rendering:pixelated}
+  .pslot span{min-width:0}.pslot small{display:block;color:var(--muted);font-size:11px;font-weight:700}
+  .pslot b{display:block;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .pstat{font-size:13px;line-height:1.4}
   .pbars{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0}
   .pbars>div{font-size:11.5px;color:var(--muted);font-weight:800}.pbars b{float:right;color:var(--text)}
@@ -894,24 +902,25 @@
   <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
 </div></div>
 
-<!-- ===== Окно «Питомец»: копает на своей земле или отдыхает в шахте ===== -->
+<!-- ===== Окно «Питомцы»: «Рядом со мной» сидит в шахте, «Копает» — на своей земле ===== -->
 <div class="sheet" id="sh-pet"><div class="sh-in">
-  <div class="sh-head"><h1><i class="px px-paw"></i> <span id="ptTitle">Питомец</span></h1><button class="btn sh-x" data-close title="Закрыть">✕</button></div>
+  <div class="sh-head"><h1><i class="px px-paw"></i> <span id="ptTitle">Питомцы</span></h1><button class="btn sh-x" data-close title="Закрыть">✕</button></div>
   <div class="sh-body">
-    <div class="pscene"><canvas id="ptCv" width="96" height="54"></canvas><button class="psell" id="ptSell"><i class="px px-coin"></i> Продать</button><div class="pgain" id="ptGain"></div><div class="paway" id="ptAway"><i class="px px-bed"></i> отдыхает в шахте</div></div>
+    <div class="pslots"><button class="pslot" data-slot="comp"><canvas id="ptS1" width="24" height="24"></canvas><span><small>Рядом со мной</small><b id="ptS1n"></b></span></button><button class="pslot" data-slot="dig"><canvas id="ptS2" width="24" height="24"></canvas><span><small>Копает</small><b id="ptS2n"></b></span></button></div>
+    <div class="pscene"><canvas id="ptCv" width="96" height="54"></canvas><button class="psell" id="ptSell"><i class="px px-coin"></i> Продать</button><div class="pgain" id="ptGain"></div><div class="paway" id="ptAway"></div></div>
     <div class="card">
       <div class="pstat" id="ptStat"></div>
       <div class="pbars"><div><span><i class="px px-apple"></i> Силы</span><b id="ptEnT"></b><div class="bar sm"><i id="ptEnB"></i></div></div><div><span><i class="px px-meat"></i> Сытость</span><b id="ptSatT"></b><div class="bar sm"><i id="ptSatB"></i></div></div></div>
       <button class="btn runstart" id="ptGo"></button>
       <div class="cfeed" style="margin-top:8px"><button class="btn" data-feed="cookie"><i class="px px-cookie"></i> Печенька · 50</button><button class="btn" data-feed="meal"><i class="px px-meat"></i> Обед · 100</button></div>
-      <div class="note" style="margin-top:6px">Голодный копает медленнее. Силы тратятся по одной на находку; кончились — питомец засыпает, пока ты не отправишь его отдыхать в шахту.</div>
+      <div class="note" style="margin-top:6px">Есть хочет только тот, кто копает: голодный копает медленнее. Силы тратятся по одной на находку; кончились — уложи его спать, силы вернутся.</div>
     </div>
     <div class="secttl" style="margin-top:4px"><i class="px px-up"></i> Прокачка</div>
     <div class="pups" id="ptUp"></div>
     <div class="card"><div class="label"><i class="px px-quill"></i> Имя и вид</div>
       <input class="pname" id="ptName" maxlength="14" placeholder="Питомец" aria-label="Имя питомца">
-      <div class="cpsize">📏 Размер в шахте<input type="range" id="ptSize" min="50" max="250" step="5" aria-label="Размер питомца"><b id="ptSizeV"></b><button class="btn" id="ptSize0">↺</button></div>
-      <label class="note cchk"><input type="checkbox" id="ptHide"> Спрятать питомца из шахты, когда он отдыхает</label>
+      <div class="cpsize" id="ptSizeL">📏 Размер в шахте<input type="range" id="ptSize" min="50" max="250" step="5" aria-label="Размер питомца"><b id="ptSizeV"></b><button class="btn" id="ptSize0">↺</button></div>
+      <label class="note cchk" id="ptHideL"><input type="checkbox" id="ptHide"> Спрятать питомца из шахты</label>
     </div>
     <div id="ptCos"></div>
     <div class="note" id="ptNote" style="margin-top:8px"></div>
@@ -1444,7 +1453,7 @@ const PAL = {
   grass: ['#5d9b3a', '#6aab43', '#4f8a2f', '#79bd4f'],
   deepslate: ['#4d4d55', '#45454c', '#56565e', '#3c3c43', '#5e5e66'],
   bedrock: ['#222', '#3a3a3a', '#555', '#111', '#6a6a6a', '#2c2c2c'],
-  obsidian: ['#140f1f', '#1d1430', '#2b1f45', '#0d0a14', '#3a2a5c'],
+  obsidian: ['#0e0b15', '#13101c', '#181424', '#0a080f', '#1c1729'], // v53: темнее и серее, чтобы не путать с порталом
   netherrack: ['#6f2b2b', '#5e2222', '#803434', '#4f1a1a', '#8c3a36', '#672828'],
   blackstone: ['#2a2428', '#352d33', '#1f1a1e', '#3d343b', '#2f282d'],
 };
@@ -1476,7 +1485,10 @@ function buildTextures() {
   }, 13);
   TEX.deepslate = texFrom((px, R) => { fillNoise(px, R, PAL.deepslate); for (let i = 0; i < 6; i++) { const y = Math.floor(R() * 16), x = Math.floor(R() * 10); for (let k = 0; k < 5; k++) px(x + k, y, '#35353b'); } }, 14);
   TEX.bedrock = texFrom((px, R) => fillNoise(px, R, PAL.bedrock), 15);
-  TEX.obsidian = texFrom((px, R) => { fillNoise(px, R, PAL.obsidian); for (let i = 0; i < 6; i++) px(Math.floor(R() * 16), Math.floor(R() * 16), '#6a4fa0'); }, 16);
+  TEX.obsidian = texFrom((px, R) => { fillNoise(px, R, PAL.obsidian); // v53: как в Майнкрафте — почти чёрный, со стеклянными серо-лиловыми прожилками, без ярких фиолетовых точек
+    for (let i = 0; i < 6; i++) { let x = Math.floor(R() * 16), y = Math.floor(R() * 16); const dx = R() < .5 ? 1 : -1, n = 2 + Math.floor(R() * 3);
+      for (let k = 0; k < n; k++) { px((x + 16) % 16, (y + 16) % 16, k === 0 ? '#4a4160' : '#2c2540'); x += dx; if (R() < .6) y++; } }
+    for (let i = 0; i < 3; i++) px(Math.floor(R() * 16), Math.floor(R() * 16), '#5e5478'); }, 16);
   TEX.coal = oreTex(['#262626', '#363636', '#4d4d4d'], 21);
   TEX.iron = oreTex(['#d8af93', '#c49a7c', '#f0d2bc'], 22);
   TEX.lapis = oreTex(['#2554c7', '#1a3a8f', '#5a86ff'], 23);
@@ -1820,7 +1832,7 @@ function renderHelp() {
       ${row('🏦', `<b>Банк</b>: положи монеты — +${BANK_RATE * 100}% в день (проценты идут с первых ${fmtShort(BANK_CAP)}). В шахте их не потеряешь.`)}
       ${row('🏘', `<b>Деревня</b>: строй здания — они копят монеты, а ты собираешь урожай вручную. Способ заработать, даже когда на балансе пусто.`)}
       ${row('🏅', `<b>Достижения</b> — в Профиле.`)}
-      ${row('🐾', `<b>Питомец</b> (своя кнопка): копает на своей земле находки в рюкзак — даже когда игра закрыта. Продавай их за монеты, качай лопатку, нюх, рюкзак и выносливость. Силы кончились — отправь отдыхать в шахту: там он болеет за тебя. Голодный копает медленнее.`)}
+      ${row('🐾', `<b>Питомец</b> (своя кнопка): копает на своей земле находки в рюкзак — даже когда игра закрыта. Продавай их за монеты, качай лопатку, нюх, рюкзак и выносливость. Питомцев два: один сидит рядом с тобой в шахте и болеет за тебя, другой копает (выбираешь в окне 🐾). Силы кончились — уложи копателя спать. Голодный копает медленнее.`)}
       ${row('🎨', `<b>Косметика</b>: скины кирки (цвет железа всегда по уровню), следы, эффекты поломки и забора, темы шахты, кейсы. Скины кирки — 5 редкостей: обычная, редкая, эпическая, легендарная, роскошная. Только для красоты.`)}
       ${row('📋', `<b>Таблица выплат</b> — кнопка 📋 Выплаты в меню (и в окне ⚙ Режим).`)}`),
   ].join('') + `<button class="btn" id="hTut" style="width:100%;padding:12px;flex:none">🎓 Обучения с подсветкой (с наградой)</button>`;
@@ -1966,7 +1978,7 @@ function showLearnHint(txt) {
 }
 // версия разработчика: make-apk.sh dev ставит true (отдельный APK «Кирка DEV»). На сайте и в обычном APK — false, режима нет совсем.
 const DEV_BUILD = false;
-const BUILD = '2026-11-06 · 3.3: экономика, ранги до Бессмертного, Кролик, роскошная косметика, деревня Джунгли · v50: Лягушка, Панда, Динозаврик, новые задания и достижения · v51: новый стол зачарований · v52: без градиента в углу';
+const BUILD = '2026-11-06 · 3.3: экономика, ранги до Бессмертного, Кролик, роскошная косметика, деревня Джунгли · v50: Лягушка, Панда, Динозаврик, новые задания и достижения · v51: новый стол зачарований · v52: без градиента в углу · v53: два питомца, морская свинка, тема «Сакура», живое небо, новый обсидиан · v54: даль из блоков в Классике, Сакуре и Конфетной · v55: новости 3.5 · v55: цены питомцев разные, пометка «НОВОЕ» на новинках';
 // Удача новичка: первые 10 обычных раундов — полная, к 25-му плавно сходит на нет. Игроку об этом не сообщается.
 // Пока она действует, после 2+ сгоревших подряд следующий раунд ещё удачливее (×1.5) — чтобы не было обидных серий.
 let begLoss = 0;
@@ -2149,8 +2161,8 @@ function openSheet(id) {
   sheetId = id; const el = $('sh-' + id); el.querySelector('.sh-body').scrollTop = 0; el.classList.add('show');
   if (id === 'vil') openVil();
   if (id === 'prof') { $('pSaveMsg').textContent = ''; renderProfile(); }
-  if (id === 'cos') { meta.cos.seen = 1; saveMeta(); cosRender(); }
-  if (id === 'pet') { cosPv.kind = null; cosPv.hat = null; digTick(true); petRender(); petLoopGo(); }
+  if (id === 'cos') { meta.cos.seen = 1; newMark('cos'); saveMeta(); cosRender(); }
+  if (id === 'pet') { newMark('pet'); cosPv.kind = null; cosPv.hat = null; ptSlot = meta.dig.pk || meta.cos.pet.off ? 'dig' : 'comp'; digTick(true); petRender(); petLoopGo(); }
   if (id === 'gift') renderGifts();
   if (id === 'bank') { bankAccrue(); if (meta.bank.pend >= 1) gtoast(`📈 Проценты банка: +${fmt(meta.bank.pend)}${COIN}`, '#7fd0ff'); meta.bank.pend = 0; saveMeta(); $('bkErr').textContent = ''; renderBank(); }
   try { if (!(window.history.state && window.history.state.sheet)) window.history.pushState({ sheet: id }, ''); } catch (e) { }
@@ -2384,15 +2396,7 @@ function draw() {
     for (let yy = 0; yy < 5; yy++) for (let xx = 0; xx < 4; xx++) if (yy === 0 || yy === 4 || xx === 0 || xx === 3) ctx.drawImage(TEX.obsidian, fx + xx * CELL, fy + yy * CELL, CELL + .5, CELL + .5);
     ctx.globalAlpha = .75 + .2 * Math.sin(renderT * 4); ctx.drawImage(TEX.portal, 2, 2, 12, 12, fx + CELL, fy + CELL, CELL * 2, CELL * 3); ctx.globalAlpha = 1;
   } else if (camY < 0 && thCur()) { thCur().sky(ctx, camY - 20, CELL * COLS);
-  } else if (camY < 0) {
-    const g = ctx.createLinearGradient(0, camY, 0, 0); g.addColorStop(0, '#5aa0ff'); g.addColorStop(1, '#a8d4ff');
-    ctx.fillStyle = g; ctx.fillRect(-20, camY - 20, CELL * COLS + 40, -camY + 20);
-    // облака
-    ctx.fillStyle = '#ffffffcc';
-    for (let i = 0; i < 4; i++) { const x = ((renderT * 8 + i * 140) % (CELL * COLS + 160)) - 80, y = -230 + i * 37 % 90; ctx.fillRect(x, y, 70, 14); ctx.fillRect(x + 14, y - 10, 40, 10); }
-    // солнце
-    ctx.fillStyle = '#fff7b0'; ctx.fillRect(CELL * COLS - 90, -260, 44, 44);
-  }
+  } else if (camY < 0) { skyClassic(ctx, camY - 20, CELL * COLS); }
   const r0 = Math.max(0, Math.floor(camY / CELL) - 1), r1 = Math.ceil((camY + viewH) / CELL) + 1;
   const t = game.time, TC = thCur(), TA = TC && TC.air; thL = [];
   for (let r = r0; r <= r1; r++) {
@@ -2804,7 +2808,7 @@ function metaRound(win, bet, broke, depth) {
   const s = meta.stats; s.rounds++; s.bet += bet; s.maxDepth = Math.max(s.maxDepth, depth || 0);
   qEv('rounds'); if (depth >= 25) qEv('depth'); if (depth >= 50) qEv('deep50');
   if (depth >= 8) qEv('d8'); if (depth >= 15) qEv('d15');
-  if (!(meta.cos.pet.hide || (meta.dig && meta.dig.st === 'dig'))) qEv('pet'); // питомец был в шахте
+  if (!(meta.cos.pet.hide || meta.cos.pet.off)) qEv('pet'); // питомец был в шахте (v53: тот, что «Рядом со мной»)
   if (broke) {
     s.breaks++; qReset('row5');
     s.brkRow = (s.brkRow || 0) + 1; s.brkRowMax = Math.max(s.brkRowMax || 0, s.brkRow);
@@ -3100,7 +3104,7 @@ const TUT = {
   uTop: { holes: () => [rUnion(rEl(qs('.topbar .balrow')), rEl($('free')), rEl($('learnBtn')))], ptrs: () => [rEl($('balance')), rEl($('free')), rEl($('learnBtn'))],
     t: '💰 Верхняя полоса', d: () => `<b>Баланс</b> — твои монеты: ставка списывается отсюда, выигрыш приходит сюда.<br>🎁 <b>Подарки</b> — ${fair ? 'ежедневный подарок, задания, спасательный круг и возврат части проигрыша, зелёная точка — есть что забрать' : 'в Чите +1000 монет без ограничений'}.<br>🎓 <b>Обучения</b> — светится, пока есть обучения с наградой.` },
   uStage: { holes: () => [rEl($('stage'))], ptrs: () => [rEl($('hudDepth')), winPill(), rEl($('hudHp'))],
-    t: '⛏ Шахта', d: () => 'Сверху: <b>глубина</b>, <b>выигрыш раунда</b> и <b>прочность кирки ❤</b> (там же шанс трещины, ниже 30 ❤ он заметно растёт). 🔊 в углу — звук.' + (uiOpen('pet') ? ' В углу сидит твой 🐾 питомец, когда отдыхает (когда копает — его тут нет).' : '') },
+    t: '⛏ Шахта', d: () => 'Сверху: <b>глубина</b>, <b>выигрыш раунда</b> и <b>прочность кирки ❤</b> (там же шанс трещины, ниже 30 ❤ он заметно растёт). 🔊 в углу — звук.' + (uiOpen('pet') ? ' В углу сидит твой 🐾 питомец — тот, что «Рядом со мной». Второй в это время копает.' : '') },
   uBet: { holes: () => [rEl(qs('.betline'))], ptrs: () => [rEl($('bet'))],
     t: '🪙 Ставка', d: () => `− и + меняют ставку, ½ и ×2 — половина и вдвое, 10 — быстро поставить 10, MAX — максимум (не больше баланса и лимита ранга: сейчас ${isFinite(maxBet()) ? fmtShort(maxBet()) : '∞'}).` },
   uPlay: { holes: () => [rEl($('play')), rEl($('cash'))], ptrs: () => [rEl($('play')), rEl($('cash'))],
@@ -3117,13 +3121,13 @@ const TUT = {
   pScene: { holes: () => [rEl(qs('#sh-pet .pscene'))], ptrs: () => [rPt(PT.HX - 2, PT.G - 12, PT.HX + 16, PT.G + 6)], scroll: () => qs('#sh-pet .pscene'), area: 1,
     t: () => `🐾 Земля питомца`, d: 'Тут он <b>копает сам</b>. Находка вылезает из ямки по чуть-чуть, вылезла целиком — летит в рюкзак. Находки — уголь, железо, редстоун, лазурит, золото, алмаз и изумруд. Копает <b>по реальному времени, даже когда игра закрыта</b>.' },
   pGo: { holes: () => [rEl($('ptGo'))], ptrs: () => [rEl($('ptGo'))], wait: 1, waitFor: 'ptGo', scroll: () => $('ptGo'), area: 1, need: () => meta.dig.st !== 'dig' && meta.dig.en >= 1,
-    t: '⛏ Отправь копать', d: 'Жми кнопку — питомец уйдёт на свою землю.' },
+    t: '⛏ Отправь копать', d: 'Жми кнопку — питомец пойдёт копать на свою землю.' },
   pState: { holes: () => [rEl($('ptStat')), rEl($('ptGo'))], ptrs: () => [rEl($('ptStat')), rEl($('ptGo'))], scroll: () => $('ptStat'), area: 1,
-    t: '⛏ Копает или 😴 отдыхает', d: 'Решаешь только ты. Пока он <b>копает</b> — в шахте его нет. <b>Отдыхает</b> — сидит с тобой в шахте и реагирует на игру, но ничего не копает. Тут написано, что он делает и когда будет следующая находка.' },
+    t: '🐾 Два питомца', d: 'Сверху две карточки. <b>«Рядом со мной»</b> — этот сидит с тобой в шахте и реагирует на игру. <b>«Копает»</b> — этот копает на своей земле. Нажми на карточку и выбери любого своего питомца. Питомец один — решай сам, где он нужнее. Тут написано, что делает копатель и когда будет следующая находка.' },
   pBag: { holes: () => [rPt(PT.BX - 13, PT.G - 17, PT.BX + 13, PT.G + 3)], ptrs: () => [rPt(PT.BX - 10, PT.G - 18, PT.BX + 10, PT.G)], scroll: () => qs('#sh-pet .pscene'), area: 1,
     t: '🎒 Рюкзак', d: 'Внутрь не заглянуть — видно только, как он <b>раздувается</b>. Когда там что-то есть, сверху появится пузырёк <b>«💰 Продать»</b>: находки вылетят фонтаном, монеты — на баланс. Полный рюкзак — питомец ждёт.' },
   pBars: { holes: () => [rUnion(rEl(qs('#sh-pet .pbars')), rEl(qs('#sh-pet .cfeed')))], ptrs: () => [rEl($('ptEnT')), rEl($('ptSatT'))], scroll: () => qs('#sh-pet .pbars'), area: 1,
-    t: '💪 Силы и 🍖 сытость', d: () => `Каждая находка тратит 1 силу. Кончились — уснёт в ямке и будет ждать: <b>отправь отдыхать</b>, сам не уйдёт. От нуля до полных сил — ${DIG_REST / 3600} часа. Голодный копает <b>медленнее</b>, но не останавливается — корми печенькой или обедом.` },
+    t: '💪 Силы и 🍖 сытость', d: () => `Каждая находка тратит 1 силу. Кончились — уснёт в ямке и будет ждать: <b>уложи спать</b>, сам не ляжет. От нуля до полных сил — ${DIG_REST / 3600} часа. Голодный копает <b>медленнее</b>, но не останавливается — корми печенькой или обедом.` },
   pUp: { holes: () => [rEl($('ptUp'))], ptrs: () => [rEl($('ptUp'))], scroll: () => $('ptUp'), area: 1,
     t: '⬆ Прокачка', d: '<b>Лопатка</b> — копает быстрее. <b>Нюх</b> — редкое чаще. <b>Рюкзак</b> — больше влезает. <b>Выносливость</b> — дольше копает без отдыха. У каждой 5 уровней, покупка двумя нажатиями.' },
   pLook: { holes: () => [rEl($('ptName') && $('ptName').parentElement)], ptrs: () => [rEl($('ptName'))], scroll: () => $('ptName'), area: 1,
@@ -3214,7 +3218,7 @@ const TUT_OUTRO = {
   vil: 'Копи на здания: деревня приносит доход, даже когда на балансе пусто. Заходи собирать — само не капает.',
   bank: 'Банк — твоя подушка: монеты там растут и не сгорают.',
   cos: 'Покупки — за монеты с баланса. Выбранное видно сразу в шахте.',
-  pet: 'Совет: отправляй питомца копать перед тем, как закрыть игру, — вернёшься к находкам. Устал — отправь отдыхать, это 2 часа.',
+  pet: 'Совет: отправляй питомца копать перед тем, как закрыть игру, — вернёшься к находкам. Устал — уложи спать, это 2 часа.',
   runs: 'Забег — проверка: сколько поднимешь с одной суммы. Основной баланс в безопасности.',
   mode: 'Новичку лучше низкая волатильность. Поменять можно в любой момент между раундами.',
   hell: () => `По-настоящему бонуска стоит ×${BONUS_PRICE} от ставки или ловится бесплатно через портал в шахте. Итог бывает и меньше цены, и в разы больше.`,
@@ -4473,6 +4477,7 @@ const THEMES = {
   sand: { n: 'Песчаник', vil: 1, i: 'cactus', fr: '#e8b860', sw: 'linear-gradient(#ffb85a,#ffe7b0 60%,#c9a25e 60%)' },
   ice: { n: 'Ледяная пещера', vil: 2, i: 'snow', fr: '#9fdcff', sw: 'linear-gradient(#a8dcff,#eaf8ff 60%,#5a7a9a 60%)' },
   candy: { n: 'Конфетная', price: 60000, i: 'candy', fr: '#ff8ac8', sw: 'linear-gradient(#ff9ccf,#ffe3f2 60%,#a05a7a 60%)' },
+  sakura: { n: 'Сакура', price: 60000, i: 'sakura', fr: '#ffb7d5', sw: 'linear-gradient(#8cc8ff,#ffe2ee 60%,#6a4048 60%)' },
   neon: { n: 'Неон', price: 100000, i: 'city', fr: '#18f0ff', sw: 'linear-gradient(#05010f,#2a0a4a 60%,#0a0418 60%)' },
   crystal: { n: 'Кристальный грот', price: 75000, i: 'crystal', fr: '#c38bff', sw: 'linear-gradient(#1a0832,#4a2280 60%,#2a1a40 60%)' },
   halloween: { n: 'Хэллоуин', season: 'hw', price: 20000, i: 'pumpkin', fr: '#ff8a1a', sw: 'linear-gradient(#12061e,#6a2a0a 60%,#2a1408 60%)' },
@@ -4482,7 +4487,7 @@ const PETS = {
   mole: { n: 'Кротик', free: 1, eye: [5, 9, 7], mouth: [7, 11], hat: [8, 3], pal: { k: PETK, b: '#5e4e56', d: '#45373e', l: '#7a6a72', p: '#ff9ab0' },
     map: ['................', '................', '................', '.....kkkkkk.....', '....kbbbbbbk....', '...kbbbbbbbbk...', '..kbbbbbbbbbbk..', '..kbbbbbbbbbbk..', '..kbbbbbbbbbbk..', '..kbbbbppbbbbk..',
       '.kdbbbbppbbbbdk.', '.kpdbbbbbbbbdpk.', '.kppdbllllbdppk.', '..kkdbllllbdkk..', '...kddddddddk...', '....kkkkkkkk....'] },
-  cat: { n: 'Котик', price: 15000, eye: [4, 10, 7], mouth: [7, 10], hat: [8, 4], pal: { k: PETK, b: '#f0a040', d: '#c87820', l: '#ffe2b8', p: '#ff9ab0' },
+  cat: { n: 'Котик', price: 10000, eye: [4, 10, 7], mouth: [7, 10], hat: [8, 4], pal: { k: PETK, b: '#f0a040', d: '#c87820', l: '#ffe2b8', p: '#ff9ab0' },
     map: ['................', '..kk........kk..', '..kbk......kbk..', '..kbpk....kpbk..', '..kbbbkkkkbbbk..', '.kbbbbbbbbbbbbk.', '.kbbdbbbbbbdbbk.', '.kbbbbbbbbbbbbk.', '.kbbbbbbbbbbbbk.', '.kblllbppblllbk.',
       '..kbllllllllbk..', '...kkbbbbbbkk...', '...kbbllllbbk...', '...kbbllllbbk...', '...kbkbbbbkbk...', '...kkk.kk.kkk...'] },
   dog: { n: 'Пёсик', price: 15000, eye: [5, 9, 6], mouth: [7, 11], hat: [8, 2], pal: { k: PETK, b: '#c8a070', d: '#8a6038', l: '#f4e6d0', n: '#2a1a14' },
@@ -4497,13 +4502,15 @@ const PETS = {
   frog: { n: 'Лягушка', price: 50000, eye: [3, 11, 2], mouth: [7, 8], hat: [8, 0], pal: { k: PETK, g: '#6cc04a', d: '#2f6a2a', y: '#e0f4a8', p: '#ff9ab0' },
     map: ['..kkkk....kkkk..', '.kggggk..kggggk.', '.kggggk..kggggk.', '.kggggkkkkggggk.', '.kggggggggggggk.', 'kggggggggggggggk', 'kgpggggggggggpgk', 'kggdggggggggdggk', '.kgddddddddddgk.', '..kggggggggggk..',
       '..kgyyyyyyyygk..', '.kggkyyyyyykggk.', 'kgggkyyyyyykgggk', 'kggggkyyyykggggk', 'kkggggkkkkggggkk', '.kkkkk....kkkkk.'] },
-  panda: { n: 'Панда', price: 50000, weye: 1, eye: [4, 11, 5], mouth: [7, 9], hat: [8, 2], pal: { k: PETK, b: '#2c2a32', w: '#f4f2ee', g: '#cfcbd4', n: '#1c1416', p: '#6a5450' },
+  panda: { n: 'Панда', price: 75000, weye: 1, eye: [4, 11, 5], mouth: [7, 9], hat: [8, 2], pal: { k: PETK, b: '#2c2a32', w: '#f4f2ee', g: '#cfcbd4', n: '#1c1416', p: '#6a5450' },
     map: ['.kkkk......kkkk.', 'kbbbbkkkkkkbbbbk', 'kbbbwwwwwwwwbbbk', '.kbwwwwwwwwwwbk.', '.kwwwwwwwwwwwwk.', 'kwwbbbwwwwbbbwwk', 'kwbbbbwwwwbbbbwk', 'kwbbbwwnnwwbbbwk', '.kwwwwwwwwwwwwk.', '..kgwwwwwwwwgk..',
       '.kbbkkggggkkbbk.', 'kbbbbbwwwwbbbbbk', 'kbbbbwwwwwwbbbbk', 'kbbbbgwwwwgbbbbk', 'kbpbbbbwwbbbbpbk', '.kkkkkkkkkkkkkk.'] },
-  dino: { n: 'Динозаврик', price: 50000, eye: [4, 10, 4], mouth: [7, 7], hat: [8, 2], pal: { k: PETK, g: '#5ec24a', d: '#3e8a30', y: '#f4e08a', o: '#ff8a3a', p: '#ff9ab0', w: '#f4f0e6' },
+  dino: { n: 'Динозаврик', price: 100000, eye: [4, 10, 4], mouth: [7, 7], hat: [8, 2], pal: { k: PETK, g: '#5ec24a', d: '#3e8a30', y: '#f4e08a', o: '#ff8a3a', p: '#ff9ab0', w: '#f4f0e6' },
     map: ['.....o..o..o....', '....kookookook..', '..kggggggggggk..', '.kggggggggggggk.', '.kggggggggggggk.', '.kggggggggggggk.', '.kgpggggggggpgk.', '.kggggggggggggk.', '..kgggwggwgggk..', '...kgyyyyyygk...',
       '..kgkyyyyyykgk..', '..kggyyyyyyggk..', '..kggyyyyyyggggk', '..kgggyyyygggkk.', '..kggkggggkggk..', '..kkkk....kkkk..'] },
-  axolotl: { n: 'Аксолотль', price: 75000, eye: [4, 10, 7], mouth: [7, 9], hat: [8, 3], pal: { k: PETK, b: '#ff9ac8', d: '#e06aa0', l: '#ffd6ea', g: '#ff4f8a' },
+  gpig: { n: 'Морская свинка', price: 30000, eye: [3, 11, 7], mouth: [7, 11], hat: [8, 3], pal: { k: PETK, e: '#e8a898', E: '#a86a5a', n: '#ff8aa0', p: '#ffb4c4', w: '#f6f0e6', o: '#e8903a', x: '#4a3836', d: '#cfc4b8' },
+    map: ['................', '................', '................', '..kk.kkkkkk.kk..', '.kEekooowxxkeEk.', '.keooooowxxxxek.', 'kooooooowxxxxxxk', 'koooooowwxxxxxxk', 'kooooowwwwxxxxxk', 'koooowwwwwwxxxxk', 'koooowwnnwwxxxxk', 'kwooowwwwwwxxxwk', 'kwwwwwwwwwwwwwwk', 'kwwwwwwwwwwwwwwk', '.kdpwwwwwwwwpdk.', '..kkkkkkkkkkkk..'] },
+  axolotl: { n: 'Аксолотль', price: 150000, eye: [4, 10, 7], mouth: [7, 9], hat: [8, 3], pal: { k: PETK, b: '#ff9ac8', d: '#e06aa0', l: '#ffd6ea', g: '#ff4f8a' },
     map: ['................', '................', '................', '.g..kkkkkkkk..g.', '.gg.kbbbbbbk.gg.', '..gkbbbbbbbbkg..', '.ggkbbbbbbbbkgg.', '..kbbbbbbbbbbk..', '.gkbbbbbbbbbbkg.', '..kbbbbbbbbbbk..',
       '..kbbllllllbbk..', '...kkbbbbbbkk...', '...kbllllllbk...', '..kdbllllllbdk..', '..kkbbbbbbbbkk..', '...kk.kkkk.kk...'] },
 };
@@ -4526,6 +4533,15 @@ const HATS = {
 };
 for (const k in SKINS) if (SKINS[k].r && SKINS[k].rank == null && !SKINS[k].price) SKINS[k].price = RAR[SKINS[k].r].price; // ранговые — не продаются, у дорогих — своя цена
 const COS = { skin: SKINS, fx: BFX, cfx: CFX, theme: THEMES, pet: PETS, hat: HATS };
+// НОВИНКИ ОБНОВЫ: в каждой обнове менять v (= id новостей) и список «раздел:ключ». Пометка «НОВОЕ» висит, пока вещь не куплена;
+// огонёк на кнопке меню и точка на вкладке гаснут, когда игрок туда заглянул. Разделы: skin, trail, fx, cfx, theme, case, pet, hat
+function newList() { return { v: '2026-11-07', items: ['pet:gpig', 'theme:sakura'] }; }
+function isNewIt(cat, id) { if (!newList().items.includes(cat + ':' + id)) return false; return cat === 'trail' ? !meta.owned.includes(id) : !cosOwn(cat, id); }
+const newSec = cat => cat === 'pet' || cat === 'hat' ? 'pet' : cat === 'cfx' ? 'fx' : cat; // вкладка, где лежит вещь
+function newIn(sec) { return newList().items.some(x => { const [c, id] = x.split(':'); return newSec(c) === sec && isNewIt(c, id); }); }
+function newSeen(k) { const S = meta.nwSeen; return !!(S && S.v === newList().v && S[k]); }
+function newMark(k) { if (!meta.nwSeen || meta.nwSeen.v !== newList().v) meta.nwSeen = { v: newList().v }; if (!meta.nwSeen[k]) { meta.nwSeen[k] = 1; saveMeta(); } }
+const NEW_TAG = '<em class="cnew">НОВОЕ</em>';
 const PET_MIN = .5, PET_MAX = 2.5; // размер питомца в шахте (×, 1 = как раньше)
 
 // ---------- кейсы с косметикой (монеты Обычной версии; только красота) ----------
@@ -4702,6 +4718,8 @@ const PX = {
     p: { p: '#ff8ac8', r: '#ff3d6a', w: '#ffffff' } },
   city: { m: ['............', '..c.........', '.ccc....m...', '.cyc...mmm..', '.ccc.c.mym..', '.cyccccmmm..', '.cccycccmym.', 'mccccccmmmm.', 'myccycymmym.', 'mcccccccmmm.', 'mmmmmmmmmmmm', '............'],
     p: { c: '#2a1a5a', m: '#1a0a3a', y: '#18f0ff' } },
+  sakura: { m: ['............', '.....pp.....', '....pPPp....', '.pp.pPPp.pp.', 'pPPppPPppPPp', '.pPPPyyPPPp.', '..pPyyyyPp..', '.pPPPyyPPPp.', 'pPPp.pp.pPPp', '.pp.pPPp.pp.', '....pPPp....', '.....pp.....'],
+    p: { p: '#e85a9a', P: '#ffc4de', y: '#ffd23f' } },
   crystal: { m: ['.....h......', '....hPp.....', '....hPp..h..', '...hPPpp.Pp.', '...hPPpp.Pp.', '.h.hPPpphPp.', '.Pp.hPppPPp.', 'hPPphPpPPpp.', 'hPPphPpPPpp.', '.ppp.pp.pp..', 'kkkkkkkkkkkk', '............'],
     p: { h: '#f0d0ff', P: '#c38bff', p: '#7a3ad0', k: '#3a2a4a' } },
   pumpkin: { m: ['.....gg.....', '......g.....', '..oOOoOOoo..', '.oOOoooOOoo.', 'oOkkoookkooo', 'oOkkoookkooo', 'oOooookoooOo', 'oOookkkkkoOo', 'oOookokokoOo', '.oOooooooOo.', '..oooooooo..', '............'],
@@ -5021,6 +5039,58 @@ function glow(x, y, r, rgb, a = .35) { thL.push([x, y, r, rgb, a]); }
 function snow(g, x0, y0, w, h, n, col) { for (let i = 0; i < n; i++) { const px = x0 + md(hsh(i, 1) * w + Math.sin(renderT * .8 + i) * 14, w), py = y0 + md(hsh(i, 2) * h + renderT * (18 + hsh(i, 3) * 22), h); g.fillStyle = col; const s = 1.5 + hsh(i, 4) * 2; g.fillRect(px, py, s, s); } }
 function twinkle(g, x0, y0, w, h, n, col, sd = 0) { for (let i = 0; i < n; i++) { const a = Math.max(0, Math.sin(renderT * (1.2 + hsh(i, 5 + sd)) + i * 2.3)); if (a < .2) continue; const px = x0 + hsh(i, 11 + sd) * w, py = y0 + hsh(i, 12 + sd) * h, s = 1 + a * 1.6;
   g.globalAlpha = a; g.fillStyle = col; g.fillRect(px - s, py - .6, s * 2, 1.2); g.fillRect(px - .6, py - s, 1.2, s * 2); } g.globalAlpha = 1; }
+// v54: даль как в Майнкрафте — холмы из настоящих блоков с текстурой, чем дальше, тем сильнее дымка; деревья из блоков
+const landC = {};
+function landTex(k) {
+  if (landC[k]) return landC[k];
+  const N = (px, R, pal) => fillNoise(px, R, pal);
+  const T = {
+    leaves: () => texFrom((px, R) => { N(px, R, ['#3f8a2c', '#4a9a34', '#2f6e22', '#56aa3e', '#367c27']); for (let i = 0; i < 14; i++) px(Math.floor(R() * 16), Math.floor(R() * 16), '#24561a'); }, 601),
+    log: () => texFrom((px, R) => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) px(x, y, (x % 4 === 0) ? '#4a3018' : ['#6b4a2a', '#5e4022', '#765232'][Math.floor(R() * 3)]); }, 602),
+    pink: () => texFrom((px, R) => { N(px, R, ['#ffb3d6', '#f68dbf', '#ffc6e0', '#ff9fcb', '#ffd6ea']); for (let i = 0; i < 10; i++) px(Math.floor(R() * 16), Math.floor(R() * 16), '#e46aa6'); }, 603),
+    clog: () => texFrom((px, R) => { for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) px(x, y, (x % 4 === 1) ? '#2e1a20' : ['#4a2a30', '#3e2228', '#56323a'][Math.floor(R() * 3)]); }, 604),
+    frost: () => texFrom((px, R) => { N(px, R, ['#f2d29a', '#e8c488', '#f8deb0', '#ecca92']); // глазурь сверху с потёками, внизу бисквит
+      for (let x = 0; x < 16; x++) { const d = 4 + Math.floor(R() * 4); for (let y = 0; y < d; y++) px(x, y, ['#ff8ac8', '#ff9ed2', '#ff7abd'][Math.floor(R() * 3)]); }
+      const C = ['#ffffff', '#3ddcff', '#ffd23f', '#7aff7a', '#9a6bff']; for (let i = 0; i < 9; i++) px(Math.floor(R() * 16), Math.floor(R() * 4), C[i % 5]); }, 605),
+    mint: () => texFrom((px, R) => { N(px, R, ['#e57fae', '#d9709f', '#ee92bc']); // малиновый бисквит с мятной глазурью
+      for (let x = 0; x < 16; x++) { const d = 6 + Math.floor(R() * 4); for (let y = 0; y < d; y++) px(x, y, ['#9ff0d0', '#86e6c2', '#b4f8de'][Math.floor(R() * 3)]); }
+      for (let i = 0; i < 7; i++) px(Math.floor(R() * 16), Math.floor(R() * 3), ['#ff4f8a', '#ffffff', '#ffd23f'][i % 3]); }, 606),
+    sponge: () => texFrom((px, R) => { N(px, R, ['#f2d29a', '#e8c488', '#f8deb0', '#ecca92']); for (let x = 0; x < 16; x++) { px(x, 7, '#e0306a'); px(x, 8, R() < .6 ? '#c01e54' : '#e0306a'); } for (let i = 0; i < 8; i++) px(Math.floor(R() * 16), 10 + Math.floor(R() * 6), '#c9a060'); }, 607),
+    choc: () => texFrom((px, R) => { N(px, R, ['#6a3a22', '#5a2e1a', '#7a4630', '#4e2814']); for (let y = 0; y < 16; y += 8) for (let x = 0; x < 16; x++) px(x, y, '#3a1c0c'); for (let x = 0; x < 16; x += 8) for (let y = 0; y < 16; y++) px(x, y, '#3a1c0c'); }, 608),
+    gtop: () => texFrom((px, R) => { N(px, R, ['#6aab43', '#5d9b3a', '#79bd4f', '#64a33f']); for (let x = 0; x < 16; x++) px(x, 0, '#86c95a'); }, 610),   // трава сверху (издалека холмы зелёные)
+    gside: () => texFrom((px, R) => { N(px, R, ['#4f8a2f', '#5a9636', '#46802a', '#55913a']); for (let i = 0; i < 6; i++) px(Math.floor(R() * 16), Math.floor(R() * 16), '#3d7224'); }, 611),
+    cake: () => texFrom((px, R) => { N(px, R, ['#e57fae', '#d9709f', '#ee92bc', '#e286b2']); for (let i = 0; i < 6; i++) px(Math.floor(R() * 16), Math.floor(R() * 16), '#ffffff'); }, 612),
+    gum: () => texFrom((px, R) => { N(px, R, ['#ff4f8a', '#ff6a9e', '#e83a78']); for (let i = 0; i < 12; i++) px(Math.floor(R() * 16), Math.floor(R() * 16), '#ffd0e0'); }, 609),
+  };
+  return landC[k] = k === 'grass' ? TEX.grass : k === 'dirt' ? TEX.dirt : k === 'stone' ? TEX.stone : T[k]();
+}
+const landFog = (k, fog) => { const key = k + '|' + fog; if (landC[key]) return landC[key]; const c = mkCanvas(16, 16), g = c.getContext('2d'); g.drawImage(landTex(k), 0, 0); if (fog) { g.fillStyle = fog; g.fillRect(0, 0, 16, 16); } return landC[key] = c; };
+// готовая даль в кэше (×3, рисуется один раз на тему): landPaint(g, 'classic', w, [слой, слой])
+function landPaint(g, key, w, layers) {
+  const k = 'L|' + key + '|' + w; let c = landC[k];
+  if (!c) { const S = 3, H = 170; c = mkCanvas((w + 40) * S, H * S); const q = c.getContext('2d'); q.imageSmoothingEnabled = false; q.setTransform(S, 0, 0, S, 20 * S, H * S); layers.forEach(L => landLayer(q, w, L)); landC[k] = c; }
+  g.drawImage(c, -20, -170, w + 40, 170);
+}
+// слой: B — размер блока, lift — на сколько слой поднят над землёй, h0/amp — высота в блоках, top/body — блоки, fog — дымка, tree — какие деревья
+function landLayer(g, w, L) {
+  const B = L.B, n = Math.ceil((w + 40) / B) + 1, tops = [], T = landFog(L.top, L.fog), D = landFog(L.body, L.fog);
+  for (let i = 0; i < n; i++) {
+    const j = i + L.seed, hb = Math.max(1, Math.round(L.h0 + L.amp * (Math.sin(j * .29) * .7 + Math.sin(j * .11 + 1.3) * .9 + (hsh(j, 7) - .5) * .35)));
+    const x = -20 + i * B, top = -L.lift - hb * B; tops.push(top);
+    g.drawImage(T, x, top, B, B); for (let y = top + B; y < 0; y += B) g.drawImage(D, x, y, B, B);
+  }
+  if (!L.tree) return;
+  for (let i = 1; i < n - 1; i++) {
+    const j = i + L.seed; if (hsh(j, 31) > L.tree.p || hsh(j - 1, 31) <= L.tree.p) continue; // не два дерева подряд
+    const x = -20 + i * B, y = tops[i], th = L.tree.h || 2, Lf = landFog(L.tree.leaf, L.fog), Lg = landFog(L.tree.log, L.fog);
+    if (L.tree.kind === 'lolly') { // леденец на палочке: палочка + круг из блоков
+      g.fillStyle = L.fog ? '#f4eef2' : '#ffffff'; g.fillRect(x + B * .4, y - th * B, B * .2, th * B);
+      const cx = x + B / 2, cy = y - th * B - B * .8; g.drawImage(Lf, cx - B, cy - B / 2, B * 2, B); g.drawImage(Lf, cx - B / 2, cy - B, B, B * 2); continue; }
+    for (let k = 1; k <= th; k++) g.drawImage(Lg, x, y - k * B, B, B);
+    const ly = y - th * B; for (let a = -1; a <= 1; a++) for (let b = 1; b <= 2; b++) g.drawImage(Lf, x + a * B, ly - b * B + B * .5, B, B);
+    g.drawImage(Lf, x, ly - 2.5 * B, B, B);
+  }
+}
 const TH = {
   night: {
     sky(g, y0, w) {
@@ -5066,7 +5136,8 @@ const TH = {
   candy: {
     sky(g, y0, w) {
       skyGrad(g, y0, w, '#ff9ccf', '#ffe3f2');
-      for (let i = 0; i < 4; i++) { const x = md(renderT * 7 + i * 120, w + 160) - 80, y = -235 + (i * 41) % 100; g.fillStyle = '#fff0f8'; g.beginPath(); g.arc(x, y, 14, 0, 7); g.arc(x + 16, y - 6, 17, 0, 7); g.arc(x + 34, y, 13, 0, 7); g.fill(); }
+      for (let i = 0; i < 4; i++) { const x = md(renderT * 7 + i * 120, w + 160) - 80, y = -235 + (i * 41) % 100, ww = 56 + (i % 2) * 20; g.fillStyle = '#fff0f8'; g.fillRect(x, y, ww, 13); g.fillRect(x + 12, y - 9, ww - 26, 9); g.fillStyle = '#ffc8e4'; g.fillRect(x, y + 13, ww, 4); } // сахарная вата — плоская, как облака в Майнкрафте
+      landPaint(g, 'candy', w, [{ B: 8, lift: 16, h0: 5.5, amp: 2.4, seed: 21, top: 'mint', body: 'cake', fog: 'rgba(255,227,242,.25)', tree: { kind: 'lolly', p: .18, leaf: 'gum', log: 'gum', h: 2 } }, { B: 12, lift: 0, h0: 1.6, amp: 1.2, seed: 66, top: 'frost', body: 'sponge', fog: 'rgba(255,227,242,.15)', tree: { kind: 'lolly', p: .12, leaf: 'gum', log: 'gum', h: 3 } }]);
       for (const [lx, lh] of [[40, 70], [w - 50, 54]]) { g.fillStyle = '#ffffff'; g.fillRect(lx - 2, -lh, 4, lh); for (let k = 4; k > 0; k--) { g.fillStyle = k % 2 ? '#ff4f8a' : '#ffffff'; g.beginPath(); g.arc(lx, -lh, k * 4.5, 0, 7); g.fill(); } }
     },
     air(g, x, y, r, c) {
@@ -5076,6 +5147,34 @@ const TH = {
     },
     dark: k => [k * .5, 2.6, 7, '60,0,40'],
     amb(g, x0, y0, w, h) { twinkle(g, x0, y0, w, h, 12, '#ffffff', 3); },
+  },
+  sakura: { // v53: вишнёвая роща как в Майнкрафте — розовые блочные деревья, летят лепестки
+    sky(g, y0, w) {
+      skyGrad(g, y0, w, '#7fc0ff', '#ffe4f0');
+      g.fillStyle = 'rgba(255,255,255,.9)'; for (let i = 0; i < 3; i++) { const x = md(renderT * 6 + i * 150, w + 160) - 80, y = -238 + i * 26; g.fillRect(x, y, 64, 12); g.fillRect(x + 12, y - 8, 36, 8); }
+      landPaint(g, 'sakura', w, [{ B: 8, lift: 18, h0: 5, amp: 2.2, seed: 11, top: 'gtop', body: 'gside', fog: 'rgba(255,228,240,.6)', tree: { p: .2, leaf: 'pink', log: 'clog', h: 2 } }, { B: 12, lift: 0, h0: 1.4, amp: 1, seed: 57, top: 'gtop', body: 'gside', fog: 'rgba(255,228,240,.2)' }]);
+      const tree = (cx, base, s) => { // ствол и крона из розовых квадратов
+        g.fillStyle = '#4a2a30'; g.fillRect(cx - 2 * s, base - 26 * s, 4 * s, 26 * s); g.fillRect(cx - 9 * s, base - 22 * s, 8 * s, 3 * s); g.fillRect(cx + 2 * s, base - 18 * s, 8 * s, 3 * s);
+        const L = [[-16, -40, 14, 10, '#f68dbf'], [-4, -46, 16, 10, '#ffb3d6'], [8, -40, 14, 10, '#f68dbf'], [-12, -32, 26, 8, '#ff9fcb'], [-22, -30, 10, 8, '#ffc6e0'], [12, -30, 10, 8, '#ffc6e0'], [-2, -50, 8, 4, '#ffd6ea']];
+        for (const [x, y, ww, hh, c] of L) { g.fillStyle = c; g.fillRect(cx + x * s, base + y * s, ww * s, hh * s); }
+        g.fillStyle = '#e46aa6'; for (let i = 0; i < 6; i++) g.fillRect(cx + (hsh(i, cx) * 36 - 18) * s, base + (-46 + hsh(cx, i) * 22) * s, 2 * s, 2 * s);
+      };
+      tree(w - 70, -24, 1); tree(40, 0, 1.6); tree(w - 20, -2, 1.1);
+      g.fillStyle = '#ff9fcb'; for (let x = 0; x < w; x += 8) if (hsh(x, 3) < .4) g.fillRect(x, -3, 4, 3); // ковёр лепестков у земли
+      for (let i = 0; i < 16; i++) { const px_ = md(hsh(i, 61) * w + Math.sin(renderT * 1.3 + i) * 16 + renderT * 10, w), py = -250 + md(hsh(i, 62) * 250 + renderT * (14 + hsh(i, 63) * 12), 250);
+        g.fillStyle = i % 3 ? '#ffb3d6' : '#ff8cc0'; g.fillRect(px_, py, 3, 2); }
+    },
+    air(g, x, y, r, c, ab, bl, dec) {
+      g.fillStyle = 'rgba(255,160,205,.2)'; g.fillRect(x, y, CELL, CELL);
+      if (dec != null ? dec : (bl && hsh(r, c + 9) < .2)) { // розовые лепестки на полу
+        const C = ['#ff9fcb', '#f06aa8', '#ffc6e0'];
+        for (let i = 0; i < 6; i++) { g.fillStyle = C[i % 3]; g.fillRect(x + 4 + hsh(r + i, c) * 30, y + CELL - 3 - (i % 2) * 2, 3, 2); }
+        g.fillStyle = '#5aa236'; g.fillRect(x + 10, y + CELL - 2, 1, 2); g.fillRect(x + 26, y + CELL - 2, 1, 2);
+      }
+    },
+    dark: k => [k * .8, 2.4, 6.5, '40,0,24'],
+    amb(g, x0, y0, w, h) { for (let i = 0; i < 12; i++) { const a = .55 + .35 * Math.sin(renderT * 2 + i); g.fillStyle = `rgba(255,170,210,${a})`;
+      g.fillRect(x0 + md(hsh(i, 71) * w + Math.sin(renderT * .9 + i * 1.7) * 18, w), y0 + md(hsh(i, 72) * h + renderT * (10 + hsh(i, 73) * 10), h), 2.5, 2); } },
   },
   neon: {
     sky(g, y0, w) {
@@ -5133,6 +5232,19 @@ const TH = {
     amb(g, x0, y0, w, h) { for (let i = 0; i < 8; i++) { const a = Math.max(0, Math.sin(renderT * 1.5 + i * 2)); g.fillStyle = `rgba(255,150,40,${a * .7})`; g.fillRect(x0 + md(hsh(i, 41) * w + Math.sin(renderT * .7 + i) * 20, w), y0 + md(hsh(i, 42) * h - renderT * 12, h), 2, 2); } },
   },
 };
+// v53: живое небо «Классики» — облака в два слоя, солнце с ореолом, птицы, холмы с деревьями на горизонте
+function skyClassic(g, y0, w) {
+  skyGrad(g, y0, w, '#4f96ff', '#bfe0ff');
+  const sx = w - 90, sy = -262, k = .5 + .5 * Math.sin(renderT * 1.2);           // солнце: квадратное, ореол чуть дышит
+  g.fillStyle = `rgba(255,248,190,${.14 + k * .06})`; g.fillRect(sx - 16, sy - 16, 76, 76); g.fillStyle = 'rgba(255,248,190,.22)'; g.fillRect(sx - 7, sy - 7, 58, 58);
+  g.fillStyle = '#fff7b0'; g.fillRect(sx, sy, 44, 44); g.fillStyle = '#ffe866'; g.fillRect(sx + 8, sy + 8, 28, 28);
+  for (let i = 0; i < 4; i++) { const x = md(renderT * 4 + i * 110, w + 120) - 60, y = -200 + (i * 29) % 60; g.fillStyle = 'rgba(255,255,255,.5)'; g.fillRect(x, y, 40, 7); g.fillRect(x + 8, y - 5, 22, 5); } // дальние облака
+  for (let i = 0; i < 4; i++) { const x = md(renderT * 9 + i * 140, w + 160) - 80, y = -232 + (i * 37) % 90, ww = 60 + (i % 2) * 22; // ближние облака
+    g.fillStyle = '#ffffffee'; g.fillRect(x, y, ww, 14); g.fillRect(x + 14, y - 10, ww - 30, 10); g.fillStyle = '#dbe8f8'; g.fillRect(x, y + 14, ww, 4); }
+  for (let i = 0; i < 3; i++) { const bx = md(renderT * (22 + i * 6) + i * 170, w + 200) - 100, by = -180 + i * 22 + Math.sin(renderT * 1.5 + i) * 6, f = Math.sin(renderT * 10 + i * 2) > 0; // птицы
+    g.fillStyle = '#2a3a5a'; g.fillRect(bx, by, 2, 2); g.fillRect(bx - 4, by + (f ? -2 : 1), 4, 2); g.fillRect(bx + 2, by + (f ? -2 : 1), 4, 2); }
+  landPaint(g, 'classic', w, [{ B: 8, lift: 14, h0: 5, amp: 2.4, seed: 3, top: 'gtop', body: 'gside', fog: 'rgba(191,224,255,.5)', tree: { p: .16, leaf: 'leaves', log: 'log', h: 2 } }, { B: 12, lift: 0, h0: 1.6, amp: 1.2, seed: 40, top: 'gtop', body: 'gside', fog: 'rgba(191,224,255,.18)', tree: { p: .24, leaf: 'leaves', log: 'log', h: 2 } }]);
+}
 const thCur = () => (game.bonus && phase !== 'idle') ? null : TH[meta.cos.theme] || null;
 function thLights(g) {
   if (!thL.length) return; g.globalCompositeOperation = 'lighter';
@@ -5143,17 +5255,28 @@ function thLights(g) {
 // ---------- питомец: живёт в углу шахты, реагирует на игру, иногда просит есть, никогда не умирает ----------
 const pet = { emo: '', until: 0, act: 0, acc: 0 };
 const petName = () => meta.cos.pet.name || 'Питомец';
+const digName = () => meta.dig.nm || (PETS[meta.dig.pk] ? PETS[meta.dig.pk].n : 'Копатель');
+const compName = () => meta.cos.pet.off ? '' : (meta.cos.pet.name || PETS[meta.cos.pet.kind].n);
+let ptSlot = 'dig'; // какая карточка выбрана в окне питомцев
+// поставить питомца на место: если он уже на другом — меняются местами (шапка и имя — вместе с питомцем)
+function petPut(slot, id) {
+  if (busy()) return; digTick(true); const D = meta.dig, P = meta.cos.pet;
+  const S = { comp: { k: P.off ? '' : P.kind, h: P.hat, n: P.name || '' }, dig: { k: D.pk, h: D.ph, n: D.nm || '' } }, me = S[slot], ot = S[slot === 'dig' ? 'comp' : 'dig'];
+  if (id === me.k) return;
+  if (id && id === ot.k) { const t = Object.assign({}, me); Object.assign(me, ot); Object.assign(ot, t); } else me.k = id;
+  P.off = S.comp.k ? 0 : 1; if (S.comp.k) P.kind = S.comp.k; P.hat = S.comp.h; P.name = S.comp.n;
+  D.pk = S.dig.k; D.ph = S.dig.h; D.nm = S.dig.n;
+  if (!D.pk && D.st === 'dig') { D.st = 'rest'; D.t = Date.now(); } D.fl = digState();
+  cosPv.kind = null; cosPv.hat = null; petEmo('love', 2); saveMeta(); updatePanel(); petRender();
+}
 function petEmo(e, s) { pet.emo = e; pet.until = renderT + s; pet.act = renderT; }
 function petSat() { const P = meta.cos.pet, now = Date.now(); P.sat = Math.max(0, Math.min(100, P.sat - Math.max(0, now - P.t) / DAY * 100)); P.t = now; return P.sat; }
 function petMood() {
   if (pet.emo && renderT < pet.until) return pet.emo;
   if (game.bonus && (phase === 'play' || phase === 'portal')) return 'dance';
   if (phase === 'play') return 'normal';
-  const s = meta.cos.pet.sat;
-  if (s < 20) return 'hungry';
-  const h = new Date().getHours();
+  const h = new Date().getHours(); // v53: тот, кто рядом, не голодает — есть хочет только копатель
   if (h < 6 || renderT - pet.act > 120) return 'sleep';
-  if (s < 45) return 'normal';
   return 'happy0';
 }
 const petSprC = {}, hatSprC = {};
@@ -5210,7 +5333,7 @@ function drawPet(g, ox, oy, kind, hat, emo, t, look) {
 }
 function petDraw(dt) {
   const cv = $('petCv'); if (!cv) return;
-  const hide = !!(meta.cos.pet.hide || tut || (meta.dig && meta.dig.st === 'dig'));
+  const hide = !!(meta.cos.pet.hide || tut || meta.cos.pet.off);
   if (cv.style.display !== (hide ? 'none' : '')) cv.style.display = hide ? 'none' : '';
   if (hide) return; pet.acc += dt; if (pet.acc < 1 / 24) return; pet.acc = 0;
   const g = cv.getContext('2d'); g.clearRect(0, 0, 24, 24);
@@ -5219,12 +5342,12 @@ function petDraw(dt) {
 }
 function petPoke() { petEmo('love', 1.4); tone(880, .08, 'sine', .05, 200); tone(1175, .1, 'sine', .04, 0, .08); }
 function petFeed(kind) {
-  if (busy()) return; digTick(true); petSat(); const P = meta.cos.pet, price = kind === 'meal' ? 100 : 50;
-  if (P.sat >= 97) { gtoast(`🐾 ${petName()} сыт и доволен`, '#ffd23f'); petEmo('happy', 1.5); return; }
+  if (busy()) return; if (!meta.dig.pk) { gtoast('Есть хочет только тот, кто копает — сначала выбери его', '#ff8a8a'); return; } digTick(true); petSat(); const P = meta.cos.pet, price = kind === 'meal' ? 100 : 50;
+  if (P.sat >= 97) { gtoast(`🐾 ${digName()} сыт и доволен`, '#ffd23f'); petEmo('happy', 1.5); return; }
   if (mainBal() < price) { gtoast('Не хватает монет на балансе', '#ff8a8a'); return; }
   addMain(-price); P.sat = kind === 'meal' ? 100 : Math.min(100, P.sat + 40); P.warned = 0; saveMeta();
   petEmo('happy', 3); [659, 784, 1047].forEach((f, i) => tone(f, .09, 'square', .04, 0, i * .07));
-  gtoast(`${kind === 'meal' ? '🍖' : '🍪'} ${petName()}: ням!`, '#ffd23f'); cosRender(); updatePanel(); if (sheetId === 'pet') petUi();
+  gtoast(`${kind === 'meal' ? '🍖' : '🍪'} ${digName()}: ням!`, '#ffd23f'); cosRender(); updatePanel(); if (sheetId === 'pet') petUi();
 }
 
 // ---------- события игры → питомец ----------
@@ -5238,7 +5361,7 @@ function cosEv(e, tutR) {
     case 'portal': petEmo('excited', 2.2); break;
     case 'broke': petEmo('sad', 4); break;
     case 'cashout': { const x = e.win / Math.max(1e-9, game.bet); petEmo(x >= 2 ? 'cashbig' : 'cash', x >= 5 ? 4 : x >= 2 ? 3 : 2.2); // радуется любому забору: спас монеты
-      if (!tutR && !meta.cos.pet.hide && meta.dig.st !== 'dig') [880, 1175].forEach((f, i) => tone(f, .05, 'square', .02, 0, .25 + i * .07)); break; }
+      if (!tutR && !meta.cos.pet.hide && !meta.cos.pet.off) [880, 1175].forEach((f, i) => tone(f, .05, 'square', .02, 0, .25 + i * .07)); break; }
     case 'bonusEnd': petEmo('excited', 3); break;
   }
 }
@@ -5253,7 +5376,7 @@ function cosFrame(dt) {
 }
 function cosTick() {
   const P = meta.cos.pet; petSat(); P.seen = Date.now();
-  if (P.sat < 20 && !P.warned && (!P.hide || meta.dig.st === 'dig') && uiOpen('pet')) { P.warned = 1; saveMeta(); if (!tut) gtoast(`🍖 ${petName()} хочет есть — покорми в окне 🐾 Питомец`, '#ffb0d0'); }
+  if (P.sat < 20 && !P.warned && meta.dig.pk && uiOpen('pet')) { P.warned = 1; saveMeta(); if (!tut) gtoast(`🍖 ${digName()} хочет есть — покорми в окне 🐾 Питомцы`, '#ffb0d0'); }
 }
 
 // ====================== 🐾 ПИТОМЕЦ-КОПАТЕЛЬ ======================
@@ -5284,9 +5407,18 @@ const DIG_BAG = [30, 50, 80, 120, 180, 240], DIG_STA = [30, 50, 80, 120, 180, 24
 const DIG_PRICE = [1000, 5000, 25000, 100000, 500000];          // цена следующего уровня (любой прокачки)
 const DIG_REST = 2 * 3600;                                       // секунд отдыха: от нуля до полных сил
 const DIG_UPS = [['sh', 'Лопатка'], ['nose', 'Нюх'], ['bag', 'Рюкзак'], ['sta', 'Выносливость']];
-function digDefaults() { return { st: 'rest', lv: { sh: 0, nose: 0, bag: 0, sta: 0 }, en: DIG_STA[0], prog: 0, cur: '', bag: {}, n: 0, t: Date.now(), soldN: 0, sold: 0, fl: '' }; }
+function digDefaults() { return { pk: '', ph: 'none', nm: '', st: 'rest', lv: { sh: 0, nose: 0, bag: 0, sta: 0 }, en: DIG_STA[0], prog: 0, cur: '', bag: {}, n: 0, t: Date.now(), soldN: 0, sold: 0, fl: '' }; }
 { const o = meta.dig && typeof meta.dig === 'object' ? meta.dig : {}; meta.dig = Object.assign(digDefaults(), o); meta.dig.lv = Object.assign(digDefaults().lv, o.lv || {});
-  if (!meta.dig.bag || typeof meta.dig.bag !== 'object') meta.dig.bag = {}; if (meta.dig.cur && !DIG_IT[meta.dig.cur]) meta.dig.cur = ''; }
+  if (!meta.dig.bag || typeof meta.dig.bag !== 'object') meta.dig.bag = {}; if (meta.dig.cur && !DIG_IT[meta.dig.cur]) meta.dig.cur = '';
+  // v53: два питомца — «Рядом со мной» (meta.cos.pet) и «Копает» (meta.dig.pk/ph/nm)
+  const D = meta.dig, P = meta.cos.pet;
+  if (o.pk === undefined) {
+    if (D.st === 'dig') { D.pk = P.kind; D.ph = P.hat; D.nm = P.name || '';
+      const alt = P.kind !== 'mole' ? 'mole' : Object.keys(PETS).find(k => k !== 'mole' && cosOwn('pet', k));
+      if (alt) { P.kind = alt; P.hat = 'none'; P.name = ''; P.off = 0; } else P.off = 1; }
+    else { D.pk = ''; D.ph = 'none'; D.nm = ''; } }
+  if (D.pk && !(PETS[D.pk] && cosOwn('pet', D.pk))) D.pk = ''; if (!HATS[D.ph]) D.ph = 'none';
+  if (D.pk && !P.off && D.pk === P.kind) D.pk = ''; if (!D.pk && D.st === 'dig') D.st = 'rest'; }
 var digReady = true;
 const digCap = () => DIG_BAG[meta.dig.lv.bag], digEnMax = () => DIG_STA[meta.dig.lv.sta], digInt = () => DIG_SH[meta.dig.lv.sh];
 const digHf = s => s >= 60 ? 1 : s >= 30 ? .75 : s >= 10 ? .5 : .25;   // голод: только медленнее, но не до нуля
@@ -5317,8 +5449,8 @@ function digTick(quiet) {
   if (found.length) { if (sheetId === 'pet') found.slice(-3).forEach((k, i) => setTimeout(() => digFly(k), i * 260)); saveMeta(); }
   if (st !== D.fl) {
     const was = D.fl; D.fl = st; saveMeta();
-    if (!quiet && was && uiOpen('pet') && !tut) { const nm = petName();
-      if (st === 'tired') gtoast(`${px('zzz')} ${nm}: силы кончились — отправь отдыхать (${px('paw')})`, '#ffb0d0');
+    if (!quiet && was && uiOpen('pet') && !tut) { const nm = digName();
+      if (st === 'tired') gtoast(`${px('zzz')} ${nm}: силы кончились — уложи спать (${px('paw')})`, '#ffb0d0');
       else if (st === 'full') gtoast(`${px('bag')} ${nm}: рюкзак полон — продай находки (${px('paw')})`, '#ffd23f');
       else if (st === 'rested') gtoast(`${px('apple')} ${nm}: силы полные — можно отправлять копать (${px('paw')})`, '#7fe0a0'); }
     updatePanel();
@@ -5327,9 +5459,11 @@ function digTick(quiet) {
   return found;
 }
 function digGo() {
-  if (busy()) return; const D = meta.dig, nm = petName(); digTick(true);
-  if (D.st === 'dig') { D.st = 'rest'; petEmo('love', 2.5); gtoast(`${px('bed')} ${nm}: отдых в шахте, рядом с тобой`, '#ffb0d0'); }
-  else { if (D.en < 1) { gtoast('Сил пока нет — пусть ещё отдохнёт', '#ff8a8a'); return; } D.st = 'dig'; if (!D.cur) D.cur = digPick(); gtoast(`${digIco()} ${nm}: за работу!`, '#ffd23f'); }
+  if (busy()) return; const D = meta.dig; digTick(true);
+  if (!D.pk) { if (meta.cos.pet.off) { gtoast('Выбери питомца в карточке «Копает»', '#ff8a8a'); return; } petPut('dig', meta.cos.pet.kind); } // один питомец — сам решаешь: копать или сидеть рядом
+  const nm = digName();
+  if (D.st === 'dig') { D.st = 'rest'; petEmo('love', 2.5); gtoast(`${px('bed')} ${nm}: спать — силы вернутся`, '#ffb0d0'); }
+  else { if (D.en < 1) { gtoast('Сил пока нет — пусть ещё поспит', '#ff8a8a'); return; } D.st = 'dig'; if (!D.cur) D.cur = digPick(); gtoast(`${digIco()} ${nm}: за работу!`, '#ffd23f'); }
   D.t = Date.now(); D.fl = digState(); saveMeta(); petUi(); updatePanel();
   [523, 659].forEach((f, i) => tone(f, .07, 'square', .035, 0, i * .07));
 }
@@ -5387,11 +5521,11 @@ function petScene(dt) {
   }
   const fill = ptSell ? Math.max(0, ptSell.n0 - ptSell.i) / digCap() : D.n / digCap();
   const stg = fill <= 0 ? 0 : fill < .34 ? 1 : fill < .67 ? 2 : fill < 1 ? 3 : 4, bag = drawBag(g, PT.BX, G, stg, t);
-  const pv = cosPv.kind || cosPv.hat;
-  if (D.st === 'dig' || pv) { // когда отдыхает — он в шахте; здесь виден только при примерке
-    const emo = pet.emo && t < pet.until ? pet.emo : D.st !== 'dig' ? 'happy0' : st === 'tired' ? 'sleep' : st === 'full' ? 'normal' : P.sat < 20 ? 'hungry' : 'normal';
+  const pv = ptSlot === 'dig' && (cosPv.kind || cosPv.hat), dk = (pv && cosPv.kind) || D.pk, dh = (pv && cosPv.hat) || D.ph;
+  if (dk) { // v53: копатель всегда на своей земле; отдыхает — спит тут же
+    const emo = pet.emo && t < pet.until ? pet.emo : D.st !== 'dig' ? (pv ? 'happy0' : 'sleep') : st === 'tired' ? 'sleep' : st === 'full' ? 'normal' : P.sat < 20 ? 'hungry' : 'normal';
     const bob = digging ? Math.floor(t * 6) % 2 : 0;
-    drawPet(g, PT.PX + bob, G - 16 - bob + (st === 'tired' ? 1 : 0), cosPv.kind || P.kind, cosPv.hat || P.hat, emo, t, st === 'full' ? -1 : 1);
+    drawPet(g, PT.PX + bob, G - 16 - bob + (st === 'tired' || D.st !== 'dig' ? 1 : 0), dk, dh, emo, t, st === 'full' ? -1 : 1);
   }
   for (let i = ptParts.length - 1; i >= 0; i--) { const q = ptParts[i]; q.t += dt; q.x += q.vx * dt; q.y += q.vy * dt; q.vy += 140 * dt; if (q.t > q.life) { ptParts.splice(i, 1); continue; }
     if (q.k) { g.globalAlpha = Math.max(0, Math.min(1, (q.life - q.t) * 3)); g.drawImage(digSpr(q.k), Math.round(q.x - 6), Math.round(q.y - 6)); if (DIG_IT[q.k].rare) glyph(g, GLY.spark, Math.round(q.x + 4), Math.round(q.y - 8), '#ffffff'); g.globalAlpha = 1; }
@@ -5408,7 +5542,12 @@ function petScene(dt) {
   const sb = $('ptSell'), show = D.n > 0 && !ptSell;
   if (sb.classList.contains('show') !== show) sb.classList.toggle('show', show);
   if (show) { sb.style.left = (PT.BX / PT.W * 100) + '%'; sb.style.top = ((bag.y - 3) / PT.H * 100) + '%'; }
-  const aw = $('ptAway'), away = D.st !== 'dig'; if (aw.classList.contains('show') !== away) aw.classList.toggle('show', away);
+  const aw = $('ptAway'), away = !D.pk || D.st !== 'dig', ah = !D.pk ? px('paw') + ' никто не копает' : px('bed') + ' спит · набирается сил';
+  if (aw.classList.contains('show') !== away) aw.classList.toggle('show', away); if (away && aw.dataset.h !== ah) { aw.dataset.h = ah; aw.innerHTML = ah; }
+  // карточки «Рядом со мной» / «Копает»: живые питомцы + примерка на выбранной
+  for (const [id, sl] of [['ptS1', 'comp'], ['ptS2', 'dig']]) { const c = $(id); if (!c) continue; const q = c.getContext('2d'); q.clearRect(0, 0, 24, 24);
+    const pvh = ptSlot === sl && (cosPv.kind || cosPv.hat), k = (pvh && cosPv.kind) || (sl === 'dig' ? D.pk : (P.off ? '' : P.kind)), h = (pvh && cosPv.hat) || (sl === 'dig' ? D.ph : P.hat);
+    if (k) drawPet(q, 4, 6, k, h, sl === 'dig' && D.st !== 'dig' && !pvh ? 'sleep' : 'happy0', t, 1); else { q.fillStyle = '#3c3c48'; q.fillRect(6, 10, 12, 2); q.fillRect(11, 5, 2, 12); } }
 }
 function digSell() {
   if (busy() || ptSell) return; const D = meta.dig; digTick(true); if (!D.n) return;
@@ -5416,7 +5555,7 @@ function digSell() {
   const key = list.map(k => [DIG_IT[k].v + Math.random() * 25, k]).sort((a, b) => a[0] - b[0]); // редкое — ближе к концу, для интриги
   const n0 = D.n; D.bag = {}; D.n = 0; D.sold += sum; D.soldN += list.length; addMain(sum); D.fl = digState(); saveMeta(); updatePanel();
   ptSell = { list: key.map(q => q[1]), n0, i: 0, t: 0, got: 0 }; petEmo('happy', 2.5); petUi();
-  setTimeout(() => gtoast(`${px('coin')} ${petName()}: находки проданы · +${fmt(sum)}${COIN}`, '#ffd23f'), Math.min(2200, list.length * 120 + 600));
+  setTimeout(() => gtoast(`${px('coin')} ${digName()}: находки проданы · +${fmt(sum)}${COIN}`, '#ffd23f'), Math.min(2200, list.length * 120 + 600));
 }
 function petLoopGo() { if (!ptLoopOn) { ptLoopOn = true; ptLast = 0; requestAnimationFrame(petLoop); } }
 function petLoop(now) {
@@ -5427,16 +5566,18 @@ const mmss = s => { s = Math.max(0, Math.ceil(s)); const h = Math.floor(s / 3600
 const fmtMin = s => (s >= 60 ? String(+(s / 60).toFixed(1)).replace('.', ',') + ' мин' : s + ' с');
 // живые цифры окна (раз в секунду)
 function petUi() {
-  if (sheetId !== 'pet') return; const D = meta.dig, st = digState(), sat = petSat(), hf = digHf(sat), mx = digEnMax(), nm = petName();
-  $('ptTitle').textContent = nm;
-  $('ptStat').innerHTML = st === 'dig' ? `${digIco()} <b>${nm} копает</b> · следующая находка через <b>${mmss((1 - D.prog) * digInt() / hf)}</b>` + (hf < 1 ? `<br><span style="color:#ffb0d0">${px('meat')} Хочет есть — копает медленнее (×${String(hf).replace('.', ',')}). Покорми!</span>` : '')
+  if (sheetId !== 'pet') return; const D = meta.dig, st = digState(), sat = petSat(), hf = digHf(sat), mx = digEnMax(), nm = digName();
+  $('ptS1n').textContent = compName() || 'никого'; $('ptS2n').textContent = D.pk ? nm : 'никого';
+  document.querySelectorAll('#sh-pet .pslot').forEach(b => b.classList.toggle('on', b.dataset.slot === ptSlot));
+  $('ptStat').innerHTML = !D.pk ? `${px('paw')} <b>Никто не копает.</b> Нажми на карточку «Копает» сверху и выбери питомца` + (meta.cos.pet.off ? '.' : ` — или нажми кнопку ниже, и копать пойдёт «${compName()}».`)
+    : st === 'dig' ? `${digIco()} <b>${nm} копает</b> · следующая находка через <b>${mmss((1 - D.prog) * digInt() / hf)}</b>` + (hf < 1 ? `<br><span style="color:#ffb0d0">${px('meat')} Хочет есть — копает медленнее (×${String(hf).replace('.', ',')}). Покорми!</span>` : '')
     : st === 'full' ? `${px('bag')} <b>Рюкзак полон</b> — ${nm} ждёт. Продай находки (пузырёк над рюкзаком), иначе копать некуда.`
-    : st === 'tired' ? `${px('zzz')} <b>Силы кончились</b> — ${nm} спит прямо в ямке. Отправь отдыхать в шахту.`
-    : st === 'rest' ? `${px('bed')} <b>${nm} отдыхает в шахте</b> с тобой · полные силы через <b>${mmss((mx - D.en) / mx * DIG_REST)}</b>`
+    : st === 'tired' ? `${px('zzz')} <b>Силы кончились</b> — ${nm} клюёт носом прямо в ямке. Уложи спать — силы вернутся.`
+    : st === 'rest' ? `${px('bed')} <b>${nm} спит</b> на своей земле · полные силы через <b>${mmss((mx - D.en) / mx * DIG_REST)}</b>`
     : `${px('apple')} <b>Силы полные</b> — можно отправлять копать.`;
   const en = Math.floor(D.en + 1e-6); $('ptEnT').textContent = `${en} / ${mx}`; $('ptEnB').style.width = (D.en / mx * 100) + '%';
   $('ptSatT').textContent = Math.round(sat) + '%'; const sb = $('ptSatB'); sb.style.width = sat + '%'; sb.style.background = sat < 30 ? 'linear-gradient(90deg,#ff3b3b,#ff8a3d)' : '';
-  const go = $('ptGo'), gh = D.st === 'dig' ? px('bed') + ' Отправить отдыхать в шахту' : en < 1 ? px('zzz') + ' Сил нет — пусть отдохнёт' : digIco() + ' Отправить копать'; if (go.dataset.h !== gh) { go.dataset.h = gh; go.innerHTML = gh; } go.disabled = D.st !== 'dig' && en < 1;
+  const noP = !D.pk && meta.cos.pet.off, go = $('ptGo'), gh = noP ? px('paw') + ' Выбери, кто копает' : D.st === 'dig' && D.pk ? px('bed') + ' Уложить спать' : en < 1 ? px('zzz') + ' Сил нет — пусть поспит' : digIco() + (D.pk ? ' Отправить копать' : ` Отправить копать: ${compName()}`); if (go.dataset.h !== gh) { go.dataset.h = gh; go.innerHTML = gh; } go.disabled = noP || (D.st !== 'dig' && en < 1);
   $('ptNote').innerHTML = (D.soldN ? `Всего продано: <b>${fmt(D.soldN)}</b> находок на <b style="color:var(--gold)">${fmt(D.sold)}</b><i class="coin"></i>. ` : 'Находки: уголь, сырое железо, редстоун, лазурит, сырое золото, алмаз и изумруд — чем реже, тем дороже. Что в рюкзаке — не видно, узнаешь, когда продашь. ') + 'На выплаты в шахте питомец не влияет.';
 }
 // окно целиком: прокачка, имя, питомцы и шапки
@@ -5451,25 +5592,30 @@ function petRender() {
     card('nose', 'Нюх', px('compass'), `алмаз и изумруд: ${r(digRarePct(L.nose))}`, L.nose < 5 ? r(digRarePct(L.nose + 1)) : '') +
     card('bag', 'Рюкзак', px('bag'), `${DIG_BAG[L.bag]} находок`, L.bag < 5 ? DIG_BAG[L.bag + 1] : '') +
     card('sta', 'Выносливость', px('apple'), `сил на ${DIG_STA[L.sta]} находок`, L.sta < 5 ? DIG_STA[L.sta + 1] : '');
-  const nm = $('ptName'); if (document.activeElement !== nm) nm.value = P.name || '';
+  const nm = $('ptName'), dg = ptSlot === 'dig'; if (document.activeElement !== nm) nm.value = (dg ? D.nm : P.name) || '';
+  nm.placeholder = dg ? (PETS[D.pk] ? PETS[D.pk].n : 'Копатель') : (P.off ? 'Питомец' : PETS[P.kind].n); $('ptSizeL').style.display = $('ptHideL').style.display = dg ? 'none' : '';
   $('ptSize').value = Math.round(P.size * 100); $('ptSizeV').textContent = Math.round(P.size * 100) + '%'; $('ptHide').checked = !!P.hide;
-  $('ptCos').innerHTML = `<div class="secttl" style="margin-top:10px">${px('paw')} Кто копает · только внешний вид</div><div class="cgrid">${Object.keys(PETS).map(id => cItem('pet', id, petIcon(id, 'none'))).join('')}</div>` +
-    `<div class="secttl" style="margin-top:12px">${px('tophat')} Шапки</div><div class="cgrid">${Object.keys(HATS).map(id => cItem('hat', id, petIcon(cosPv.kind || P.kind, id))).join('')}</div>` +
-    `<div class="note" style="margin-top:6px">Питомцы и шапки только для красоты: копают все одинаково. Ещё они выпадают в кейсах (🎨 Косметика → Кейсы). Нажми на карточку — примеришь на сцене.</div>`;
+  const sk = dg ? D.pk : (P.off ? '' : P.kind), none = !sk;
+  const noneCard = `<div class="citem${none ? ' on' : ''}" data-nopet="1"><div class="ci">${px('bed')}</div><b>Никого</b><small>${dg ? 'никто не копает' : 'в шахте пусто'}</small>${none ? '<span class="cbtn">✓ выбрано</span>' : '<button class="btn cbtn" data-nopet="1">выбрать</button>'}</div>`;
+  $('ptCos').innerHTML = `<div class="secttl" style="margin-top:10px">${px('paw')} ${dg ? 'Кто копает' : 'Кто сидит рядом с тобой в шахте'}</div><div class="cgrid">${Object.keys(PETS).map(id => cItem('pet', id, petIcon(id, 'none'))).join('')}${noneCard}</div>` +
+    `<div class="secttl" style="margin-top:12px">${px('tophat')} Шапки · ${dg ? 'копателю' : 'тому, кто рядом'}</div><div class="cgrid">${Object.keys(HATS).map(id => cItem('hat', id, petIcon(cosPv.kind || sk || 'mole', id))).join('')}</div>` +
+    `<div class="note" style="margin-top:6px">Сверху две карточки: «Рядом со мной» и «Копает» — нажми и выбери питомца для каждой. Один питомец не может быть сразу в двух местах: выберешь того, кто уже на другой карточке, — они поменяются. Питомцы и шапки только для красоты: копают все одинаково. Ещё они выпадают в кейсах (🎨 Косметика → Кейсы).</div>`;
   petUi();
 }
 function petInit() {
   const body = $('sh-pet').querySelector('.sh-body');
-  body.addEventListener('click', e => { const u = e.target.closest('[data-up]'); if (u) { u.blur(); return digUp(u.dataset.up); } cosClick(e); });
+  body.addEventListener('click', e => { const u = e.target.closest('[data-up]'); if (u) { u.blur(); return digUp(u.dataset.up); }
+    const sl = e.target.closest('[data-slot]'); if (sl) { ptSlot = sl.dataset.slot; cosPv.kind = null; cosPv.hat = null; petRender(); return; }
+    if (e.target.closest('button[data-nopet]')) return petPut(ptSlot, ''); cosClick(e); });
   $('ptGo').onclick = e => { e.currentTarget.blur(); digGo(); };
   $('ptSell').onclick = e => { e.stopPropagation(); digSell(); };
-  $('ptName').onchange = () => { meta.cos.pet.name = $('ptName').value.trim().slice(0, 14); saveMeta(); petUi(); };
+  $('ptName').onchange = () => { const v = $('ptName').value.trim().slice(0, 14); if (ptSlot === 'dig') meta.dig.nm = v; else meta.cos.pet.name = v; saveMeta(); petUi(); };
   $('ptSize').oninput = () => { petSize($('ptSize').value / 100); $('ptSizeV').textContent = $('ptSize').value + '%'; }; $('ptSize').onchange = () => saveMeta();
   $('ptSize0').onclick = () => { petSize(1); $('ptSize').value = 100; $('ptSizeV').textContent = '100%'; saveMeta(); };
   $('ptHide').onchange = () => { meta.cos.pet.hide = $('ptHide').checked ? 1 : 0; saveMeta(); };
-  $('ptCv').onclick = () => { if (meta.dig.st === 'dig') petPoke(); };
+  $('ptCv').onclick = () => { if (meta.dig.pk) petPoke(); };
   const away = digTick(true);
-  if (away.length && uiOpen('pet')) setTimeout(() => { if (tut) return; const st = digState(); gtoast(`${px('paw')} ${petName()}: пока тебя не было — ${away.length} ${plur(away.length, 'находка', 'находки', 'находок')}` + (st === 'full' ? '. Рюкзак полон!' : st === 'tired' ? '. Силы кончились — отправь отдыхать.' : ''), '#ffd23f', true); }, 2600);
+  if (away.length && uiOpen('pet')) setTimeout(() => { if (tut) return; const st = digState(); gtoast(`${px('paw')} ${digName()}: пока тебя не было — ${away.length} ${plur(away.length, 'находка', 'находки', 'находок')}` + (st === 'full' ? '. Рюкзак полон!' : st === 'tired' ? '. Силы кончились — уложи спать.' : ''), '#ffd23f', true); }, 2600);
   setInterval(() => digTick(false), 1000);
 }
 
@@ -5479,7 +5625,7 @@ let cosTab = 'skin', cosArm = { k: '', t: 0 };
 const cosPv = { skin: null, theme: null, kind: null, hat: null, fx: null, trail: null };
 let pvTrail = [], pvParts = [];
 let pvFx = [], pvLast = 0, pvHold = 0, cosLoopOn = false;
-const cosSel = cat => cat === 'pet' ? meta.cos.pet.kind : cat === 'hat' ? meta.cos.pet.hat : meta.cos[cat];
+const cosSel = cat => cat === 'pet' ? (ptSlot === 'dig' ? meta.dig.pk : (meta.cos.pet.off ? '' : meta.cos.pet.kind)) : cat === 'hat' ? (ptSlot === 'dig' ? meta.dig.ph : meta.cos.pet.hat) : meta.cos[cat];
 function openCos(tab) { if (tab === 'pet') return openSheet('pet'); if (tab) cosTab = tab; if (sheetId === 'cos') cosRender(); else openSheet('cos'); }
 function cItem(cat, id, icon) {
   const it = COS[cat][id], key = cat + ':' + id, own = cosOwn(cat, id), on = cosSel(cat) === id;
@@ -5490,7 +5636,7 @@ function cItem(cat, id, icon) {
   else btn = '<span class="cbtn lock">🔒</span>';
   const sub = own ? (it.d || (on ? 'надето' : 'есть')) : cosHow(cat, id);
   const R = it.r && RAR[it.r];
-  return `<div class="citem${on ? ' on' : ''}${own ? '' : ' locked'}${R ? ' rar' : ''}${it.r === 'x' ? ' lux' : ''}" data-pv="${key}"${R ? ` style="--rc:${R.col}"` : ''}>${it.season ? `<em class="cseas">${SEASONS[it.season].i}</em>` : ''}<div class="ci">${icon}</div><b>${it.n}</b>${R ? `<em class="crar">${R.n}</em>` : ''}<small>${sub}</small>${btn}</div>`;
+  return `<div class="citem${on ? ' on' : ''}${own ? '' : ' locked'}${R ? ' rar' : ''}${it.r === 'x' ? ' lux' : ''}" data-pv="${key}"${R ? ` style="--rc:${R.col}"` : ''}>${isNewIt(cat, id) ? NEW_TAG : ''}${it.season ? `<em class="cseas">${SEASONS[it.season].i}</em>` : ''}<div class="ci">${icon}</div><b>${it.n}</b>${R ? `<em class="crar">${R.n}</em>` : ''}<small>${sub}</small>${btn}</div>`;
 }
 function seasonBanner() {
   for (const s in SEASONS) {
@@ -5506,7 +5652,8 @@ function cosRender() {
   if (sheetId !== 'cos') return;
   if (!COS_TABS.some(q => q[0] === cosTab)) cosTab = 'skin';
   $('cWal').textContent = fmt(mainBal());
-  $('cTabs').innerHTML = COS_TABS.map(([id, i, n]) => `<button class="btn ctab${cosTab === id ? ' on' : ''}" data-tab="${id}">${i}<small>${n}</small></button>`).join('');
+  if (newIn(cosTab)) newMark('t_' + cosTab); // заглянул во вкладку — точка гаснет
+  $('cTabs').innerHTML = COS_TABS.map(([id, i, n]) => `<button class="btn ctab${cosTab === id ? ' on' : ''}" data-tab="${id}">${!newSeen('t_' + id) && newIn(id) ? '<i class="cnewdot"></i>' : ''}${i}<small>${n}</small></button>`).join('');
   let h = cosTab === 'skin' ? seasonBanner() : '';
   const skOrd = id => { const S = COS.skin[id]; return S.rank != null ? 99 : S.r ? RAR_ORDER.indexOf(S.r) + 1 : 0; };
   const ord = cat => { const k = Object.keys(COS[cat]); return cat === 'skin' ? k.sort((a, b) => skOrd(a) - skOrd(b)) : k; };
@@ -5526,7 +5673,7 @@ function cosRender() {
       const sw = T.rb ? 'linear-gradient(90deg,#ff3b3b,#ffd23f,#3ddc63,#4fc3ff,#c38bff)' : T.c ? `linear-gradient(90deg,${T.c.join(',')})` : 'linear-gradient(90deg,#666,#bbb)';
       const btn = on ? '<span class="cbtn">✓ выбрано</span>' : own ? `<button class="btn cbtn" data-tr="${id}">выбрать</button>` : T.price ? `<button class="btn cbtn buy" data-tr="${id}">${fmtShort(T.price)}<i class="coin"></i></button>` : '<span class="cbtn lock">🔒</span>';
       const R = T.r && RAR[T.r];
-      return `<div class="citem${on ? ' on' : ''}${own ? '' : ' locked'}${id === tp ? ' pv' : ''}${R ? ' rar' : ''}${T.r === 'x' ? ' lux' : ''}" data-pv="trail:${id}"${R ? ` style="--rc:${R.col}"` : ''}><div class="ci"><i class="ctrail" style="background:${sw}"></i></div><b>${T.n}</b>${R ? `<em class="crar">${R.n}</em>` : ''}<small>${own ? (T.d || 'есть') : trailHow(id)}</small>${btn}</div>`;
+      return `<div class="citem${on ? ' on' : ''}${own ? '' : ' locked'}${id === tp ? ' pv' : ''}${R ? ' rar' : ''}${T.r === 'x' ? ' lux' : ''}" data-pv="trail:${id}"${R ? ` style="--rc:${R.col}"` : ''}>${isNewIt('trail', id) ? NEW_TAG : ''}<div class="ci"><i class="ctrail" style="background:${sw}"></i></div><b>${T.n}</b>${R ? `<em class="crar">${R.n}</em>` : ''}<small>${own ? (T.d || 'есть') : trailHow(id)}</small>${btn}</div>`;
     }).join('')}</div>`;
   } else if (cosTab === 'fx') {
     h += `<canvas class="cprev" id="cPrev" data-w="240"></canvas><div class="note" style="margin-top:4px">Нажми на карточку — эффект покажется тут.</div>`;
@@ -5564,7 +5711,7 @@ function cosRender() {
 }
 function cosSelect(cat, id, quiet) {
   if (busy() || !cosOwn(cat, id)) return;
-  if (cat === 'pet') meta.cos.pet.kind = id; else if (cat === 'hat') meta.cos.pet.hat = id; else meta.cos[cat] = id;
+  if (cat === 'pet') return petPut(ptSlot, id); if (cat === 'hat') { if (ptSlot === 'dig') meta.dig.ph = id; else meta.cos.pet.hat = id; } else meta.cos[cat] = id;
   if (cat === 'skin') { cosPv.skin = null; applySkin(); }
   if (cat === 'theme') cosPv.theme = null;
   if (cat === 'pet') { cosPv.kind = null; petEmo('love', 2); }
@@ -5619,7 +5766,7 @@ function drawPrev(cv) {
   const g = cv.getContext('2d'), k = cw / W, Hh = ch / k; g.setTransform(1, 0, 0, 1, 0, 0); g.fillStyle = '#000'; g.fillRect(0, 0, cw, ch); g.imageSmoothingEnabled = false;
   if (W === 360) { // превью темы
     const th = cosPv.theme || meta.cos.theme, T = TH[th], sky = 70; g.setTransform(k, 0, 0, k, 0, sky * k);
-    if (T) T.sky(g, -sky, 360); else { const gr = g.createLinearGradient(0, -sky, 0, 0); gr.addColorStop(0, '#5aa0ff'); gr.addColorStop(1, '#a8d4ff'); g.fillStyle = gr; g.fillRect(-20, -sky, 400, sky); g.fillStyle = '#fff7b0'; g.fillRect(280, -58, 30, 30); }
+    if (T) T.sky(g, -sky, 360); else { skyClassic(g, -sky, 360); g.fillStyle = '#fff7b0'; g.fillRect(280, -66, 30, 30); g.fillStyle = '#ffe866'; g.fillRect(286, -60, 18, 18); }
     thL = [];
     for (let rr = 0; rr < PV_MAP.length; rr++) for (let c = 0; c < 9; c++) {
       const t = PV_MAP[rr][c], x = c * CELL, y = rr * CELL;
@@ -5777,13 +5924,15 @@ function cosClick(e) {
 }
 function cosPanel() {
   setText('mProfSub', rank().n);
-  const P = meta.cos.pet, hungry = P.sat < 20 && !P.hide, ss = Object.keys(SEASONS).find(s => seasonOn(s));
-  setText('mCosSub', !meta.cos.seen ? 'новое!' : ss ? SEASONS[ss].n : 'скины');
-  setProp($('mCos'), 'mCosCls', 'className', 'btn' + (!meta.cos.seen ? ' hot' : ''));
+  const P = meta.cos.pet, hungry = P.sat < 20 && !!meta.dig.pk, ss = Object.keys(SEASONS).find(s => seasonOn(s));
+  const cNew = !newSeen('cos') && ['skin', 'trail', 'fx', 'theme', 'case'].some(newIn); // новинки обновы в косметике
+  setText('mCosSub', !meta.cos.seen || cNew ? 'новое!' : ss ? SEASONS[ss].n : 'скины');
+  setProp($('mCos'), 'mCosCls', 'className', 'btn' + (!meta.cos.seen || cNew ? ' hot' : ''));
   if (!digReady) return; // updatePanel может сработать раньше, чем объявлен питомец-копатель
-  const st = digState(), hun = P.sat < 20;
-  setText('mPetSub', st === 'tired' ? 'нет сил' : st === 'full' ? 'рюкзак полон' : hun ? 'есть хочет' : st === 'dig' ? 'копает' : st === 'rested' ? 'отдохнул' : 'отдыхает');
-  setProp($('mPet'), 'mPetCls', 'className', 'btn' + ((st === 'tired' || st === 'full' || st === 'rested' || hun) && uiOpen('pet') ? ' hot' : ''));
+  const st = digState(), dp = !!meta.dig.pk, hun = dp && P.sat < 20;
+  const pNew = !newSeen('pet') && newIn('pet'), pUrg = dp && (st === 'tired' || st === 'full' || hun);
+  setText('mPetSub', pNew && !pUrg ? 'новое!' : !dp ? 'никто не копает' : st === 'tired' ? 'нет сил' : st === 'full' ? 'рюкзак полон' : hun ? 'есть хочет' : st === 'dig' ? 'копает' : st === 'rested' ? 'выспался' : 'спит');
+  setProp($('mPet'), 'mPetCls', 'className', 'btn' + ((dp && (st === 'tired' || st === 'full' || st === 'rested' || hun) || pNew) && uiOpen('pet') ? ' hot' : ''));
 }
 // v19/v20: убранное из косметики — купленное за монеты возвращается один раз; скины за достижения/ранги
 // теперь продаются, но у кого они уже были открыты — остаются навсегда; осколки и сезонные награды убраны
@@ -5803,7 +5952,7 @@ function cosRefund() {
 function cosInit() {
   cosRefund(); applySkin();
   const P = meta.cos.pet; petSat(); pet.act = renderT;
-  if (Date.now() - P.seen > 8 * 3600e3 && meta.stats.rounds > 0 && !P.hide) { petEmo('love', 6); setTimeout(() => { if (!tut) gtoast(`🐾 ${petName()} соскучился!`, '#ffb0d0'); }, 2200); }
+  if (Date.now() - P.seen > 8 * 3600e3 && meta.stats.rounds > 0 && !P.hide && !P.off) { petEmo('love', 6); setTimeout(() => { if (!tut) gtoast(`🐾 ${petName()} соскучился!`, '#ffb0d0'); }, 2200); }
   P.seen = Date.now(); saveMeta();
   if (!meta.cos.seen && meta.stats.rounds > 0) setTimeout(() => { if (!tut && !$('intro').classList.contains('show')) gtoast('🎨 Новое: <b>Косметика</b> — скины кирки, эффекты, темы шахты и питомец. Кнопка 🎨 внизу', '#d6b0ff', true); }, 3500);
   $('cTabs').addEventListener('click', cosClick); $('cBody').addEventListener('click', cosClick);
@@ -6155,17 +6304,13 @@ if (DEV_BUILD) {
 // ---------- новости обновления ----------
 // Заполняется с каждой обновой (id — любая новая строка, например дата). Пока список пуст — окно не показывается,
 // кнопки в профиле нет. Новичкам новости не показываются (им — приветствие и обучение).
-const NEWS = { id: '2026-11-06', title: 'Обновление 3.3', sub: 'Джунгли, новые ранги, Кролик и роскошная косметика', items: [
-  [px('parrot'), '<b>Новая деревня — Джунгли.</b> Открывается, когда достроишь Незер. Храм с золотой вершиной, водопад с озером и причалом, плантация с пандами и попугаями, дом на дереве. Достроишь всё — получишь след «Лианы».'],
-  [px('coin'), '<b>Шахта платит больше.</b> Все блоки дают на 20% больше монет.'],
-  [px('heartb'), '<b>Кирка стала капризнее.</b> Когда прочности остаётся меньше 30, трещины случаются чаще. Шанс трещины виден рядом с прочностью — следи за ним и забирай вовремя.'],
-  [px('fire'), '<b>Портал в ад попадается реже</b>, но купить его можно как раньше.'],
-  [px('gift'), '<b>Возврат проигрыша.</b> Если день не задался — в Подарках можно забрать четверть проигранного за сегодня.'],
-  [px('heart'), '<b>Спасательный круг растёт вместе с рангом:</b> чем выше ранг, тем больше помощь, когда монеты кончились.'],
-  [px('crown'), '<b>Четыре новых ранга:</b> Император, Титан, Миф и Бессмертный — ставки до 500 млн. За каждый своя награда, её не купить и не выбить из кейса: венец императора для питомца и скины кирки Титановая, Мифическая и Бессмертная. А Легенда теперь ставит до 25 млн.'],
-  [px('paw'), '<b>Новый питомец — Кролик</b>, 25 000 монет.'],
-  [px('crystal'), '<b>Роскошная косметика</b> для тех, у кого миллионы: 4 скина кирки, 3 шапки питомцу и 3 следа, от 10 млн до 1 млрд. Новая редкость «Роскошная», в кейсах её нет. Следы теперь покупаются по второму нажатию — чтобы не купить случайно.'],
-  [px('cap'), '<b>Обучение обновлено</b> под новые правила.'],
+const NEWS = { id: '2026-11-07', title: 'Обновление 3.5', sub: 'Два питомца, морская свинка, тема «Сакура» и новые фоны', items: [
+  [px('paw'), '<b>Теперь питомцев два!</b> Вы просили — сделал. В окне «Питомцы» сверху две карточки: <b>«Рядом со мной»</b> — этот сидит с тобой в шахте и болеет за тебя, <b>«Копает»</b> — этот копает находки на своей земле. Нажми на карточку и выбери любого своего питомца. Бесплатно для всех.'],
+  [px('bed'), '<b>Копатель спит у себя.</b> Кончились силы — жми «Уложить спать», через 2 часа он снова бодрый. Есть хочет только тот, кто копает. Шапка и имя у каждого питомца свои. Питомец один — решай сам, где он нужнее.'],
+  [px('heart'), '<b>Новый питомец — Морская свинка</b>, трёхцветная, 30 000 монет. Есть и в кейсах.'],
+  [px('sakura'), '<b>Новая тема шахты — «Сакура»</b>, 60 000 монет: розовые деревья, летят лепестки, лепестки и на полу шахты.'],
+  [px('sun'), '<b>Небо над шахтой ожило.</b> В «Классике» плывут облака, летают птицы, а вдали — холмы и деревья из блоков, как в Майнкрафте.'],
+  [px('candy'), '<b>У «Конфетной» появился свой пейзаж:</b> холмы-торты с глазурью и леденцы на палочках.'],
 ] };
 const newsPending = () => !!(NEWS.id && NEWS.items.length && meta.news !== NEWS.id);
 function showNews() {

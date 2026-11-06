@@ -1,5 +1,5 @@
 // Офлайн-режим Кирки. Создан make-iphone.py — руками не править.
-const CACHE = 'kirka-5d345d3955';
+const CACHE = 'kirka-97d7acd76e';
 const FILES = ['./', './index.html', './manifest.webmanifest', './apple-touch-icon.png', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './favicon.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES.map(f => new Request(f, { cache: 'reload' })))).then(() => self.skipWaiting()));
