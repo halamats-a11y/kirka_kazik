@@ -365,6 +365,16 @@
   .tbtn{font-size:12px;padding:5px 9px}.tbtn.buy{background:linear-gradient(#ffcf3a,#c98a00);color:#2a1a00}
   .tchk{font-size:11px;padding:3px 8px;border-radius:6px;background:#fff;color:#000;font-weight:800}.tlock{font-size:16px;opacity:.6}
   .trail.on{background:linear-gradient(90deg,#2a2240,transparent)}
+  .collgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+  .acard{background:#20202a;border:3px solid var(--ac);border-radius:10px;padding:8px 4px;text-align:center;position:relative;min-width:0}
+  .acard .ai{display:block;width:56px;height:56px;margin:2px auto 4px}
+  .acard.lock{border-color:#34343f;background:#191920} .acard.lock .ai{filter:brightness(0) opacity(.4)}
+  .acard b{display:block;font-size:12px;line-height:1.2} .acard .ar{display:block;font-size:10px;color:var(--ac);font-weight:800;margin-top:2px}
+  .acard .ac{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.25} .acard .cnew{position:absolute;top:-9px;right:-4px}
+  .artfly{position:fixed;z-index:96;width:48px;height:48px;left:0;top:0;pointer-events:none;filter:drop-shadow(0 0 10px var(--ac)) drop-shadow(2px 2px 0 #000);transition:transform .75s cubic-bezier(.55,-.25,.7,1),opacity .3s}
+  .controls .quick{grid-template-columns:repeat(4,1fr) .8fr} #betPay .px{width:1.25em;height:1.25em;vertical-align:-.26em}
+  .promorow{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:8px}
+  .promorow input{min-width:0;background:#111117;border:2px solid var(--line);color:var(--text);font:inherit;font-size:14px;border-radius:8px;padding:8px;text-transform:uppercase;letter-spacing:1px}
   .savebox{width:100%;min-height:70px;margin-top:8px;background:#111117;border:2px solid var(--line);color:var(--text);font:inherit;font-size:11px;border-radius:8px;padding:6px;word-break:break-all}
   .introcard{text-align:center;padding:20px 16px}
   .introcard .iemo{font-size:54px;margin:4px 0 8px}
@@ -591,7 +601,7 @@
   .cfeed .btn{font-size:12px;padding:7px 3px}
   .cchk{display:flex;align-items:center;gap:6px;margin-top:6px}
   .pscene{position:relative;flex:none}
-  .pscene canvas{display:block;width:100%;aspect-ratio:96/54;image-rendering:pixelated;border:2px solid #000;border-radius:10px;background:#78a7ff}
+  .pscene canvas{display:block;width:100%;aspect-ratio:128/72;image-rendering:pixelated;border:2px solid #000;border-radius:10px;background:#78a7ff}
   .psell{position:absolute;transform:translate(-50%,-100%);padding:5px 9px;font-size:12.5px;font-weight:900;border-radius:10px;background:#ffd23f;color:#2a1a00;border:2px solid #000;box-shadow:0 3px 0 #000a;white-space:nowrap;display:none;animation:psellB 1.6s ease-in-out infinite}
   .psell::after{content:'';position:absolute;left:50%;bottom:-8px;margin-left:-6px;border:6px solid transparent;border-top-color:#000}
   .psell.show{display:block}
@@ -745,6 +755,7 @@
       <button class="btn" data-q="double">×2</button>
       <button class="btn" data-q="10">10</button>
       <button class="btn" data-q="max">MAX</button>
+      <button class="btn" id="betPay" title="Таблица выплат" aria-label="Таблица выплат"><i class="px px-pay"></i></button>
     </div>
     </div>
     <div class="actions">
@@ -770,7 +781,7 @@
     <button class="btn" id="mCos"><span class="i"><i class="px px-palette"></i></span>Косметика<small id="mCosSub"></small></button>
     <button class="btn" id="mRuns" style="display:none"><span class="i"><i class="px px-flag"></i></span>Забеги<small id="mRunsSub"></small></button>
     <button class="btn" id="mMode" style="display:none"><span class="i"><i class="px px-gear"></i></span>Режим<small id="mModeSub"></small></button>
-    <button class="btn" id="mPay"><span class="i"><i class="px px-pay"></i></span>Выплаты<small id="mPaySub">по блокам</small></button>
+    <button class="btn" id="mColl"><span class="i"><i class="px px-art-compass"></i></span>Коллекция<small id="mCollSub"></small></button>
     <button class="btn" id="mProf"><span class="i"><i class="px px-head"></i></span>Профиль<small id="mProfSub"></small></button>
   </div>
 </div>
@@ -821,6 +832,16 @@
     </div>
     <div class="note" id="freeNote" style="margin-top:4px"></div>
     <button class="opt" id="mPayIn" style="margin-top:12px"><div class="h">📋 Таблица выплат</div><ul><li>Сколько платит каждый блок при твоей ставке</li></ul></button>
+  </div>
+  <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
+</div></div>
+
+<!-- ===== Окно «Коллекция» (артефакты) ===== -->
+<div class="sheet" id="sh-coll"><div class="sh-in">
+  <div class="sh-head"><h1><i class="px px-art-compass"></i> Коллекция</h1><button class="btn sh-x" data-close title="Закрыть">✕</button></div>
+  <div class="sh-body">
+    <div class="card" id="collTop"></div>
+    <div class="collgrid" id="collGrid"></div>
   </div>
   <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
 </div></div>
@@ -897,6 +918,9 @@
     <div class="card"><div class="label">💾 Сохранение</div><div class="note" style="margin-top:4px">Перенеси прогресс на другое устройство или спрячь копию в заметки.</div>
       <div class="mrow" style="margin-top:8px"><button class="btn" id="pExport">📤 Код сохранения</button><button class="btn" id="pImport">📥 Загрузить</button></div>
       <textarea class="savebox" id="pSaveTxt" style="display:none" spellcheck="false"></textarea><div class="note" id="pSaveMsg"></div></div>
+    <div class="card"><div class="label">🎁 Промокод</div><div class="note" style="margin-top:4px">Промокоды публикуются в Телеграм-канале @igra_za_0. Каждый код можно ввести один раз.</div>
+      <div class="promorow"><input id="pPromo" maxlength="32" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Введи код" aria-label="Промокод"><button class="btn" id="pPromoGo">Ввести</button></div>
+      <div class="note" id="pPromoMsg"></div></div>
     <div class="card" id="pNewsCard" style="display:none"><div class="label">📰 Новости</div><div class="note" style="margin-top:4px">Что поменялось в последнем обновлении.</div><button class="btn" id="pNews" style="width:100%;margin-top:8px;padding:10px">📰 Что нового</button></div>
   </div>
   <div class="sh-foot"><button class="btn" data-close>▼ Свернуть</button></div>
@@ -907,7 +931,7 @@
   <div class="sh-head"><h1><i class="px px-paw"></i> <span id="ptTitle">Питомцы</span></h1><button class="btn sh-x" data-close title="Закрыть">✕</button></div>
   <div class="sh-body">
     <div class="pslots"><button class="pslot" data-slot="comp"><canvas id="ptS1" width="24" height="24"></canvas><span><small>Рядом со мной</small><b id="ptS1n"></b></span></button><button class="pslot" data-slot="dig"><canvas id="ptS2" width="24" height="24"></canvas><span><small>Копает</small><b id="ptS2n"></b></span></button></div>
-    <div class="pscene"><canvas id="ptCv" width="96" height="54"></canvas><button class="psell" id="ptSell"><i class="px px-coin"></i> Продать</button><div class="pgain" id="ptGain"></div><div class="paway" id="ptAway"></div></div>
+    <div class="pscene"><canvas id="ptCv" width="128" height="72"></canvas><button class="psell" id="ptSell"><i class="px px-coin"></i> Продать</button><div class="pgain" id="ptGain"></div><div class="paway" id="ptAway"></div></div>
     <div class="card">
       <div class="pstat" id="ptStat"></div>
       <div class="pbars"><div><span><i class="px px-apple"></i> Силы</span><b id="ptEnT"></b><div class="bar sm"><i id="ptEnB"></i></div></div><div><span><i class="px px-meat"></i> Сытость</span><b id="ptSatT"></b><div class="bar sm"><i id="ptSatB"></i></div></div></div>
@@ -1064,6 +1088,10 @@ const PORTAL_W = 0.025;   // вес портала при генерации о�
 const CRACK_POW = 1, CRACK_BASE = 0, CRACK_WORN = 0.15, CRACK_MIN = 10, CRACK_MAX = 30, FAIR_VALUE_MUL = 1; // 3.3: было 0.08
 // 3.3: ниже CRACK_LOW_HP прочности шанс трещины выше на CRACK_LOW — жадничать «до нуля» больше не выгоднее, чем забрать у черты 30
 const CRACK_LOW_HP = 30, CRACK_LOW = 0.10;
+// v63: богатый верх шахты — блок в ряду r платит ×(1 + TOP_RICH·(1 − r/TOP_ROWS)), только в основной шахте
+const TOP_RICH = 0.18, TOP_ROWS = 10;
+// v63: когда кирка уже незеритовая, каждая следующая наковальня за раунд попадается в MAXED_SLOW раз реже (нет бесконечной петли)
+const MAXED_SLOW = 0.5;
 const UPGRADE_HEAL = 25;  // наковальня: сразу +25 прочности (максимум растёт до прочности нового тира)
 const REPAIR_HEAL = 50;   // верстак: +50 прочности (не выше максимума)
 // ===== РЕЖИМЫ ВОЛАТИЛЬНОСТИ =====
@@ -1112,7 +1140,7 @@ function pickWeighted(list) {
 // «Удача новичка» (скрытая): первые раунды нового игрока щедрее — кирка изнашивается медленнее (часть ударов
 // бесплатна), реже трещины, чаще сундуки. beg = 1 → полная удача, 0 → обычная игра. Сила — здесь, затухание — в begLuck().
 const BEG = { wear: 0.35, crack: 0.65, chest: 1 };
-function genType(r, c, cfg, beg = 0) {
+function genType(r, c, cfg, beg = 0, maxN = 0) {
   if (c === 0 || c === COLS - 1) return 'bedrock';
   if (r === 0) return 'grass';
   const d = r, w = [];
@@ -1134,7 +1162,7 @@ function genType(r, c, cfg, beg = 0) {
   add('magma', d >= 9 ? 1.8 : 0);
   add('tnt', d >= 2 ? 2.8 : 0);
   add('crafting', d >= 3 ? 0.9 : 0);
-  add('anvil', d >= 3 ? 2.3 : 0);
+  add('anvil', d >= 3 ? 2.3 * Math.pow(MAXED_SLOW, maxN) : 0);
   add('chest', d >= 4 ? 0.6 : 0);
   add('enchant', d >= 3 ? 1.9 : 0);
   add('portal', d >= 6 ? PORTAL_W : 0);
@@ -1175,7 +1203,7 @@ class Game {
   reset(bet, mode, fair, bonus) {
     if (mode) this.cfg = MODES[mode];
     this.fair = !!fair; this.bonus = !!bonus; this.portal = false; this.lastMult = 1; this.maxed = false;
-    this.bet = bet; this.win = 0; this.rows = []; this.tier = this.bonus ? HELL.startTier : 0;
+    this.nMax = 0; this.bet = bet; this.win = 0; this.rows = []; this.tier = this.bonus ? HELL.startTier : 0;
     this.maxHp = this.tierHp(this.tier); this.hp = this.maxHp; this.luck = 0;
     this.p = { x: CELL * COLS / 2 + rand(-40, 40), y: -150, vx: rand(-80, 80), vy: 0, a: rand(0, 6.28), av: rand(-6, 6) };
     this.time = 0; this.lastHit = -1; this.stall = 0; this.fuses = []; this.depth = 0; this.blocks = 0; this.over = false;
@@ -1188,7 +1216,7 @@ class Game {
     while (this.rows.length <= r) {
       const rr = this.rows.length, arr = [];
       for (let c = 0; c < COLS; c++) {
-        const t = this.bonus ? genHell(rr, c, this.cfg) : (this.devPortal && rr === 7 && c > 0 && c < COLS - 1) ? 'portal' : genType(rr, c, this.cfg, this.beg), b = BLOCKS[t];
+        const t = this.bonus ? genHell(rr, c, this.cfg) : (this.devPortal && rr === 7 && c > 0 && c < COLS - 1) ? 'portal' : genType(rr, c, this.cfg, this.beg, this.nMax || 0), b = BLOCKS[t];
         arr.push({ t, hp: b.hp || 0, max: b.hp || 0, rev: (rr === 0 || c === 0 || c === COLS - 1) ? 1 : 0, revT: -9, lit: -1, hitT: -9 });
       }
       this.rows.push(arr);
@@ -1337,7 +1365,7 @@ class Game {
     let mult = this.hellMult(), lucky = false;
     const v = this.val(t);
     if (this.luck > 0 && (v || B.special === 'chest')) { mult *= this.cfg.luckMult; this.luck--; lucky = true; }
-    if (v) { const coins = v * this.bet * mult; if (!this.addWin(coins)) return; this.emit('coins', { r, c, coins, t, lucky }); }
+    if (v) { const coins = v * this.bet * mult * (this.bonus ? 1 : 1 + TOP_RICH * Math.max(0, 1 - r / TOP_ROWS)); if (!this.addWin(coins)) return; this.emit('coins', { r, c, coins, t, lucky }); }
     this.emit('break', { r, c, t, src });
     const x = (c + .5) * CELL, y = (r + .5) * CELL;
     switch (B.special) {
@@ -1352,6 +1380,7 @@ class Game {
           this.hp = Math.min(this.maxHp, this.hp + UPGRADE_HEAL);
           this.emit('special', { kind: 'upgrade', x, y, tier: this.tier });
         } else {
+          this.nMax++;
           this.hp = this.maxHp; const coins = this.bet * this.cfg.maxedBonus * this.hellMult(); if (!this.addWin(coins)) return;
           this.emit('special', { kind: 'maxed', x, y, coins });
         }
@@ -1833,9 +1862,10 @@ function renderHelp() {
       ${row('🏦', `<b>Банк</b>: положи монеты — +${BANK_RATE * 100}% в день (проценты идут с первых ${fmtShort(BANK_CAP)}). В шахте их не потеряешь.`)}
       ${row('🏘', `<b>Деревня</b>: строй здания — они копят монеты, а ты собираешь урожай вручную. Способ заработать, даже когда на балансе пусто.`)}
       ${row('🏅', `<b>Достижения</b> — в Профиле.`)}
-      ${row('🐾', `<b>Питомец</b> (своя кнопка): копает на своей земле находки в рюкзак — даже когда игра закрыта. Продавай их за монеты, качай лопатку, нюх, рюкзак и выносливость. Питомцев два: один сидит рядом с тобой в шахте и болеет за тебя, другой копает (выбираешь в окне 🐾). Силы кончились — уложи копателя спать. Голодный копает медленнее.`)}
+      ${row('🐾', `<b>Питомец</b> (своя кнопка): копает на своей земле находки в рюкзак — даже когда игра закрыта. Продавай их за монеты, качай кирку, нюх, рюкзак и выносливость. Питомцев два: один сидит рядом с тобой в шахте и болеет за тебя, другой копает (выбираешь в окне 🐾). Силы кончились — уложи копателя спать. Голодный копает медленнее.`)}
       ${row('🎨', `<b>Косметика</b>: скины кирки (цвет железа всегда по уровню), следы, эффекты поломки и забора, темы шахты, кейсы. Скины кирки — 5 редкостей: обычная, редкая, эпическая, легендарная, роскошная. Только для красоты.`)}
-      ${row('📋', `<b>Таблица выплат</b> — кнопка 📋 Выплаты в меню (и в окне ⚙ Режим).`)}`),
+      ${row('🗿', `<b>Коллекция</b> (кнопка в меню): в обычном камне шахты прячутся 12 артефактов, каждый попадается один раз. Собери все — награда ${fmt(ART_PRIZE)}.`)}
+      ${row('📋', `<b>Таблица выплат</b> — маленькая кнопка 📋 рядом со ставкой.`)}`),
   ].join('') + `<button class="btn" id="hTut" style="width:100%;padding:12px;flex:none">🎓 Обучения с подсветкой (с наградой)</button>`;
   $('helpBody').querySelectorAll('details').forEach(d => d.ontoggle = () => { helpOpen[d.dataset.h] = d.open; });
   $('hPay').onclick = e => { e.currentTarget.blur(); openSheet('pay'); };
@@ -1903,7 +1933,7 @@ function updatePanel() {
   }
   setProp($('runStart'), 'runStartDis', 'disabled', playing);
   // нижнее меню (во время раунда заблокировано)
-  for (const id of ['mVil', 'mBank', 'mPet', 'mPay', 'mRuns', 'mProf', 'mMode', 'mCos']) setProp($(id), id + 'Dis', 'disabled', playing);
+  for (const id of ['mVil', 'mBank', 'mPet', 'mColl', 'betPay', 'mRuns', 'mProf', 'mMode', 'mCos']) setProp($(id), id + 'Dis', 'disabled', playing);
   if (!vilBadge) vilUi();
   setText('mBankSub', isMain() ? fmtShort(meta.bank.amt) + ' · +1%' : '🔒 ' + (ra ? 'забег' : 'чит'));
   setProp($('mRuns'), 'mRunsCls', 'className', 'btn' + (run ? ' hot' : ''));
@@ -1979,7 +2009,7 @@ function showLearnHint(txt) {
 }
 // версия разработчика: make-apk.sh dev ставит true (отдельный APK «Кирка DEV»). На сайте и в обычном APK — false, режима нет совсем.
 const DEV_BUILD = false;
-const BUILD = '2026-11-06 · 3.3: экономика, ранги до Бессмертного, Кролик, роскошная косметика, деревня Джунгли · v50: Лягушка, Панда, Динозаврик, новые задания и достижения · v51: новый стол зачарований · v52: без градиента в углу · v53: два питомца, морская свинка, тема «Сакура», живое небо, новый обсидиан · v54: даль из блоков в Классике, Сакуре и Конфетной · v55: новости 3.5 · v55: цены питомцев разные, пометка «НОВОЕ» на новинках · v58: капибара, Эндрик, осьминог, цвета у легендарных, редкости и цены питомцев, кейс с питомцами, 6 шапок, 4 кирки, лягушка — шапки сидят на голове · v59: новости 3.6';
+const BUILD = '2026-11-06 · 3.3: экономика, ранги до Бессмертного, Кролик, роскошная косметика, деревня Джунгли · v50: Лягушка, Панда, Динозаврик, новые задания и достижения · v51: новый стол зачарований · v52: без градиента в углу · v53: два питомца, морская свинка, тема «Сакура», живое небо, новый обсидиан · v54: даль из блоков в Классике, Сакуре и Конфетной · v55: новости 3.5 · v55: цены питомцев разные, пометка «НОВОЕ» на новинках · v58: капибара, Эндрик, осьминог, цвета у легендарных, редкости и цены питомцев, кейс с питомцами, 6 шапок, 4 кирки, лягушка — шапки сидят на голове · v59: новости 3.6 · v60: новая шахта питомца — тоннель в разрезе, руда трескается в забое, копатель копает киркой (прокачка «Кирка») · v62: новые находки 16×16, находка лежит на полу перед рюкзаком · v63: баланс — богатый верх шахты, без бесконечного разгона незеритовой кирки · v64: защита — подписанный код сохранения KIRKA3, проверка монет при загрузке кода, игра в APK зашифрована · v65: окно промокодов (коды добавляются с обновлением, каждый один раз) · v66: артефакты и «Коллекция», таблица выплат — кнопкой у ставки, 21 промокод, новости 3.7';
 // Удача новичка: первые 10 обычных раундов — полная, к 25-му плавно сходит на нет. Игроку об этом не сообщается.
 // Пока она действует, после 2+ сгоревших подряд следующий раунд ещё удачливее (×1.5) — чтобы не было обидных серий.
 let begLoss = 0;
@@ -1993,10 +2023,11 @@ function play() {
   parts.length = 0; floats.length = 0; trail.length = 0;
   $('overlay').classList.remove('show');
   if (DEV_BUILD) devSeedRound();
-  game.start(bet, mode, fair, begLuck()); phase = 'play';
+  game.start(bet, mode, fair, begLuck()); phase = 'play'; artPend = artRoll();
   updatePanel();
 }
 function endBonus(win, maxed) {
+  artPend = 0;
   if (tut && tut.round) return tutRoundEnd(win, false);
   phase = 'done';
   if (DEV_BUILD) devRoundEnd(win, false, true);
@@ -2021,7 +2052,7 @@ function enterPortal(win) {
   balance += win;
   history.unshift({ w: 1, m: win / game.bet, d: game.depth });
   runAfterRound(win, game.bet, 0);
-  metaRound(win, game.bet, false, game.depth);
+  metaRound(win, game.bet, false, game.depth); artAfter();
   save(); renderHistory();
   overlay('ПОРТАЛ!', win > 0 ? `+${fmt(win)}${COIN}` : '🔥', win > 0 ? 'Выигрыш сохранён. Открываем портал в ад…' : 'Открываем портал в ад…', '#d29bff');
   SFX.portal(); vibe([80, 40, 80]);
@@ -2161,10 +2192,11 @@ function openSheet(id) {
   if (id === 'learn') renderLearn();
   sheetId = id; const el = $('sh-' + id); el.querySelector('.sh-body').scrollTop = 0; el.classList.add('show');
   if (id === 'vil') openVil();
-  if (id === 'prof') { $('pSaveMsg').textContent = ''; renderProfile(); }
+  if (id === 'prof') { $('pSaveMsg').textContent = ''; $('pPromoMsg').textContent = ''; renderProfile(); }
   if (id === 'cos') { meta.cos.seen = 1; newMark('cos'); saveMeta(); cosRender(); }
   if (id === 'pet') { newMark('pet'); cosPv.kind = null; cosPv.hat = null; ptSlot = meta.dig.pk || meta.cos.pet.off ? 'dig' : 'comp'; digTick(true); petRender(); petLoopGo(); }
   if (id === 'gift') renderGifts();
+  if (id === 'coll') { renderColl(); meta.art.nw = 0; meta.art.fresh = []; saveMeta(); artPanel(); }
   if (id === 'bank') { bankAccrue(); if (meta.bank.pend >= 1) gtoast(`📈 Проценты банка: +${fmt(meta.bank.pend)}${COIN}`, '#7fd0ff'); meta.bank.pend = 0; saveMeta(); $('bkErr').textContent = ''; renderBank(); }
   try { if (!(window.history.state && window.history.state.sheet)) window.history.pushState({ sheet: id }, ''); } catch (e) { }
 }
@@ -2325,6 +2357,7 @@ function endRound(win, broke) {
   }
   runAfterRound(broke ? 0 : win, game.bet, 0);
   metaRound(broke ? 0 : win, game.bet, !!broke, game.depth);
+  artAfter();
   save(); renderHistory(); updatePanel();
   runCheckBust();
 }
@@ -2348,7 +2381,9 @@ function handleEvents() {
         if (e.crack) { floatText(game.p.x, game.p.y - 24, `ТРЕЩИНА −${e.cost}`, '#ff3b3b', 17); toast(`💔 Трещина! −${e.cost} прочности`, '#ff6b6b'); SFX.crack(); shake = Math.max(shake, 9); vibe(90); }
         else if (e.cost >= 8) floatText(game.p.x, game.p.y - 20, `−${e.cost}`, '#ff6b6b', 13, 'heart');
         break; }
-      case 'break': { const [x, y] = cc(e.r, e.c); spawnParts(x, y, TEX.pal[e.t], e.src === 'tnt' ? 6 : 12, 230, 6); if (e.src !== 'tnt') SFX.brk(); break; }
+      case 'break': { const [x, y] = cc(e.r, e.c); spawnParts(x, y, TEX.pal[e.t], e.src === 'tnt' ? 6 : 12, 230, 6); if (e.src !== 'tnt') SFX.brk();
+        if (artPend && !tutR && !game.bonus && e.src === 'pick' && (e.t === 'stone' || e.t === 'deepslate') && Math.random() < ART_STONE) artFind(x, y);
+        break; }
       case 'coins': { const [x, y] = cc(e.r, e.c); const big = game.val(e.t) >= 1;
         floatText(x, y, '+' + fmt(e.coins), e.lucky ? '#d29bff' : (big ? '#7ff7ff' : '#ffd23f'), big ? 20 : 14, true); coinSfx = Math.max(coinSfx, game.val(e.t) * (e.lucky ? 2 : 1) + .001);
         if (big) { toast(`${BLOCKS[e.t].name}! +${fmt(e.coins)}${COIN}`, (e.t === 'emerald' || e.t === 'hemerald') ? '#3ddc63' : (e.t === 'hgold' || e.t === 'hredstone') ? '#ffb02a' : '#7ff7ff'); spawnParts(x, y, ['#fff', '#ffd23f', '#7ff7ff'], 20, 300, 4); } // без тряски: трясёт только трещина и динамит
@@ -2878,6 +2913,7 @@ const ACH = [
   { id: 'rk7', i: '🐉', n: 'Легенда', d: 'Получить ранг «Легенда»', v: () => meta.peak, g: RANKS[7].w, r: 1e6 },
   { id: 'rk8', i: '🤴', n: 'Император', d: 'Получить ранг «Император»', v: () => meta.peak, g: RANKS[8].w, r: 5e6 },
   { id: 'rk11', i: '🌟', n: 'Бессмертный', d: 'Получить ранг «Бессмертный»', v: () => meta.peak, g: RANKS[11].w, r: 500e6 },
+  { id: 'art12', i: '🗿', n: 'Археолог', d: 'Собрать все 12 артефактов', v: () => artN(), g: 12, r: 500000 }, // v66: награда за всю коллекцию
   { id: 'pet1', i: '🐾', n: 'Первый друг', d: 'Купить первого питомца', v: () => achPets(), g: 1, r: 1000 },
   { id: 'zoo', i: '🐾', n: 'Зоопарк', d: 'Собрать всех питомцев', v: () => achPets() >= Object.keys(PETS).filter(k => !PETS[k].free).length ? 1 : 0, g: 1, r: 50000 },
   { id: 'hats10', i: '🎓', n: 'Модник', d: 'Купить 10 шапок', v: () => Object.keys(HATS).filter(k => !HATS[k].free && cosOwn('hat', k)).length, g: 10, r: 10000 },
@@ -2988,10 +3024,178 @@ function renderProfile() {
     return `<div class="ach${done ? ' done' : ''}"><div class="ai">${a.i}</div><div class="at"><b>${a.n}</b><span>${a.d}</span>${done ? '' : `<div class="bar sm"><i style="width:${pct.toFixed(1)}%"></i></div>`}</div><div class="ar">${done ? '✓' : rew}</div></div>`;
   }).join('');
 }
+// v64: код сохранения с подписью — «KIRKA3:<данные>.<подпись>». Изменённый руками или старый KIRKA2 игра не принимает.
+function saveSig(t) {
+  const k = [107, 105, 114, 107, 97, 45, 122, 97, 45, 48, 45, 115].map(c => String.fromCharCode(c)).join('');
+  const u = k + '|' + t + '|' + k.split('').reverse().join('');
+  let h1 = 0x9e3779b1 ^ t.length, h2 = 0x85ebca6b ^ k.length;
+  for (let i = 0; i < u.length; i++) { const c = u.charCodeAt(i); h1 = Math.imul(h1 ^ c, 2654435761); h2 = Math.imul(h2 ^ c, 1597334677); }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (h2 >>> 0).toString(16).padStart(8, '0') + (h1 >>> 0).toString(16).padStart(8, '0');
+}
+function readSaveCode(code) {
+  code = String(code || '').trim().replace(/\s+/g, '');
+  let v = 0, b = '', sig = true;
+  if (code.startsWith('KIRKA3:')) { const i = code.lastIndexOf('.'); b = i > 7 ? code.slice(7, i) : code.slice(7); sig = i > 7 && saveSig(b) === code.slice(i + 1); v = 3; }
+  else if (code.startsWith('KIRKA2:')) { b = code.slice(7); v = 2; sig = false; }
+  else return { err: 'fmt' };
+  let o; try { o = JSON.parse(decodeURIComponent(escape(atob(b)))); } catch (e) { return { err: 'bad', v }; }
+  if (!o || typeof o !== 'object' || !('pk_meta' in o || 'pk_balance' in o)) return { err: 'notkirka', v };
+  return { o, v, sig };
+}
+// v64: промокоды. Коды вшиты в игру только отпечатками (сам код из файла не прочитать); каждый — один раз на игрока, бессрочно.
+// Отпечаток кода: node tools/promo-hash.js КОД. Формат: { h: 'отпечаток', c: монеты, it: 'hat:id' (вещь, необязательно) }
+const PROMO = [ // 08.11: 20 кодов по 50 000 и 1 код на 5 000 000 (для первого игрока). Сами коды — у автора, в игре только отпечатки
+  { h: '01b6a5ccf26c769e', c: 50000 },
+  { h: 'ea07f866c442fd4f', c: 50000 },
+  { h: '57bc39995baf7630', c: 50000 },
+  { h: '2b17b113c26645fd', c: 50000 },
+  { h: 'a61a094fb56e8c77', c: 50000 },
+  { h: '9e594c9d83afd2d6', c: 50000 },
+  { h: 'd860b79277306701', c: 50000 },
+  { h: '45f7cd59c01f1d00', c: 50000 },
+  { h: '95ab23c3d4c6dc5d', c: 50000 },
+  { h: 'df66b3ffdb2c37d7', c: 50000 },
+  { h: '33c160fcb190475d', c: 50000 },
+  { h: 'ae7a08ae05d64de5', c: 50000 },
+  { h: '968fd190ad817248', c: 50000 },
+  { h: '64c667f04d10666e', c: 50000 },
+  { h: '81c1fc8912015968', c: 50000 },
+  { h: '61cfbe35e3b64f34', c: 50000 },
+  { h: '6efbaf9404a63809', c: 50000 },
+  { h: '426086cab4af00eb', c: 50000 },
+  { h: '8ffa69fe55d86f97', c: 50000 },
+  { h: 'e08e7f240cb56f28', c: 50000 },
+  { h: '030deee2b3d595d7', c: 5000000 },
+];
+const promoNorm = t => String(t || '').toUpperCase().replace(/Ё/g, 'Е').replace(/[\s\-_.]+/g, '');
+const promoHash = t => saveSig('promo|' + promoNorm(t));
+function usePromo() {
+  const box = $('pPromo'), msg = $('pPromoMsg'), code = promoNorm(box.value);
+  if (!code) { msg.textContent = 'Введи промокод в поле.'; box.focus(); return; }
+  const h = promoHash(code), P = PROMO.find(x => x.h === h);
+  if (!Array.isArray(meta.promo)) meta.promo = [];
+  if (!P) { msg.textContent = '✕ Такого промокода нет. Проверь, правильно ли написал.'; return; }
+  if (meta.promo.includes(h)) { msg.textContent = '✕ Этот промокод ты уже вводил.'; return; }
+  meta.promo.push(h); const got = [];
+  if (P.c) { addMain(P.c); meta.promoSum = (meta.promoSum || 0) + P.c; got.push(`+${fmt(P.c)}${COIN}`); }
+  if (P.it) { const [c, id] = P.it.split(':'), it = COS[c] && COS[c][id]; if (it && !meta.cos.own.includes(P.it)) meta.cos.own.push(P.it); if (it) got.push(`«${it.n}»`); }
+  saveMeta(); box.value = '';
+  msg.innerHTML = '✓ Промокод принят' + (got.length ? ': ' + got.join(' и ') : '');
+  gtoast(`🎁 Промокод: ${got.join(' и ') || 'принят'}`, '#ffd23f', true); sfxAch(); updatePanel(); checkAch();
+}
+var ARTS = [ // var, а не const: достижение «Археолог» может спросить про артефакты раньше этой строки
+  { id: "coin", n: "Старая монета", r: "c", cap: "На неё ничего не купишь. Но красиво.",
+    m: ["................", "................", ".....bbbbbb.....", "....bccccccb....", "...bcchhccccd...", "..bcchbbbbccbd..", "..bchbccccbcbd..", "..bcbcchccbcbd..", "..bcbccccsbcbd..", "..bcbcccssbcbd..", "..bccbbbbbbcbd..", "...bccccccccd...", "....dbbbbbbd....", ".....dddddd.....", "................", "................"],
+    p: {"d": "#8a5a12", "b": "#d49a2a", "c": "#f0c050", "h": "#fff0a0", "s": "#6e7a3a"} },
+  { id: "shell", n: "Окаменелая ракушка", r: "c", cap: "Когда-то тут было море. Теперь шахта.",
+    m: ["................", "................", ".....bbbbbb.....", "...bbccccccbb...", "..bccbbbbbbccb..", "..bcbccccccbcbd.", ".bcbcbbbbbcbcbd.", ".bcbcbchhbcbcbd.", ".bcbcbcbbbcbcbd.", ".bcbcbccccbcbbd.", ".bcbcbbbbbbcbd..", "..bcbccccccbbd..", "..dbcbbbbbbbd...", "...ddbbbbbddd...", ".....ddddd......", "................"],
+    p: {"d": "#6b5a48", "b": "#a89276", "c": "#cdb898", "h": "#ede0c6"} },
+  { id: "arrow", n: "Наконечник стрелы", r: "c", cap: "Кто-то очень давно промахнулся.",
+    m: ["................", ".......hc.......", "......hccb......", "......hcbb......", ".....hccbbd.....", ".....hcbbbd.....", "....hccbcbbd....", "....hcbbbbbd....", "...hccbcbbbbd...", "...hcbbbbcbbd...", "..hccbbbbbbbbd..", "..cbbbbbbbbbdd..", "...dd.bbbb.dd...", "......wwvv......", "......wwvv......", "................"],
+    p: {"d": "#2a2c34", "b": "#4a4e5c", "c": "#6e7486", "h": "#a8b0c4", "w": "#8a5a2a", "v": "#5a3a1a"} },
+  { id: "shard", n: "Осколок горшка", r: "c", cap: "Горшок разбился задолго до тебя.",
+    m: ["................", "................", "...bbb..........", "...bcccbb.......", "...bchhccbbb....", "...bcccccccbb...", "...pppppppppbd..", "...bcpccpccpbd..", "...pppppppppbd..", "....bccccccbbd..", "....bcccccbbd...", ".....bcccbbd....", ".....bccbdd.....", "......bbdd......", "......dd........", "................"],
+    p: {"d": "#6e2e14", "b": "#b4542a", "c": "#d87a44", "h": "#f0a46a", "p": "#2a1a10"} },
+  { id: "key", n: "Ржавый ключ", r: "c", cap: "От какой двери — никто не знает.",
+    m: ["................", "................", "................", "................", "..bbbb..........", ".bcccdb.........", "bch..cdb........", "bc....cbbbbbbbbb", "bc....cbcrccrccd", "bcd..ccbdddddddd", ".bccccbd...bd.bd", "..bbbbd....bd.bd", "...ddd.....dd.dd", "................", "................", "................"],
+    p: {"d": "#4a2a14", "b": "#8a4a22", "c": "#b8723a", "h": "#d8a060", "r": "#6e3a1a"} },
+  { id: "compass", n: "Компас", r: "r", cap: "Показывает на север. Или на алмазы?",
+    m: ["................", ".......bb.......", "......bccb......", ".....bbbbbb.....", "....bccccccb....", "...bcggggggcd...", "..bcgggnggggcd..", "..bcggnnggggcd..", "..bcgggkwgggcd..", "..bcggggwwggcd..", "..bcgggggwggcd..", "...bcggggggcd...", "....bccccccd....", ".....dddddd.....", "................", "................"],
+    p: {"d": "#6a4a14", "b": "#b88a2a", "c": "#e0b84a", "h": "#fff0a0", "g": "#cfe6f0", "n": "#d82020", "w": "#f4f4f4", "k": "#20202a"} },
+  { id: "watch", n: "Карманные часы", r: "r", cap: "Остановились ровно в три часа ночи.",
+    m: ["................", ".......cc.......", "......c..c......", ".......bb.......", ".....bbccbb.....", "....bcffffcb....", "...bcfffkffcd...", "...bcfffkffcd...", "...bcfffkkkcd...", "...bcffffffcd...", "...bcffffffcd...", "....bcffffcd....", ".....dddddd.....", "................", "................", "................"],
+    p: {"d": "#8a5a12", "b": "#d49a2a", "c": "#f0c050", "h": "#fff0a0", "f": "#f4efe0", "k": "#20202a"} },
+  { id: "bone", n: "Кость динозавра", r: "r", cap: "Динозавр, наверное, был не против.",
+    m: ["................", "................", "................", "................", "..bb........bb..", ".bccb......bccb.", ".bchcbbbbbbbccbd", "..bchccccccccbd.", "..bcccccccccbbd.", ".bccbddddddbccbd", ".bcbd......dbcbd", "..dd........dd..", "................", "................", "................", "................"],
+    p: {"d": "#8a7a5a", "b": "#d8ccae", "c": "#efe6cf", "h": "#ffffff"} },
+  { id: "helmet", n: "Каска шахтёра", r: "r", cap: "Фонарик до сих пор горит.",
+    m: ["................", "................", "................", "......gggg......", ".....bglllgb....", "....bbglllgbb...", "...bccgggggcbb..", "..bcchccccccbbd.", "..bchccccccccbd.", "..bccccccccccbd.", ".bbbbbbbbbbbbbbd", ".dddddddddddddd.", "................", "................", "................", "................"],
+    p: {"d": "#8a6a0a", "b": "#e0b020", "c": "#f6d24a", "h": "#fff2a0", "l": "#fffbe0", "g": "#6a6a72"} },
+  { id: "geode", n: "Жеода с кристаллами", r: "e", cap: "Снаружи камень, внутри праздник.",
+    m: ["................", "................", "................", "....bbbbbbbb....", "...bccccccccb...", "..bcqpwqpwqpcb..", ".bcpqwqpqwqqpcb.", ".bcqwqpwqpwqqcbd", ".bcpqqwqqpqqpcbd", ".bcqpqqpqqqpqcbd", ".bccpqpqqpqpccbd", "..bccccccccccbd.", "...dbbbbbbbbdd..", "....dddddddd....", "................", "................"],
+    p: {"d": "#3a3a44", "b": "#6a6a76", "c": "#9a9aa6", "p": "#6a2a9a", "q": "#a35ad8", "w": "#e2b8ff"} },
+  { id: "map", n: "Карта сокровищ", r: "e", cap: "Крестик уже раскопан. Тобой.",
+    m: ["................", "................", "..dbbbbbbbbbbd..", "..bccccccccccbd.", "..bcpccccccccbd.", "..bccpccccxcxbd.", "..bccpcccccxcbd.", "..bcccppccxcxbd.", "..bcccccpcccbbd.", "..bccccccpcccbd.", "..bccccccccccbd.", "..bcccccccccbbd.", "..dbbbbbbbbbbd..", "................", "................", "................"],
+    p: {"d": "#8a6a3a", "b": "#d8bc84", "c": "#efdcae", "x": "#c81818", "p": "#6a4a2a"} },
+  { id: "firstpick", n: "Кирка первого шахтёра", r: "l", cap: "Ею выкопали самый первый блок.",
+    m: ["................", "................", "....bbbbbbb.....", "..bbcccccccbb...", ".bcbbbbrrbbbcb..", ".cb....rr...bcb.", ".b.....wv....bc.", "......wv......b.", ".....wv.........", "....wv..........", "...wv...........", "..wv............", ".wv.............", "................", "................", "................"],
+    p: {"d": "#3a3a44", "b": "#7a7a86", "c": "#b8b8c4", "w": "#9a6a32", "v": "#5a3a1a", "r": "#d8b878"} }
+];
+// v66: АРТЕФАКТЫ. Прячутся только в обычном камне основной шахты (булыжник, глубинный сланец), видно — только когда кирка
+// разобьёт камень. Не больше одного за раунд, в аду и в обучении нет, шанс не зависит от ставки. Повторов нет: выпадает
+// только ненайденный; собрал все 12 — больше не выпадают. Найденный остаётся, даже если кирка потом сломалась.
+// Выплаты и шансы блоков не меняются — артефакт решается отдельно (Math.random, а не генератор шахты).
+const ART_ROUND = 1 / 36, ART_STONE = 0.7, ART_PRIZE = 500000; // ~1 артефакт за 40 раундов (иногда раунд кончается раньше, чем кирка дойдёт до камня)
+const ART_W = { c: 55, r: 30, e: 12, l: 3 }; // шанс редкости (среди ещё не найденных)
+const ART_RN = { c: 'Обычный', r: 'Редкий', e: 'Эпический', l: 'Легендарный' };
+if (!meta.art || typeof meta.art !== 'object') meta.art = { got: {}, nw: 1, fresh: [] };
+if (!meta.art.got || typeof meta.art.got !== 'object') meta.art.got = {}; if (!Array.isArray(meta.art.fresh)) meta.art.fresh = [];
+let artPend = 0, artShow = null;
+function artN() { if (!ARTS || !meta.art) return 0; return ARTS.filter(a => meta.art.got[a.id]).length; }
+const artCol = a => RAR[a.r].col;
+function artCv(a) {
+  const H = a.m.length, W = a.m[0].length, at = (x, y) => x >= 0 && x < W && y >= 0 && y < H && a.m[y][x] !== '.';
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    let k = a.m[y][x]; if (k === '.') { if (at(x + 1, y) || at(x - 1, y) || at(x, y + 1) || at(x, y - 1)) k = 'o'; else continue; }
+    g.fillStyle = k === 'o' ? (a.p.o || '#14101a') : a.p[k]; g.fillRect(x, y, 1, 1);
+  }
+  return c;
+}
+function artInit() { let css = ''; for (const a of ARTS) css += `.px-art-${a.id}{background-image:url(${artCv(a).toDataURL()})}`; const st = document.createElement('style'); st.textContent = css; document.head.appendChild(st); }
+function artRoll() { if ((tut && tut.round) || artN() >= ARTS.length) return 0; return Math.random() < ART_ROUND ? 1 : 0; }
+function artPick() {
+  const left = ARTS.filter(a => !meta.art.got[a.id]); if (!left.length) return null;
+  const tiers = Object.keys(ART_W).filter(r => left.some(a => a.r === r)); let w = tiers.reduce((s, r) => s + ART_W[r], 0) * Math.random();
+  let tier = tiers[tiers.length - 1]; for (const r of tiers) { w -= ART_W[r]; if (w < 0) { tier = r; break; } }
+  const L = left.filter(a => a.r === tier); return L[Math.floor(Math.random() * L.length)];
+}
+function artFind(x, y) {
+  artPend = 0; const a = artPick(); if (!a) return;
+  meta.art.got[a.id] = Date.now(); meta.art.nw = 1; meta.art.fresh.push(a.id); saveMeta(); artShow = a;
+  const col = artCol(a);
+  spawnParts(x, y, [col, '#ffffff', '#ffd23f'], 26, 300, 5); parts.push({ x, y, flash: 1, t: 0, life: .3 });
+  floatText(x, y - 26, 'АРТЕФАКТ!', col, 18); sfxArt(); vibe([30, 30, 60]); artFly(a, x, y); artPanel();
+}
+const sfxArt = () => { tone(523, .1, 'triangle', .07); tone(784, .1, 'triangle', .07, 0, .09); tone(1047, .12, 'triangle', .07, 0, .18); tone(1568, .35, 'sine', .05, 0, .28); tone(2093, .3, 'sine', .03, 0, .4); };
+function artFly(a, x, y) {
+  const s = rWorld(x, y, CELL); if (!s) return;
+  const el = document.createElement('i'); el.className = `px px-art-${a.id} artfly`; el.style.setProperty('--ac', artCol(a));
+  const sx = (s.l + s.r) / 2 - 24, sy = (s.t + s.b) / 2 - 24;
+  el.style.transform = `translate(${sx}px,${sy}px) scale(.2)`; el.style.transition = 'transform .25s ease-out'; document.body.appendChild(el);
+  requestAnimationFrame(() => requestAnimationFrame(() => { el.style.transform = `translate(${sx}px,${sy - 30}px) scale(1.5)`; }));
+  setTimeout(() => {
+    const b = rEl($('mColl')); el.style.transition = '';
+    if (b) el.style.transform = `translate(${(b.l + b.r) / 2 - 24}px,${(b.t + b.b) / 2 - 24}px) scale(.5)`; else el.style.opacity = '0';
+    setTimeout(() => { el.remove(); const m = $('mColl'); if (m) { m.classList.remove('newsglow'); void m.offsetWidth; m.classList.add('newsglow'); setTimeout(() => m.classList.remove('newsglow'), 2600); } }, 780);
+  }, 900);
+}
+function artAfter() { // после раунда — табличка о находке и достижение за всю коллекцию
+  artPend = 0; const a = artShow; if (!a) return; artShow = null;
+  setTimeout(() => { gtoast(`${px('art-' + a.id)} Найден артефакт: <b>${a.n}</b> · ${ART_RN[a.r]} · ${artN()} / ${ARTS.length}`, artCol(a), true); checkAch(); }, 700);
+}
+function artPanel() {
+  if (!$('mCollSub') || !meta.art || !ARTS) return; const n = artN(), nw = !!meta.art.nw;
+  setText('mCollSub', nw ? 'новое!' : `${n} / ${ARTS.length}`);
+  setProp($('mColl'), 'mCollCls', 'className', 'btn' + (nw ? ' hot' : ''));
+}
+function renderColl() {
+  const n = artN(), all = n >= ARTS.length;
+  $('collTop').innerHTML = `<div class="label">Найдено ${n} из ${ARTS.length}</div><div class="bar sm" style="margin-top:6px"><i style="width:${(100 * n / ARTS.length).toFixed(1)}%"></i></div>
+    <div class="note" style="margin-top:6px">Артефакты прячутся в обычном камне шахты — видно, только когда кирка его разобьёт. Каждый попадается один раз.</div>
+    <div class="note" style="margin-top:4px;color:${all ? '#3ddc63' : 'var(--gold)'}">${all ? `✓ Коллекция собрана! Награда ${fmt(ART_PRIZE)}${COIN} получена.` : `Собери все ${ARTS.length} — награда ${fmt(ART_PRIZE)}${COIN}`}</div>`;
+  $('collGrid').innerHTML = ARTS.map(a => {
+    const got = !!meta.art.got[a.id], fresh = meta.art.fresh.includes(a.id);
+    return `<div class="acard${got ? '' : ' lock'}" style="--ac:${artCol(a)}">${fresh ? NEW_TAG : ''}<i class="px px-art-${a.id} ai"></i>` +
+      (got ? `<b>${a.n}</b><span class="ar">${ART_RN[a.r]}</span><div class="ac">${a.cap}</div>` : `<b>???</b><span class="ar">${ART_RN[a.r]}</span>`) + `</div>`;
+  }).join('');
+}
 function exportSave() {
   saveMeta(); save(); const o = {};
   for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith('pk_')) o[k] = localStorage.getItem(k); }
-  const code = 'KIRKA2:' + btoa(unescape(encodeURIComponent(JSON.stringify(o))));
+  const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(o)))), code = 'KIRKA3:' + b64 + '.' + saveSig(b64);
   $('pSaveTxt').value = code; $('pSaveTxt').style.display = ''; $('pSaveTxt').select();
   let ok = false; try { ok = document.execCommand && document.execCommand('copy'); } catch (e) { }
   try { navigator.clipboard && navigator.clipboard.writeText(code).then(() => { $('pSaveMsg').textContent = '✓ Код скопирован. Сохрани его в заметки.'; }).catch(() => { }); } catch (e) { }
@@ -2999,9 +3203,14 @@ function exportSave() {
 }
 function importSave() {
   const box = $('pSaveTxt');
-  if (box.style.display === 'none' || !box.value.trim().startsWith('KIRKA2:')) { box.style.display = ''; box.value = ''; box.placeholder = 'Вставь сюда код KIRKA2:… и нажми «Загрузить» ещё раз'; box.focus(); $('pSaveMsg').textContent = 'Вставь код сохранения в поле.'; return; }
-  let o; try { o = JSON.parse(decodeURIComponent(escape(atob(box.value.trim().slice(7))))); } catch (e) { $('pSaveMsg').textContent = '✕ Код повреждён'; return; }
-  if (!o || typeof o !== 'object' || !('pk_meta' in o || 'pk_balance' in o)) { $('pSaveMsg').textContent = '✕ Это не сохранение Кирки'; return; }
+  const val = box.value.trim();
+  if (box.style.display === 'none' || !/^KIRKA[23]:/.test(val)) { box.style.display = ''; box.value = ''; box.placeholder = 'Вставь сюда код KIRKA3:… и нажми «Загрузить» ещё раз'; box.focus(); $('pSaveMsg').textContent = 'Вставь код сохранения в поле.'; return; }
+  const r = readSaveCode(val), o = r.o;
+  if (r.v === 2) { $('pSaveMsg').textContent = '✕ Это код из старой версии. Обнови игру там, откуда переносишь, и скопируй код заново.'; return; }
+  if (r.err === 'notkirka') { $('pSaveMsg').textContent = '✕ Это не сохранение Кирки'; return; }
+  if (r.err || !r.sig) { $('pSaveMsg').textContent = '✕ Код повреждён или изменён. Скопируй его целиком ещё раз.'; return; }
+  let q = null; try { q = devCheckSave(val, true); } catch (e) { q = null; }
+  if (q && q.reject) { $('pSaveMsg').textContent = '✕ Код не принят: монеты в нём не сходятся со статистикой игры.'; return; }
   if (Date.now() > saveArmed) { saveArmed = Date.now() + 4000; $('pSaveMsg').textContent = '! Текущий прогресс заменится! Нажми «Загрузить» ещё раз.'; return; }
   const keys = []; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith('pk_')) keys.push(k); }
   metaLock = true;
@@ -3066,7 +3275,7 @@ const tutWin = () => fmt(Math.round(game.win));
 const rEl = el => { if (!el) return null; const r = el.getBoundingClientRect(); return r.width > 1 && r.height > 1 ? { l: r.left, t: r.top, r: r.right, b: r.bottom } : null; };
 const rWorld = (x, y, s) => { const cr = $('c').getBoundingClientRect(), cx = cr.left + x * SC, cy = cr.top + (y - camY) * SC, h = s * SC / 2; return { l: cx - h, t: cy - h, r: cx + h, b: cy + h }; };
 const rPad = (r, p) => r && { l: r.l - p, t: r.t - p, r: r.r + p, b: r.b + p };
-const MENU_ROWS = [['mVil', 'mBank', 'mPet'], ['mCos', 'mPay', 'mProf']];
+const MENU_ROWS = [['mVil', 'mBank', 'mPet'], ['mCos', 'mColl', 'mProf']];
 const menuRow = i => rUnion(...MENU_ROWS[i].map(id => rEl($(id))));
 const menuTxt = L => L.map(([k, i, n, d]) => !k || uiOpen(k) ? `${i} <b>${n}</b> — ${d}` : `<span style="opacity:.6">🔒 ${n} — откроется ${uiLockTxt(k)}</span>`).join('<br>');
 const rPt = (x0, y0, x1, y1) => { const c = $('ptCv'), r = c && rEl(c); if (!r) return null; const kx = (r.r - r.l) / PT.W, ky = (r.b - r.t) / PT.H; return { l: r.l + x0 * kx, t: r.t + y0 * ky, r: r.l + x1 * kx, b: r.t + y1 * ky }; };
@@ -3107,7 +3316,7 @@ const TUT = {
   uStage: { holes: () => [rEl($('stage'))], ptrs: () => [rEl($('hudDepth')), winPill(), rEl($('hudHp'))],
     t: '⛏ Шахта', d: () => 'Сверху: <b>глубина</b>, <b>выигрыш раунда</b> и <b>прочность кирки ❤</b> (там же шанс трещины, ниже 30 ❤ он заметно растёт). 🔊 в углу — звук.' + (uiOpen('pet') ? ' В углу сидит твой 🐾 питомец — тот, что «Рядом со мной». Второй в это время копает.' : '') },
   uBet: { holes: () => [rEl(qs('.betline'))], ptrs: () => [rEl($('bet'))],
-    t: '🪙 Ставка', d: () => `− и + меняют ставку, ½ и ×2 — половина и вдвое, 10 — быстро поставить 10, MAX — максимум (не больше баланса и лимита ранга: сейчас ${isFinite(maxBet()) ? fmtShort(maxBet()) : '∞'}).` },
+    t: '🪙 Ставка', d: () => `− и + меняют ставку, ½ и ×2 — половина и вдвое, 10 — быстро поставить 10, MAX — максимум (не больше баланса и лимита ранга: сейчас ${isFinite(maxBet()) ? fmtShort(maxBet()) : '∞'}). 📋 — таблица выплат.` },
   uPlay: { holes: () => [rEl($('play')), rEl($('cash'))], ptrs: () => [rEl($('play')), rEl($('cash'))],
     t: '► ИГРАТЬ и ЗАБРАТЬ', d: () => '<b>ИГРАТЬ</b> — списать ставку и запустить кирку. <b>ЗАБРАТЬ</b> — забрать накопленное, пока кирка цела. Две разные кнопки — чтобы не промахнуться. На компьютере — пробел.' + (uiOpen('bonus') ? '' : `<br>🔥 ${uiLockTxt('bonus').replace('через', 'Через')} под ними появится <b>«Портал в ад»</b> — бонуска с множителем до ×${HELL.maxMult}. А если кирка влетит в портал в шахте — попадёшь туда раньше и бесплатно.`) },
   uBuy: { holes: () => [rEl($('buyBonus'))], ptrs: () => [rEl($('buyBonus'))], need: () => uiOpen('bonus') && !!rEl($('buyBonus')),
@@ -3117,10 +3326,10 @@ const TUT = {
   uMenuA: { holes: () => [menuRow(0)], ptrs: () => [],
     t: '☰ Меню · верхний ряд', d: () => 'Каждая кнопка открывает <b>окно на весь экран</b>, под кнопкой мелко — что там сейчас.<br>' + menuTxt([['vil', '🏘', 'Деревня', 'строй и собирай доход'], ['bank', '🏦', 'Банк', '+1% в день, там монеты не сгорят'], ['pet', '🐾', 'Питомец', 'копает находки, даже когда игра закрыта']]) },
   uMenuB: { holes: () => [menuRow(1)], ptrs: () => [],
-    t: '☰ Меню · нижний ряд', d: () => menuTxt([['cos', '🎨', 'Косметика', 'скины кирки, следы, эффекты, темы, кейсы'], ['', '📋', 'Выплаты', 'сколько платит каждый блок при твоей ставке (открыто сразу)'], ['', '👤', 'Профиль', 'ранг, статистика, достижения, сохранение и справка «Как играть»']]) + '<br>Пока идёт раунд, меню заблокировано — сначала забери или доиграй.' },
+    t: '☰ Меню · нижний ряд', d: () => menuTxt([['cos', '🎨', 'Косметика', 'скины кирки, следы, эффекты, темы, кейсы'], ['', '🗿', 'Коллекция', 'артефакты из камня шахты: найди все 12'], ['', '👤', 'Профиль', 'ранг, статистика, достижения, сохранение и справка «Как играть»']]) + '<br>Пока идёт раунд, меню заблокировано — сначала забери или доиграй.' },
   // ---------- питомец (окно 🐾 открыто) ----------
-  pScene: { holes: () => [rEl(qs('#sh-pet .pscene'))], ptrs: () => [rPt(PT.HX - 2, PT.G - 12, PT.HX + 16, PT.G + 6)], scroll: () => qs('#sh-pet .pscene'), area: 1,
-    t: () => `🐾 Земля питомца`, d: 'Тут он <b>копает сам</b>. Находка вылезает из ямки по чуть-чуть, вылезла целиком — летит в рюкзак. Находки — уголь, железо, редстоун, лазурит, золото, алмаз и изумруд. Копает <b>по реальному времени, даже когда игра закрыта</b>.' },
+  pScene: { holes: () => [rEl(qs('#sh-pet .pscene'))], ptrs: () => [rPt(PT.HX - 2, PT.G - 18, PT.HX + 16, PT.G + 2)], scroll: () => qs('#sh-pet .pscene'), area: 1,
+    t: () => `🐾 Шахта питомца`, d: 'Тут он <b>копает сам</b>. Руда в стенке трескается по чуть-чуть, разбил — находка летит в рюкзак. Находки — уголь, железо, редстоун, лазурит, золото, алмаз и изумруд. Копает <b>по реальному времени, даже когда игра закрыта</b>.' },
   pGo: { holes: () => [rEl($('ptGo'))], ptrs: () => [rEl($('ptGo'))], wait: 1, waitFor: 'ptGo', scroll: () => $('ptGo'), area: 1, need: () => meta.dig.st !== 'dig' && meta.dig.en >= 1,
     t: '⛏ Отправь копать', d: 'Жми кнопку — питомец пойдёт копать на свою землю.' },
   pState: { holes: () => [rEl($('ptStat')), rEl($('ptGo'))], ptrs: () => [rEl($('ptStat')), rEl($('ptGo'))], scroll: () => $('ptStat'), area: 1,
@@ -3128,9 +3337,9 @@ const TUT = {
   pBag: { holes: () => [rPt(PT.BX - 13, PT.G - 17, PT.BX + 13, PT.G + 3)], ptrs: () => [rPt(PT.BX - 10, PT.G - 18, PT.BX + 10, PT.G)], scroll: () => qs('#sh-pet .pscene'), area: 1,
     t: '🎒 Рюкзак', d: 'Внутрь не заглянуть — видно только, как он <b>раздувается</b>. Когда там что-то есть, сверху появится пузырёк <b>«💰 Продать»</b>: находки вылетят фонтаном, монеты — на баланс. Полный рюкзак — питомец ждёт.' },
   pBars: { holes: () => [rUnion(rEl(qs('#sh-pet .pbars')), rEl(qs('#sh-pet .cfeed')))], ptrs: () => [rEl($('ptEnT')), rEl($('ptSatT'))], scroll: () => qs('#sh-pet .pbars'), area: 1,
-    t: '💪 Силы и 🍖 сытость', d: () => `Каждая находка тратит 1 силу. Кончились — уснёт в ямке и будет ждать: <b>уложи спать</b>, сам не ляжет. От нуля до полных сил — ${DIG_REST / 3600} часа. Голодный копает <b>медленнее</b>, но не останавливается — корми печенькой или обедом.` },
+    t: '💪 Силы и 🍖 сытость', d: () => `Каждая находка тратит 1 силу. Кончились — уснёт прямо в шахте и будет ждать: <b>уложи спать</b>, сам не ляжет. От нуля до полных сил — ${DIG_REST / 3600} часа. Голодный копает <b>медленнее</b>, но не останавливается — корми печенькой или обедом.` },
   pUp: { holes: () => [rEl($('ptUp'))], ptrs: () => [rEl($('ptUp'))], scroll: () => $('ptUp'), area: 1,
-    t: '⬆ Прокачка', d: '<b>Лопатка</b> — копает быстрее. <b>Нюх</b> — редкое чаще. <b>Рюкзак</b> — больше влезает. <b>Выносливость</b> — дольше копает без отдыха. У каждой 5 уровней, покупка двумя нажатиями.' },
+    t: '⬆ Прокачка', d: '<b>Кирка</b> — копает быстрее. <b>Нюх</b> — редкое чаще. <b>Рюкзак</b> — больше влезает. <b>Выносливость</b> — дольше копает без отдыха. У каждой 5 уровней, покупка двумя нажатиями.' },
   pLook: { holes: () => [rEl($('ptName') && $('ptName').parentElement)], ptrs: () => [rEl($('ptName'))], scroll: () => $('ptName'), area: 1,
     t: '✏ Имя и вид', d: 'Дай ему имя — оно будет в уведомлениях. Ниже — размер в шахте, а ещё ниже питомцы и шапки: <b>только для красоты</b>, копают все одинаково.' },
   // ---------- «🔓 Открыто» — первый шаг мини-обучения, когда часть игры только что открылась ----------
@@ -3170,7 +3379,7 @@ const TUT = {
   mVol: { holes: () => [rEl($('modeOpts'))], ptrs: () => [rEl($('modeOpts'))], scroll: () => $('modeOpts'), area: 1,
     t: '🟦 Волатильность', d: '<b>Низкая</b> — частые небольшие выигрыши. <b>Высокая</b> — реже, но крупнее. Меняется между раундами.' },
   mPay: { holes: () => [rEl($('mPayIn'))], ptrs: () => [rEl($('mPayIn'))], scroll: () => $('mPayIn'), area: 1,
-    t: '📋 Таблица выплат', d: 'Сколько платит каждый блок при твоей ставке — загляни, если интересно, что почём. Та же таблица открывается кнопкой <b>📋 Выплаты</b> в меню.' },
+    t: '📋 Таблица выплат', d: 'Сколько платит каждый блок при твоей ставке — загляни, если интересно, что почём. Та же таблица открывается маленькой кнопкой <b>📋</b> рядом со ставкой.' },
   // ---------- деревня (окно деревни открыто) ----------
   vTabs: { holes: () => [rEl($('vTabs'))], ptrs: () => [rEl($('vTabs'))], scroll: () => $('vTabs'), area: 1,
     t: '🏘 Пять деревень', d: 'Равнины → Пустыня → Снега → Незер → Джунгли. Следующая открывается, когда достроишь предыдущую. Каждая дороже и доходнее.' },
@@ -5417,28 +5626,30 @@ function cosTick() {
 // Находки — предметы как в Майнкрафте (только наши руды). Силы: −1 за находку, кончились — спит; отдых в шахте восстанавливает.
 // Голод только замедляет. Рюкзак: заглянуть нельзя, видно только как он раздувается; продать — пузырёк над ним. На шахту не влияет.
 const DIG_IT = {
-  coal: { n: 'Уголь', v: 10, w: 40, up: -.1, pal: { a: '#0e0e0e', b: '#2c2c2c', c: '#1a1a1a', h: '#5c5c5c' }, m: 'lump' },
-  iron: { n: 'Сырое железо', v: 20, w: 25, up: .15, pal: { a: '#5e4434', b: '#d8af93', c: '#a8836c', h: '#f4dcc8' }, m: 'lump' },
-  redstone: { n: 'Редстоун', v: 30, w: 13, up: .3, pal: { a: '#4a0606', b: '#d81818', c: '#9a0e0e', h: '#ff7a68' }, m: 'dust' },
-  lapis: { n: 'Лазурит', v: 30, w: 12, up: .3, pal: { a: '#0c1a5c', b: '#2a52d4', c: '#1a3494', h: '#8eaaff' }, m: 'flake' },
-  gold: { n: 'Сырое золото', v: 50, w: 7, up: .5, pal: { a: '#6a3e06', b: '#f4c428', c: '#c48e18', h: '#fff4a8' }, m: 'lump' },
-  diamond: { n: 'Алмаз', v: 150, w: 2.5, up: .9, rare: 1, pal: { a: '#0b4a4a', b: '#4ce2da', c: '#1ca6a6', h: '#dcfffc' }, m: 'gem' },
-  emerald: { n: 'Изумруд', v: 400, w: .5, up: 1.2, rare: 1, pal: { a: '#073e1c', b: '#2fd06a', c: '#11904a', h: '#bcffd2' }, m: 'emer' },
+  coal: { n: 'Уголь', v: 10, w: 40, up: -.1, pal: { o: '#0c0c10', p: '#2a2234', d: '#1e1e24', b: '#33333b', c: '#4c4c56', h: '#6e7f9a' }, m: 'coal' },
+  iron: { n: 'Сырое железо', v: 20, w: 25, up: .15, pal: { o: '#4a3022', d: '#8e6c54', s: '#b8937a', b: '#d6b296', c: '#ecceb6', h: '#fbeee2' }, m: 'iron' },
+  redstone: { n: 'Редстоун', v: 30, w: 13, up: .3, pal: { o: '#3a0404', d: '#8a0a0a', b: '#d81818', h: '#ff7a6a' }, m: 'redstone' },
+  lapis: { n: 'Лазурит', v: 30, w: 12, up: .3, pal: { o: '#0c1a5c', d: '#1a3494', b: '#2a52d4', l: '#4a78f0', h: '#a8c0ff' }, m: 'lapis' },
+  gold: { n: 'Сырое золото', v: 50, w: 7, up: .5, pal: { o: '#6a3c06', d: '#c07c14', s: '#e0a420', b: '#f6c42c', c: '#fde06a', h: '#fff8c8' }, m: 'gold' },
+  diamond: { n: 'Алмаз', v: 150, w: 2.5, up: .9, rare: 1, pal: { o: '#0b3f3c', d: '#178e88', b: '#3ccfc6', c: '#8eeee6', h: '#d4fffa', w: '#ffffff' }, m: 'diamond' },
+  emerald: { n: 'Изумруд', v: 400, w: .5, up: 1.2, rare: 1, pal: { o: '#063a1a', d: '#0e7a3a', b: '#1fbf5a', c: '#5ae696', h: '#c8ffde' }, m: 'emerald' },
 };
-const DIG_MAPS = {
-  lump: ['.....aa.....', '...aabbaa...', '..abbcbbba..', '.abccbbbbba.', '.abcbbbhbba.', 'abbbbbbhhbba', 'abbbhbbbbbba', 'abbhhbbbcbba', '.abbbbbbcba.', '.aabbbcbbaa.', '...aabbbaa..', '.....aaa....'],
-  dust: ['............', '.....a......', '....aba..a..', '...abhba.ab.', '..abbbbba...', '.a.abhbba.a.', 'ab.abbbbba..', '..abbbhbbba.', '.abbbbbbbbba', 'abbhbbbbhbba', '.aaaaaaaaaa.', '............'],
-  flake: ['......aa....', '....aabba...', '...abhhbba..', '..abhbbbbba.', '.abbbbcbbba.', '.abbbcbbba..', 'abbbbbbba...', 'abbcbbbba...', '.abbbbba....', '..abbba.....', '...aaa......', '............'],
-  gem: ['............', '....aaaa....', '...ahhbba...', '..ahhbbbba..', '.ahbbbbbbba.', 'abbbbbbbbbba', '.abbbbbbbca.', '..abbbbbca..', '...abbbca...', '....abca....', '.....aa.....', '............'],
-  emer: ['.....aa.....', '....ahba....', '...ahhbba...', '..ahhbbbba..', '..ahbbbbca..', '.ahbbbbbbca.', '.abbbbbbbca.', '..abbbbbca..', '..abbbbcca..', '...abbcca...', '....abca....', '.....aa.....'],
+const DIG_MAPS = { // v62: находки 16×16 — у каждой свой силуэт (уголь — неровный кусок, железо и золото — два комка, редстоун — пыль, лазурит — скол, алмаз и изумруд — гранёные)
+  coal: ["................", ".....oooo.......", "....obbbbo......", "...obbchbboo....", "..obbccbbbbbo...", ".opbbbbbbbbbbo..", ".obbhbbbdbbbbbo.", "obbbbbbbbbbhbdo.", "opbbcbbpbbbbbdo.", "obbbbbbbbbbbddo.", ".odbbbhbbbbddpo.", ".oddbbbbbddddo..", "..opddbbdddoo...", "...oopdddoo.....", ".....oooo.......", "................"],
+  iron: ["................", "....ooooo.......", "...obbbbco......", "..obbcchhbo.....", ".obbchhhcbbo....", ".obchhccbbbso...", ".obchcbbbbsso...", ".obbcbbbbssso...", ".osbbbbbssddo...", "..ossbbssddooo..", "...ossdddobbcbo.", "....oooooobchbso", "........obccbbso", "........osbbbsdo", ".........osdddo.", "..........oooo.."],
+  redstone: ["................", "................", "........o.......", "....o..oho......", "...oho.oo..o....", "...oo.obdooho...", "..ohoobdbboo..o.", "..ooodbbobdhooho", ".ohobbodbbdoboo.", "..odbbhbobbbdo..", ".obbobbbbhbodbo.", "ohbbbdbodbbbdbbo", "odbbhbbbbbdobbdo", ".odddodddoddddo.", "..ooo.ooo.oooo..", "................"],
+  lapis: ["................", "......ooo.......", "....oobbboo.....", "...obllhbbbo....", "..oblhhlbbbbo...", ".obblhlbbdbbbo..", ".obllbbbbbbdbbo.", "..obbbdbbblbbbbo", "...obbbbbbbbdbbo", "....obdbbbhbbbo.", ".....obbbbbbddo.", "......obbbdddo..", ".......odddoo...", "........ooo.....", "................", "................"],
+  gold: ["................", "....ooooo.......", "...obbbbco......", "..obbcchhbo.....", ".obbchhhcbbo....", ".obchhccbbbso...", ".obchcbbbbsso...", ".obbcbbbbssso...", ".osbbbbbssddo...", "..ossbbssddooo..", "...ossdddobbcbo.", "....oooooobchbso", "........obccbbso", "........osbbbsdo", ".........osdddo.", "..........oooo.."],
+  diamond: ["................", ".....ooooo......", "....owccccoo....", "...owwhccccbo...", "..owwhhcwccbbo..", ".owwhhwcccccbbo.", ".owhhcccccccbbo.", ".ohhcccccccbbdo.", ".ohcccccccbbddo.", ".obbbbddddbbbdo.", "..obbdbbbbdbdo..", "...obdbbbbddo...", "....odbbbbdo....", ".....oddddo.....", "......oooo......", "................"],
+  emerald: [".......oo.......", "......ohco......", ".....ohhcco.....", "....ohhccbco....", "...ohhcbbbcdo...", "...ohcbbbbcdo...", "...ohcbbbbcdo...", "...ohcbbbbcdo...", "...ohcbbbbcdo...", "...occbbbbddo...", "...ocdbbbbddo...", "....ocdddddo....", ".....ocdddo.....", "......oddo......", ".......oo.......", "................"],
 };
-const DIG_SH = [600, 420, 300, 210, 120, 60];                     // секунд на находку: лопатка дерево → незерит
+const DIG_SH = [600, 420, 300, 210, 120, 60];                     // секунд на находку: кирка дерево → незерит
 const DIG_SHN = ['Деревянная', 'Каменная', 'Железная', 'Золотая', 'Алмазная', 'Незеритовая'];
 const DIG_SHC = [['#9a6e34', '#c8a060'], ['#7c7c7c', '#b0b0b0'], ['#cfcfcf', '#ffffff'], ['#f0c020', '#fff3a0'], ['#3cd6ce', '#d8fffb'], ['#4a3f45', '#86767e']];
 const DIG_BAG = [30, 50, 80, 120, 180, 240], DIG_STA = [30, 50, 80, 120, 180, 240]; // находок в рюкзаке / сил на столько находок
 const DIG_PRICE = [1000, 5000, 25000, 100000, 500000];          // цена следующего уровня (любой прокачки)
 const DIG_REST = 2 * 3600;                                       // секунд отдыха: от нуля до полных сил
-const DIG_UPS = [['sh', 'Лопатка'], ['nose', 'Нюх'], ['bag', 'Рюкзак'], ['sta', 'Выносливость']];
+const DIG_UPS = [['sh', 'Кирка'], ['nose', 'Нюх'], ['bag', 'Рюкзак'], ['sta', 'Выносливость']];
 function digDefaults() { return { pk: '', ph: 'none', nm: '', st: 'rest', lv: { sh: 0, nose: 0, bag: 0, sta: 0 }, en: DIG_STA[0], prog: 0, cur: '', bag: {}, n: 0, t: Date.now(), soldN: 0, sold: 0, fl: '' }; }
 { const o = meta.dig && typeof meta.dig === 'object' ? meta.dig : {}; meta.dig = Object.assign(digDefaults(), o); meta.dig.lv = Object.assign(digDefaults().lv, o.lv || {});
   if (!meta.dig.bag || typeof meta.dig.bag !== 'object') meta.dig.bag = {}; if (meta.dig.cur && !DIG_IT[meta.dig.cur]) meta.dig.cur = '';
@@ -5509,18 +5720,18 @@ function digUp(k) {
   petEmo('happy', 2); [659, 784, 1047, 1319].forEach((f, i) => tone(f, .08, 'square', .04, 0, i * .07));
   gtoast(`${px('up')} ${DIG_UPS.find(q => q[0] === k)[1]}: уровень ${D.lv[k]}`, '#ffd23f');
 }
-// ---------- рисунки: находки, лопатка, рюкзак, сцена ----------
+// ---------- рисунки: находки, кирка копателя, рюкзак, сцена ----------
 const digSprC = {};
 const digSpr = k => digSprC[k] || (digSprC[k] = mkSprite(DIG_MAPS[DIG_IT[k].m], DIG_IT[k].pal, null));
 const SHOVEL_M = ['........bbb.', '.......bhbbb', '......bhbbbb', '......bbbbb.', '.....sbbbb..', '....ss.bb...', '...ss.......', '..ss........', '.ss.........', 'ss..........', 's...........', '............'];
 const shovelC = {};
-const digIco = () => `<img class="px" src="${shovelURL(meta.dig.lv.sh)}" alt="">`; // текущая лопатка
-const shovelURL = L => shovelC[L] || (shovelC[L] = iconURL(mkSprite(SHOVEL_M, { b: DIG_SHC[L][0], h: DIG_SHC[L][1], s: '#8a5a2b' }, '#1a1208')));
+const digIco = () => `<img class="px" src="${shovelURL(meta.dig.lv.sh)}" alt="">`; // текущая кирка копателя
+const shovelURL = L => shovelC[L] || (shovelC[L] = iconURL(pickTex(TIERS[L].id)));
 // рюкзак раздувается: стадия 0 — пустой и плоский … 4 — полный, застёжка не сходится, рядом высыпалось
 function drawBag(g, cx, by, st, t) {
   const W = [12, 13, 15, 16, 17][st], H = [6, 9, 11, 13, 15][st], x = Math.round(cx - W / 2), y = by - H;
   const P = (px, py, w, h, c) => { g.fillStyle = c; g.fillRect(px, py, w, h); };
-  if (st >= 3) { const peek = st === 4 ? ['gold', 'coal', 'iron', 'lapis'] : ['coal', 'iron']; peek.forEach((k, i) => g.drawImage(digSpr(k), 0, 0, 12, 7, x + 1 + i * 3, y - (st === 4 ? 6 : 3) + (i % 2), 9, 5)); }
+  if (st >= 3) { const peek = st === 4 ? ['gold', 'coal', 'iron', 'lapis'] : ['coal', 'iron']; peek.forEach((k, i) => g.drawImage(digSpr(k), 0, 1, 16, 9, x + 1 + i * 3, y - (st === 4 ? 6 : 3) + (i % 2), 9, 5)); }
   P(x + 1, y, W - 2, H, '#3b2410'); P(x, y + 1, W, H - 1, '#3b2410');
   P(x + 1, y + 1, W - 2, H - 2, '#8a5a2b'); P(x + 2, y + 2, 2, Math.max(1, H - 4), '#a8743c');
   P(x + 1, y + H - 3, W - 2, 1, '#6e4520');
@@ -5535,39 +5746,87 @@ function drawBag(g, cx, by, st, t) {
   return { y: Math.min(y, fy) - (st >= 3 ? 5 : 0) };
 }
 let ptAn = [], ptParts = [], ptSell = null, ptLoopOn = false, ptLast = 0, ptTp = -9;
+function digFly(k) { if (sheetId !== 'pet') return; ptAn.push({ k, t: 0, lx: 70 - (ptAn.length % 3) * 9 }); for (let i = 0; i < 12; i++) ptParts.push({ x: PT.HX + 2 + Math.random() * 12, y: PT.G - 14 + Math.random() * 12, vx: -10 - Math.random() * 55, vy: -25 - Math.random() * 45, t: 0, life: .7, c: Math.random() < .55 ? DIG_IT[k].pal.b : Math.random() < .5 ? DIG_IT[k].pal.h : '#7c7c7c' }); tone(DIG_IT[k].rare ? 1319 : 784, .06, 'square', .035); if (DIG_IT[k].rare) { petEmo('excited', 2); tone(1568, .1, 'square', .04, 0, .08); } }
+const PT = { W: 128, H: 72, G: 62, TOP: 30, BX: 34, PX: 82, HX: 104, RX: 52 }; // v60: шахта питомца в разрезе 128×72 — пол тоннеля y=62, рюкзак у лестницы, кровать между крепью, питомец у забоя, руда в забое (x=HX)
+let ptBg = null, ptPh = 0, ptHitT = -9;
+const shovelCvC = {};
+const shovelCv = L => shovelCvC[L] || (shovelCvC[L] = pickTex(TIERS[L].id)); // v60: копатель копает киркой — уровень прокачки = материал кирки
+function ptBgMake() { // неподвижный фон: небо, слои земли, ствол с лестницей, тоннель с крепью
+  const c = mkCanvas(PT.W, PT.H), g = c.getContext('2d'), G = PT.G, T = PT.TOP, HX = PT.HX; g.imageSmoothingEnabled = false;
+  const P = (x, y, w, h, col) => { g.fillStyle = col; g.fillRect(x, y, w, h); };
+  const sky = g.createLinearGradient(0, 0, 0, 8); sky.addColorStop(0, '#6c9cff'); sky.addColorStop(1, '#b4d0ff'); g.fillStyle = sky; g.fillRect(0, 0, PT.W, 8);
+  for (let i = 0; i < 8; i++) { g.drawImage(TEX.grass, i * 16, 8); g.drawImage(TEX.dirt, i * 16, 24); g.drawImage(TEX.stone, i * 16, 40); g.drawImage(TEX.deepslate, i * 16, 56); }
+  g.drawImage(TEX.coal, 120, 44); g.drawImage(TEX.iron, 58, 62); g.drawImage(TEX.lapis, 92, 63); // руда в стенах — для вида
+  for (const x of [34, 41, 61, 88, 113, 122]) { P(x, 6, 1, 2, '#3f8f2a'); P(x + 1, 5, 1, 3, '#4fae34'); } // травинки
+  P(72, 5, 1, 3, '#2f7a22'); P(71, 3, 3, 2, '#ff5a5a'); P(72, 3, 1, 1, '#ffd23f');                       // цветы
+  P(102, 5, 1, 3, '#2f7a22'); P(101, 3, 3, 2, '#ffe14a'); P(102, 3, 1, 1, '#ffffff');
+  const dark = (x, y, w, h, a) => { g.fillStyle = `rgba(8,6,14,${a})`; g.fillRect(x, y, w, h); };
+  dark(8, 8, 16, T - 8, .62); dark(4, T, HX - 4, G - T, .6);                                              // ствол и тоннель — задняя стенка в тени
+  g.fillStyle = 'rgba(0,0,0,.6)'; g.fillRect(7, 8, 1, T - 7); g.fillRect(24, 8, 1, T - 7); g.fillRect(25, T, HX - 25, 1); g.fillRect(3, T, 4, 1); g.fillRect(3, T, 1, G - T);
+  g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(4, T + 1, HX - 4, 2);                                          // тень под потолком
+  g.fillStyle = 'rgba(255,255,255,.14)'; g.fillRect(4, G, HX + 16 - 4, 1);                                   // край пола
+  P(5, 6, 22, 2, '#7a5434'); P(5, 6, 22, 1, '#9a6e44'); P(5, 8, 2, 5, '#5a3c22'); P(25, 8, 2, 5, '#5a3c22'); // рама над стволом
+  for (const x of [10, 21]) P(x, 7, 1, G - 7, '#8a6236');                                                    // лестница
+  for (let y = 10; y < G; y += 4) P(11, y, 10, 1, '#a87a44');
+  for (const x of [46, 74]) { P(x, T + 3, 3, G - T - 3, '#7a5434'); P(x, T + 3, 1, G - T - 3, '#9a6e44'); P(x + 2, T + 3, 1, G - T - 3, '#5a3c22'); } // крепь
+  P(44, T, 35, 3, '#7a5434'); P(44, T, 35, 1, '#9a6e44'); P(44, T + 2, 35, 1, '#5a3c22');
+  for (const [x, w] of [[30, 1], [62, 2], [79, 1], [97, 2]]) P(x, G - 1, w, 1, '#6a6a72');                     // камешки на полу
+  return c;
+}
+function ptTorch(g, x, y, t) { const f = Math.floor(t * 9 + x) % 3; g.fillStyle = '#7a5434'; g.fillRect(x, y, 1, 5); g.fillStyle = '#ff8a3d'; g.fillRect(x - (f === 1 ? 1 : 0), y - 2, 2, 2); g.fillStyle = '#ffe680'; g.fillRect(x, y - 3 + (f === 2 ? 1 : 0), 1, 2); }
+function ptLantern(g, x, t) { g.fillStyle = '#3a3a44'; g.fillRect(x, PT.TOP + 1, 1, 3); g.fillStyle = '#22222a'; g.fillRect(x - 1, PT.TOP + 4, 3, 5); g.fillStyle = Math.sin(t * 11) > -.6 ? '#ffd060' : '#ffb040'; g.fillRect(x, PT.TOP + 5, 1, 3); }
+function ptShovel(g, x, y, a) { g.save(); g.translate(x, y); g.rotate(a); g.drawImage(shovelCv(meta.dig.lv.sh), -2, -14); g.restore(); }
 function ptPuff(n) { for (let i = 0; i < n; i++) { const a = Math.random() * Math.PI * 2, v = 12 + Math.random() * 26; ptParts.push({ x: PT.PX + 8 + (Math.random() - .5) * 10, y: PT.G - 8 + (Math.random() - .5) * 12, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 12, t: 0, life: .5 + Math.random() * .4, ng: 1, c: ['#d65cff', '#a040d8', '#f0c0ff'][i % 3] }); } }
-function petTp() { ptTp = renderT; ptPuff(22); [1568, 784].forEach((f, i) => tone(f, .09, 'sine', .04, -300, i * .07)); } // Эндрик: исчезает и появляется у ямки
-function digFly(k) { if (sheetId !== 'pet') return; ptAn.push({ k, t: 0 }); tone(DIG_IT[k].rare ? 1319 : 784, .06, 'square', .035); if (DIG_IT[k].rare) { petEmo('excited', 2); tone(1568, .1, 'square', .04, 0, .08); } }
-const PT = { W: 96, H: 54, G: 30, BX: 17, PX: 40, HX: 64 }; // сцена 96×54: земля на y=30, рюкзак, питомец, ямка
+function petTp() { ptTp = renderT; ptPuff(22); [1568, 784].forEach((f, i) => tone(f, .09, 'sine', .04, -300, i * .07)); } // Эндрик: исчезает и появляется у забоя
 function petScene(dt) {
-  const cv = $('ptCv'); if (!cv) return; const g = cv.getContext('2d'), D = meta.dig, P = meta.cos.pet, t = renderT, st = digState(), G = PT.G;
+  const cv = $('ptCv'); if (!cv) return; const g = cv.getContext('2d'), D = meta.dig, P = meta.cos.pet, t = renderT, st = digState(), G = PT.G, HX = PT.HX;
   g.imageSmoothingEnabled = false;
-  const sky = g.createLinearGradient(0, 0, 0, G); sky.addColorStop(0, '#6c9cff'); sky.addColorStop(1, '#b4d0ff'); g.fillStyle = sky; g.fillRect(0, 0, PT.W, G);
-  g.fillStyle = '#ffffff'; for (const [o, y, w] of [[0, 6, 16], [60, 12, 11]]) { const x = Math.round(((t * 2.5 + o) % (PT.W + 30)) - 25); g.fillRect(x, y, w, 3); g.fillRect(x + 3, y - 2, w - 7, 2); }
-  for (let i = 0; i < 6; i++) { g.drawImage(TEX.grass, i * 16, G); g.drawImage(TEX.dirt, i * 16, G + 16); g.drawImage(TEX.stone, i * 16, G + 32); }
-  const HX = PT.HX; g.fillStyle = '#24170d'; g.fillRect(HX - 2, G, 18, 5); g.fillRect(HX, G + 5, 14, 3); g.fillStyle = '#3a2716'; g.fillRect(HX - 2, G + 4, 18, 1);
-  g.fillStyle = '#7a5434'; g.fillRect(HX + 17, G - 2, 6, 2); g.fillRect(HX + 18, G - 3, 3, 1); g.fillRect(HX - 6, G - 1, 4, 1);
-  const digging = D.st === 'dig' && st === 'dig';
-  if (D.st === 'dig' && D.cur && st === 'dig') { // находка вылезает по чуть-чуть: видно только то, что над землёй
-    const pr = Math.max(0, Math.min(1, D.prog)), top = Math.round(G + 1 - pr * 13), wob = Math.sin(t * 9) > .75 ? 1 : 0;
-    g.save(); g.beginPath(); g.rect(0, 0, PT.W, G + 1); g.clip(); g.drawImage(digSpr(D.cur), HX + 1 + wob, top); g.restore();
-    if (Math.random() < dt * 9) ptParts.push({ x: HX + 4 + Math.random() * 8, y: G, vx: (Math.random() - .5) * 50, vy: -25 - Math.random() * 30, t: 0, life: .7, c: Math.random() < .5 ? '#7a5434' : '#5a3c22' });
+  if (!ptBg) ptBg = ptBgMake(); g.drawImage(ptBg, 0, 0);
+  g.fillStyle = '#ffffff'; for (const [o, y, w] of [[0, 3, 14], [70, 1, 10]]) { const x = Math.round(((t * 2.5 + o) % (PT.W + 30)) - 25); g.fillRect(x, y, w, 2); g.fillRect(x + 3, y - 1, w - 7, 1); }
+  const digging = D.st === 'dig' && st === 'dig' && !!D.pk;
+  // забой: пока копает — руда, по ней идут трещины (сколько осталось до находки)
+  if (digging && D.cur && TEX[D.cur]) {
+    const sh = t - ptHitT < .08 ? 1 : 0; g.drawImage(TEX.stone, HX + sh, G - 16); g.drawImage(TEX[D.cur], HX + sh, G - 16);
+    const pr = Math.max(0, Math.min(1, D.prog)); if (pr > .08) g.drawImage(TEX.cracks[Math.min(4, Math.floor(pr * 5))], HX + sh, G - 16);
   }
+  g.fillStyle = 'rgba(0,0,0,.45)'; g.fillRect(HX - 1, PT.TOP, 1, G - PT.TOP);
+  ptTorch(g, 60, PT.TOP + 12, t); ptLantern(g, 101, t);
   const fill = ptSell ? Math.max(0, ptSell.n0 - ptSell.i) / digCap() : D.n / digCap();
   const stg = fill <= 0 ? 0 : fill < .34 ? 1 : fill < .67 ? 2 : fill < 1 ? 3 : 4, bag = drawBag(g, PT.BX, G, stg, t);
   const pv = ptSlot === 'dig' && (cosPv.kind || cosPv.hat), dk = (pv && cosPv.kind) || D.pk, dh = (pv && cosPv.hat) || D.ph;
+  const onBed = D.st !== 'dig', RX = PT.RX;
+  if (onBed) { g.fillStyle = '#5a3c22'; g.fillRect(RX - 2, G - 2, 2, 2); g.fillRect(RX + 16, G - 2, 2, 2); g.fillStyle = '#9a1c1c'; g.fillRect(RX - 2, G - 5, 20, 3); g.fillStyle = '#d83a3a'; g.fillRect(RX - 2, G - 5, 20, 1); g.fillStyle = '#e8e8e8'; g.fillRect(RX - 1, G - 7, 6, 2); g.fillStyle = '#ffffff'; g.fillRect(RX, G - 7, 4, 1); }
+  // кирка: копает — машет; иначе лежит на полу
+  let lean = 0;
+  if (digging) { const ph = (t * 1.5) % 1; if (ph < ptPh) { ptHitT = t; const pal = DIG_IT[D.cur] ? DIG_IT[D.cur].pal : null;
+      for (let i = 0; i < 4; i++) ptParts.push({ x: HX + 1, y: G - 4 - Math.random() * 10, vx: -15 - Math.random() * 45, vy: -20 - Math.random() * 35, t: 0, life: .55, c: pal && Math.random() < .35 ? pal.b : Math.random() < .5 ? '#8a8a8a' : '#5e5e64' }); }
+    ptPh = ph; lean = ph > .75 ? 1 : 0; }
   const tpA = t - ptTp; if (ptTp > 0 && tpA >= .45 && tpA < 2) { ptTp = -9; if (dk && PETS[dk].tp) ptPuff(16); }
-  if (dk && !(PETS[dk].tp && tpA < .45)) { // v53: копатель всегда на своей земле; отдыхает — спит тут же
+  const petIn = dk && !(PETS[dk].tp && tpA < .45);
+  if (petIn) { // v53: копатель всегда в своей шахте; отдыхает — спит на кровати
     const emo = pet.emo && t < pet.until ? pet.emo : D.st !== 'dig' ? (pv ? 'happy0' : 'sleep') : st === 'tired' ? 'sleep' : st === 'full' ? 'normal' : P.sat < 20 ? 'hungry' : 'normal';
-    const bob = digging ? Math.floor(t * 6) % 2 : 0;
-    drawPet(g, PT.PX + bob, G - 16 - bob + (st === 'tired' || D.st !== 'dig' ? 1 : 0), dk, dh, emo, t, st === 'full' ? -1 : 1);
+    if (onBed) drawPet(g, RX + 1, G - 20, dk, dh, emo, t, 1);
+    else drawPet(g, PT.PX + lean, G - 16 + (st === 'tired' ? 1 : 0), dk, dh, emo, t, st === 'full' ? -1 : 1);
   }
+  if (petIn && digging) { const ph = ptPh, a = ph < .75 ? .55 - 1.35 * (ph / .75) : -.8 + 1.35 * ((ph - .75) / .25); ptShovel(g, PT.PX + 13 + lean, G - 5, a); }
+  else if (D.pk) ptShovel(g, onBed ? 80 : PT.PX + 12, G - 1, .8);
   for (let i = ptParts.length - 1; i >= 0; i--) { const q = ptParts[i]; q.t += dt; q.x += q.vx * dt; q.y += q.vy * dt; q.vy += (q.ng ? 0 : 140) * dt; if (q.t > q.life) { ptParts.splice(i, 1); continue; }
-    if (q.k) { g.globalAlpha = Math.max(0, Math.min(1, (q.life - q.t) * 3)); g.drawImage(digSpr(q.k), Math.round(q.x - 6), Math.round(q.y - 6)); if (DIG_IT[q.k].rare) glyph(g, GLY.spark, Math.round(q.x + 4), Math.round(q.y - 8), '#ffffff'); g.globalAlpha = 1; }
-    else { g.fillStyle = q.c; g.fillRect(Math.round(q.x), Math.round(q.y), 1, 1); } }
-  for (let i = ptAn.length - 1; i >= 0; i--) { const a = ptAn[i]; a.t += dt; const u = Math.min(1, a.t / .7), x0 = HX + 7, y0 = G - 7, x1 = PT.BX, y1 = bag.y + 4;
-    const x = x0 + (x1 - x0) * u, y = y0 + (y1 - y0) * u - Math.sin(u * Math.PI) * 18; g.drawImage(digSpr(a.k), Math.round(x - 6), Math.round(y - 6));
-    if (DIG_IT[a.k].rare) glyph(g, GLY.spark, Math.round(x + 3 + Math.sin(t * 20) * 2), Math.round(y - 9), '#ffffff'); if (u >= 1) ptAn.splice(i, 1); }
+    if (q.k) { g.globalAlpha = Math.max(0, Math.min(1, (q.life - q.t) * 3)); g.drawImage(digSpr(q.k), Math.round(q.x - 8), Math.round(q.y - 8)); if (DIG_IT[q.k].rare) glyph(g, GLY.spark, Math.round(q.x + 5), Math.round(q.y - 10), '#ffffff'); g.globalAlpha = 1; }
+    else { if (!q.ng && q.y > G - 1) { q.y = G - 1; q.vy = 0; q.vx *= .5; } g.fillStyle = q.c; g.fillRect(Math.round(q.x), Math.round(q.y), 1, 1); } }
+  // находка: выпрыгивает из забоя через голову копателя (0–0,45 с) → лежит на полу и покачивается (до 1,5 с) → летит в рюкзак (до 2,1 с)
+  for (let i = ptAn.length - 1; i >= 0; i--) { const a = ptAn[i]; a.t += dt; const lx = a.lx || 70, ly = G - 8, T1 = .45, T2 = 1.5, T3 = 2.1; let x, y;
+    if (a.t < T1) { const u = a.t / T1; x = HX + 8 + (lx - HX - 8) * u; y = (G - 10) + (ly - G + 10) * u - Math.sin(u * Math.PI) * 22; }
+    else if (a.t < T2) { const u = a.t - T1; x = lx; y = ly - (u < .18 ? Math.sin(u / .18 * Math.PI) * 3 : 0) - (Math.sin(t * 4 + i) > 0 ? 1 : 0);
+      if (a.t - dt < T1) for (let j = 0; j < 5; j++) ptParts.push({ x: lx + (Math.random() - .5) * 12, y: G - 1, vx: (Math.random() - .5) * 40, vy: -10 - Math.random() * 20, t: 0, life: .4, c: Math.random() < .5 ? '#6a6a72' : '#4a4a52' }); }
+    else { const u = Math.min(1, (a.t - T2) / (T3 - T2)), x1 = PT.BX, y1 = bag.y + 4; x = lx + (x1 - lx) * u; y = ly + (y1 - ly) * u - Math.sin(u * Math.PI) * 16; }
+    if (a.t >= T1 && a.t < T2) { g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(Math.round(lx - 5), G - 1, 10, 1); }
+    g.drawImage(digSpr(a.k), Math.round(x - 8), Math.round(y - 8));
+    if (DIG_IT[a.k].rare) glyph(g, GLY.spark, Math.round(x + 4 + Math.sin(t * 20) * 2), Math.round(y - 11), '#ffffff'); if (a.t >= T3) ptAn.splice(i, 1); }
+  // свет факела и фонаря — только в тоннеле
+  g.save(); g.beginPath(); g.rect(4, PT.TOP, HX + 16 - 4, G - PT.TOP); g.clip(); g.globalCompositeOperation = 'lighter';
+  for (const [x, y, r, a] of [[60, PT.TOP + 10, 32, .2], [101, PT.TOP + 7, 26, .17]]) { const fl = a * (.85 + .15 * Math.sin(t * 7 + x)), rg = g.createRadialGradient(x, y, 1, x, y, r);
+    rg.addColorStop(0, `rgba(255,170,70,${fl})`); rg.addColorStop(1, 'rgba(255,170,70,0)'); g.fillStyle = rg; g.fillRect(x - r, y - r, r * 2, r * 2); }
+  g.restore();
   if (ptSell) {
     const S = ptSell; S.t += dt; const gap = Math.min(.12, 1.8 / Math.max(1, S.list.length));
     while (S.i < S.list.length && S.t >= S.i * gap) { const k = S.list[S.i++]; S.got += DIG_IT[k].v; ptParts.push({ k, x: PT.BX, y: bag.y + 4, vx: (Math.random() - .25) * 80, vy: -75 - Math.random() * 40, t: 0, life: 1.1 }); tone(DIG_IT[k].rare ? 1568 : 700 + Math.random() * 300, .04, 'square', .025); if (DIG_IT[k].rare) petEmo('excited', 1.5); }
@@ -5607,7 +5866,7 @@ function petUi() {
   $('ptStat').innerHTML = !D.pk ? `${px('paw')} <b>Никто не копает.</b> Нажми на карточку «Копает» сверху и выбери питомца` + (meta.cos.pet.off ? '.' : ` — или нажми кнопку ниже, и копать пойдёт «${compName()}».`)
     : st === 'dig' ? `${digIco()} <b>${nm} копает</b> · следующая находка через <b>${mmss((1 - D.prog) * digInt() / hf)}</b>` + (hf < 1 ? `<br><span style="color:#ffb0d0">${px('meat')} Хочет есть — копает медленнее (×${String(hf).replace('.', ',')}). Покорми!</span>` : '')
     : st === 'full' ? `${px('bag')} <b>Рюкзак полон</b> — ${nm} ждёт. Продай находки (пузырёк над рюкзаком), иначе копать некуда.`
-    : st === 'tired' ? `${px('zzz')} <b>Силы кончились</b> — ${nm} клюёт носом прямо в ямке. Уложи спать — силы вернутся.`
+    : st === 'tired' ? `${px('zzz')} <b>Силы кончились</b> — ${nm} клюёт носом прямо у стенки. Уложи спать — силы вернутся.`
     : st === 'rest' ? `${px('bed')} <b>${nm} спит</b> на своей земле · полные силы через <b>${mmss((mx - D.en) / mx * DIG_REST)}</b>`
     : `${px('apple')} <b>Силы полные</b> — можно отправлять копать.`;
   const en = Math.floor(D.en + 1e-6); $('ptEnT').textContent = `${en} / ${mx}`; $('ptEnB').style.width = (D.en / mx * 100) + '%';
@@ -5626,7 +5885,7 @@ function petRender() {
       (max ? '<span class="cbtn">✓ максимум</span>' : `<button class="btn${armed ? ' armed' : ''}" data-up="${k}">${armed ? 'Точно? ' : ''}${fmtShort(DIG_PRICE[L])}<i class="coin"></i></button>`) + '</div>'; };
   const L = D.lv, r = x => x.toFixed(1).replace('.', ',') + '%';
   $('ptUp').innerHTML =
-    card('sh', 'Лопатка', `<img src="${shovelURL(L.sh)}" alt="">`, `${DIG_SHN[L.sh].toLowerCase()} · ${fmtMin(DIG_SH[L.sh])} на находку`, L.sh < 5 ? fmtMin(DIG_SH[L.sh + 1]) : '') +
+    card('sh', 'Кирка', `<img src="${shovelURL(L.sh)}" alt="">`, `${DIG_SHN[L.sh].toLowerCase()} · ${fmtMin(DIG_SH[L.sh])} на находку`, L.sh < 5 ? fmtMin(DIG_SH[L.sh + 1]) : '') +
     card('nose', 'Нюх', px('compass'), `алмаз и изумруд: ${r(digRarePct(L.nose))}`, L.nose < 5 ? r(digRarePct(L.nose + 1)) : '') +
     card('bag', 'Рюкзак', px('bag'), `${DIG_BAG[L.bag]} находок`, L.bag < 5 ? DIG_BAG[L.bag + 1] : '') +
     card('sta', 'Выносливость', px('apple'), `сил на ${DIG_STA[L.sta]} находок`, L.sta < 5 ? DIG_STA[L.sta + 1] : '');
@@ -5966,6 +6225,7 @@ function cosClick(e) {
   if (t.dataset.pv) return cosPreview(...sp(t.dataset.pv));
 }
 function cosPanel() {
+  artPanel();
   setText('mProfSub', rank().n);
   const P = meta.cos.pet, hungry = P.sat < 20 && !!meta.dig.pk, ss = Object.keys(SEASONS).find(s => seasonOn(s));
   const cNew = !newSeen('cos') && ['skin', 'trail', 'fx', 'theme', 'case'].some(newIn); // новинки обновы в косметике
@@ -6036,11 +6296,12 @@ function devArmed(k) { if (devArm.k === k && Date.now() < devArm.t) { devArm = {
 function devSnap() { try { return JSON.parse(localStorage.getItem('kirka_snap') || 'null'); } catch (e) { return null; } }
 // 📏 проверка чужого кода сохранения: сходятся ли монеты со статистикой (код НЕ загружается, свой прогресс не трогается)
 let devChk = { code: '', html: '' };
-function devCheckSave(code) {
-  code = String(code || '').trim().replace(/\s+/g, '');
-  if (!code.startsWith('KIRKA2:')) return '<div class="chkv bad">✕ Это не код сохранения — он начинается с KIRKA2:</div>';
-  let o, M; try { o = JSON.parse(decodeURIComponent(escape(atob(code.slice(7))))); } catch (e) { return '<div class="chkv bad">✕ Код повреждён — не читается (скопирован не целиком?)</div>'; }
-  if (!o || typeof o !== 'object' || !('pk_meta' in o || 'pk_balance' in o)) return '<div class="chkv bad">✕ В коде нет прогресса Кирки</div>';
+function devCheckSave(code, quick) { // quick — для загрузки кода: вернуть { reject }, без таблицы
+  const rc = readSaveCode(code);
+  if (rc.err === 'fmt') return quick ? null : '<div class="chkv bad">✕ Это не код сохранения — он начинается с KIRKA3: (или старый KIRKA2:)</div>';
+  if (rc.err === 'bad') return quick ? null : '<div class="chkv bad">✕ Код повреждён — не читается (скопирован не целиком?)</div>';
+  if (rc.err) return quick ? null : '<div class="chkv bad">✕ В коде нет прогресса Кирки</div>';
+  let o = rc.o, M;
   try { M = JSON.parse(o.pk_meta || 'null') || {}; } catch (e) { return '<div class="chkv bad">✕ Прогресс в коде повреждён</div>'; }
   const D0 = metaDefaults(); M = Object.assign(D0, M);
   for (const k of ['bank', 'daily', 'quests', 'stats', 'vil', 'cb']) M[k] = Object.assign(metaDefaults()[k], M[k] && typeof M[k] === 'object' ? M[k] : {});
@@ -6056,7 +6317,7 @@ function devCheckSave(code) {
   let learnSum = 0; for (const L of LEARN) if (M.learn && M.learn[L.k]) learnSum += L.r || 0;
   const game = N(S.won) - N(S.bet);
   const inc = [['Начальные монеты', 1000], ['Раунды: выиграно − поставлено', game], ['Награды за достижения', achSum], ['Награды за обучения', learnSum],
-    ['Доход деревень', N(M.vilEarned)], ['Проценты банка', N(M.bank.earned)], ['Питомец: продажа', N(M.dig.sold)], ['Кейсы: монеты за повторы', N(M.cos.cases.back)]];
+    ['Доход деревень', N(M.vilEarned)], ['Проценты банка', N(M.bank.earned)], ['Питомец: продажа', N(M.dig.sold)], ['Кейсы: монеты за повторы', N(M.cos.cases.back)], ['Промокоды', N(M.promoSum)]];
   // траты, которые можно посчитать
   let digSum = 0; for (const k in M.dig.lv) for (let i = 0; i < Math.min(5, N(M.dig.lv[k])); i++) digSum += DIG_PRICE[i];
   let trailSum = 0; for (const id of M.owned) { const T = TRAILS[id]; if (T && T.price >= 1e6) trailSum += T.price; }
@@ -6071,7 +6332,7 @@ function devCheckSave(code) {
   const t0 = ts.length ? Math.min(...ts) : Date.now(), t1 = ts.length ? Math.max(...ts) : Date.now();
   const days = Math.max(1, Math.ceil((t1 - t0) / 864e5 + .01));
   // ранг для запаса: по рекорду состояния, но не выше того, что вообще можно было набрать (рекорд в коде тоже можно подделать)
-  const upper = 1000 + N(S.won) + achSum + learnSum + N(M.vilEarned) + N(M.bank.earned) + N(M.dig.sold) + N(M.cos.cases.back) + achOld * 50000;
+  const upper = 1000 + N(S.won) + achSum + learnSum + N(M.vilEarned) + N(M.bank.earned) + N(M.dig.sold) + N(M.cos.cases.back) + N(M.promoSum) + achOld * 50000;
   const rankOf = w => { let i = 0; RANKS.forEach((r, j) => { if (w >= r.w) i = j; }); return i; };
   const allowK = k => days * ((DAILY[DAILY.length - 1] + QREW.reduce((a, b) => a + b, 0)) * k + 30 * RESCUE * k) + CB_RATE * N(S.bet) + achOld * 50000 + 20000;
   const peak = N(M.peak) || have + N(M.spentVil);
@@ -6099,6 +6360,9 @@ function devCheckSave(code) {
   const oldRuns = N(S.runBestX) > 0 || N(S.runBigBust) > 0 || (o.pk_runs && o.pk_runs !== '[]');
   if (oldRuns) info.push('Играл в Забеги (старая версия): у них был свой кошелёк, а раунды шли в общую статистику — разница может быть неточной, поэтому строгого «нечестно» по ней не ставлю');
   if (achOld) info.push(`Достижений из старых версий: ${achOld} (их награду не знаю — до 50 000 за каждое в запасе)`);
+  if (quick) return { reject: !oldRuns && gap > allow * 1.5 + 50000, gap, allow };
+  if (rc.v === 3 && !rc.sig) bad.push('Подпись кода не сходится — код меняли руками');
+  else if (rc.v === 2) info.push('Старый код KIRKA2 (до v64, без подписи)');
   // вердикт
   let cls, head;
   if (bad.length || (gap > allow * 1.5 + 50000 && !oldRuns)) { cls = 'bad'; head = gap > allow ? `✕ Нечестно: ${fmt(Math.round(gap - allow))} монет взялись из ниоткуда` : '✕ Нечестно: статистику правили руками'; }
@@ -6121,7 +6385,7 @@ function devBody() {
     <div class="devgrid"><button class="btn" data-dev="m:10000">+10 000</button><button class="btn" data-dev="m:100000">+100 000</button><button class="btn" data-dev="m:1000000">+1 000 000</button><button class="btn" data-dev="m:100000000">+100 млн</button>
 </div>
     <button class="btn devwide" data-dev="unlock">🎨 Разблокировать всю косметику</button>
-    <div class="devgrid" style="margin-top:6px"><button class="btn" data-dev="uiall">🔓 Открыть весь интерфейс</button><button class="btn" data-dev="uinew">Как у новичка (+ обучение)</button><button class="btn" data-dev="pet1h">Питомец: +1 час</button><button class="btn" data-dev="pet8h">Питомец: +8 часов</button></div>`;
+    <div class="devgrid" style="margin-top:6px"><button class="btn" data-dev="uiall">🔓 Открыть весь интерфейс</button><button class="btn" data-dev="uinew">Как у новичка (+ обучение)</button><button class="btn" data-dev="pet1h">Питомец: +1 час</button><button class="btn" data-dev="pet8h">Питомец: +8 часов</button><button class="btn" data-dev="art1">Артефакт: +1</button><button class="btn" data-dev="art0">Артефакты: сбросить</button></div>`;
   if (devTab === 'cos') {
     let have = 0, all = 0;
     const secs = DEV_COS.map(([cat, n]) => `<div class="secttl" style="margin-top:10px">${n}</div><div class="devach">${devCosList(cat).map(id => {
@@ -6149,8 +6413,8 @@ function devBody() {
     + VILLAGES.map((V, i) => `<div class="devvil"><div class="dvn"><b>${V.i} ${V.n}</b><small>${vilDone(i)}/${vilTotal(i)}${vilUnlocked(i) ? '' : ' · 🔒'}</small></div>
       <button class="btn" data-dev="vstep:${i}"${vilComplete(i) || !vilUnlocked(i) ? ' disabled' : ''}>+1</button><button class="btn" data-dev="vall:${i}"${vilComplete(i) || !vilUnlocked(i) ? ' disabled' : ''}>Достроить</button><button class="btn" data-dev="vrst:${i}"${vilDone(i) ? '' : ' disabled'}>Сброс</button></div>`).join('')
     + `<button class="btn devwide" data-dev="vfill">💰 Наполнить все склады</button>`;
-  if (devTab === 'chk') return `<div class="note">Вставь чужой код <b>KIRKA2:…</b> — покажу, честно ли набраны монеты. Код <b>не загружается</b>, твой прогресс не меняется.</div>
-    <textarea id="devChkIn" class="chkin" placeholder="KIRKA2:…" spellcheck="false">${devEsc(devChk.code)}</textarea>
+  if (devTab === 'chk') return `<div class="note">Вставь чужой код <b>KIRKA3:…</b> (или старый KIRKA2:) — покажу, честно ли набраны монеты. Код <b>не загружается</b>, твой прогресс не меняется.</div>
+    <textarea id="devChkIn" class="chkin" placeholder="KIRKA3:…" spellcheck="false">${devEsc(devChk.code)}</textarea>
     <div class="devgrid"><button class="btn" data-dev="chk">Проверить</button><button class="btn" data-dev="chkclr">Очистить</button></div><div id="devChkOut">${devChk.html}</div>`;
   if (devTab === 'err') {
     const L = errLog();
@@ -6196,6 +6460,8 @@ function devAct(a) {
   const [k, n] = a.split(':'), v = +n; let msg = devTestAct(k, a) || '';
   if (msg) { }
   else if (k === 'm') { addMain(v); metaTick(); msg = `✓ +${fmt(v)} монет · баланс ${fmt(mainBal())}`; }
+  else if (k === 'art1') { const a = artPick(); if (!a) msg = 'Все артефакты уже найдены.'; else { meta.art.got[a.id] = Date.now(); meta.art.nw = 1; meta.art.fresh.push(a.id); saveMeta(); artPanel(); checkAch(); msg = `✓ Артефакт «${a.n}» (${ART_RN[a.r]}) · ${artN()} / ${ARTS.length}`; } }
+  else if (k === 'art0') { meta.art = { got: {}, nw: 1, fresh: [] }; delete meta.ach.art12; saveMeta(); artPanel(); msg = '✓ Коллекция артефактов очищена (награду 500 000 можно получить снова — только для проверки).'; }
   else if (k === 'pet1h' || k === 'pet8h') { const h = k === 'pet1h' ? 1 : 8; digTick(true); meta.dig.t -= h * 3600e3; meta.cos.pet.t -= h * 3600e3; const f = digTick(true); saveMeta(); msg = `Питомцу +${h} ч: находок ${f.length}, состояние «${digState()}».`; }
   else if (k === 'cos') { const [, cat, id] = a.split(':'); if (!DEV_COS0[cat] || devCosFree(cat, id)) return; const on = !devCosHas(cat, id); devCosSet(cat, id, on); devCosAfter(); msg = `${on ? '✓ Выдано' : '✖ Забрано'}: «${devEsc(devCosName(cat, id))}».`; }
   else if (k === 'cosnone') {
@@ -6347,13 +6613,13 @@ if (DEV_BUILD) {
 // ---------- новости обновления ----------
 // Заполняется с каждой обновой (id — любая новая строка, например дата). Пока список пуст — окно не показывается,
 // кнопки в профиле нет. Новичкам новости не показываются (им — приветствие и обучение).
-const NEWS = { id: '2026-11-08', title: 'Обновление 3.6', sub: 'Капибара, Эндрик, осьминог, цвета питомцев и кейс с питомцами', items: [
-  [px('paw'), '<b>Три новых питомца — вы просили, я добавил!</b> <b>Капибара</b> и <b>Эндрик</b> — мини-эндермен (эпические, 75&nbsp;000), <b>Осьминог</b> (легендарный, 150&nbsp;000). Эндрик, когда уходит копать, телепортируется в фиолетовых искрах.'],
-  [px('star'), '<b>У питомцев появились редкости:</b> обычные, редкие, эпические и легендарные. У каждой редкости одна цена — 10&nbsp;000, 30&nbsp;000, 75&nbsp;000 и 150&nbsp;000. Многие питомцы подешевели. Кто уже купил — питомец остаётся.'],
-  [px('palette'), '<b>Легендарные питомцы меняют цвет.</b> У Панды, Аксолотля и Осьминога по&nbsp;5 цветов. Выбирай в окне «Питомцы» — бесплатно и сколько угодно раз.'],
-  [px('chest'), '<b>Новый «Кейс с питомцами»</b>, 25&nbsp;000: внутри только питомцы и шапки. Легендарный питомец —&nbsp;3%.'],
-  [px('tophat'), '<b>6 новых шапок:</b> кепка, шапка с помпоном, мухомор, поварской колпак, треуголка и кепка-пропеллер. А на Лягушке шапки теперь сидят ровно.'],
-  [px('pick'), '<b>4 новые кирки:</b> Морковка, Бамбук, Леденец и Щупальце.'],
+const NEWS = { id: '2026-11-09', title: 'Обновление 3.7', sub: 'Артефакты, новая шахта питомца и промокоды', items: [
+  [px('art-compass'), '<b>Артефакты — вы просили, я добавил!</b> В обычном камне шахты прячутся 12 артефактов: от Старой монеты до легендарной Кирки первого шахтёра. Видно, только когда кирка разобьёт камень. Каждый попадается один раз. Найденные — в новом окне <b>«Коллекция»</b> в меню. Собери все 12 — награда 500&nbsp;000.'],
+  [px('pick'), '<b>Новая шахта питомца.</b> Вместо ямки — настоящая шахта в разрезе: лестница, крепь, факел и фонарь. Копатель машет киркой у забоя, руду видно прямо в стене, и она трескается, пока он копает. Разбил — находка выпрыгивает и летит в рюкзак. Прокачка «Лопатка» теперь называется «Кирка».'],
+  [px('crystal'), '<b>Новые находки.</b> Все находки копателя перерисованы — у каждой теперь свой вид.'],
+  [px('up'), '<b>Вы писали, что шахта часто забирает ставку, — я переделал.</b> Раунды в минус стали реже.'],
+  [px('gift'), '<b>Промокоды.</b> В профиле появилось окно «Промокод». Коды публикуются в Телеграм-канале @igra_za_0, каждый можно ввести один раз.'],
+  [px('pay'), '<b>Таблица выплат</b> переехала в маленькую кнопку рядом со ставкой.'],
 ] };
 const newsPending = () => !!(NEWS.id && NEWS.items.length && meta.news !== NEWS.id);
 function showNews() {
@@ -6374,7 +6640,7 @@ buildTextures();
 for (const k of Object.keys(BLOCKS)) if (TEX[k]) ICON[k] = iconURL(TEX[k]);
 PICKICON = TEX.pick.map(t => iconURL(t));
 $('logo').src = PICKICON[4];
-pxInit(); pxAuto();
+pxInit(); artInit(); pxAuto();
 cosInit();
 buildPayTable(); renderHistory(); resize(); syncIdlePick(); updatePanel();
 $('play').addEventListener('click', e => { e.currentTarget.blur(); play(); });
@@ -6392,7 +6658,8 @@ $('mRuns').onclick = e => { e.currentTarget.blur(); openSheet('runs'); };
 $('mMode').onclick = e => { e.currentTarget.blur(); openSheet('mode'); };
 $('mCos').onclick = e => { e.currentTarget.blur(); openCos(); };
 $('mPet').onclick = e => { e.currentTarget.blur(); openSheet('pet'); };
-$('mPay').onclick = e => { e.currentTarget.blur(); openSheet('pay'); };
+$('mColl').onclick = e => { e.currentTarget.blur(); openSheet('coll'); };
+$('betPay').onclick = e => { e.currentTarget.blur(); openSheet('pay'); };
 $('mPayIn').onclick = () => openSheet('pay');
 $('pCos').onclick = () => openCos('skin');
 $('uiNewGo').onclick = () => uiNewClose(true); $('uiNewLater').onclick = () => uiNewClose(false);
@@ -6494,6 +6761,8 @@ $('bkInput').addEventListener('input', () => { $('bkErr').textContent = ''; });
 $('pExport').onclick = exportSave;
 $('pNews').onclick = showNews; $('newsOk').onclick = closeNews; $('newsX').onclick = skipNews; $('newsLaterOk').onclick = newsLaterOk; $('pNewsCard').style.display = NEWS.items.length ? '' : 'none';
 $('pImport').onclick = importSave;
+$('pPromoGo').onclick = usePromo;
+$('pPromo').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); usePromo(); } });
 $('introNext').onclick = () => introNext(false);
 $('introSkip').onclick = () => introNext(true);
 window.addEventListener('resize', () => { if (sheetId === 'vil') vResize(); });
